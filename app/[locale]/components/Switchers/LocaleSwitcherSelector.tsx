@@ -11,17 +11,13 @@ type Props = {
   label: string;
 };
 
-export default function LocaleSwitcherSelect({
-  children,
-  defaultValue,
-  label,
-}: Props) {
+const LocaleSwitcherSelect = ({ children, defaultValue, label }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
   const params = useParams();
 
-  function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+  const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = event.target.value as Locale;
     startTransition(() => {
       router.replace(
@@ -32,7 +28,7 @@ export default function LocaleSwitcherSelect({
         { locale: nextLocale }
       );
     });
-  }
+  };
 
   return (
     <label
@@ -53,4 +49,6 @@ export default function LocaleSwitcherSelect({
       <span className="pointer-events-none absolute right-2 top-[8px]">⌄</span>
     </label>
   );
-}
+};
+
+export default LocaleSwitcherSelect;

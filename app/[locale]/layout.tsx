@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Locale, routing } from "@/i18n/routing";
 import Header from "./components/header/header";
 import { Providers } from "../providers";
+import Footer from "./components/footer/footer";
 
 export default async function LocaleLayout({
   children,
@@ -28,6 +29,7 @@ export default async function LocaleLayout({
       <Providers>
         <Header />
         {children}
+        <Footer />
       </Providers>
     </NextIntlClientProvider>
   );

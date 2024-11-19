@@ -1,5 +1,5 @@
 import "./globals.css";
-import Analytics from "./[locale]/components/Analitics/Analytics";
+import Analytics from "./[locale]/components/analitics/Analytics";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
