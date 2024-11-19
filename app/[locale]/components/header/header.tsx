@@ -1,4 +1,5 @@
 import LocaleSwitcher from "../LocaleSwitcher";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 const Header = () => {
   return (
@@ -12,6 +13,7 @@ const Header = () => {
           <li>About</li>
         </ul>
         <LocaleSwitcher />
+        <ThemeSwitcher />
       </nav>
     </header>
   );
