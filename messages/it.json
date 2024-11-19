@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "Ciao mondo!",
+    "about": "Vai alla pagina informazioni"
+  },
+  "LocaleSwitcher": {
+    "label": "Cambia lingua",
+    "locale": "{locale, select,  en {🇺🇸 English} ka {🇬🇪 ქართული } it {🇮🇹 italiano} other {Unknown}}"
+  }
+}

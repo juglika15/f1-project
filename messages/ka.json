@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "გამარჯობა",
+    "about": "about გვერდზე გადასვლა"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select,  en {🇺🇸 English} ka {🇬🇪 ქართული } it {🇮🇹 italiano} other {Unknown}}"
+  }
+}
