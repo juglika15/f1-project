@@ -8,8 +8,8 @@
     "locale": "{locale, select,  en {🇺🇸 English} ka {🇬🇪 ქართული } it {🇮🇹 italiano} other {Unknown}}"
   },
   "Modes": {
-    "dark": "მუქი",
-    "light": "ნათელი",
-    "system": "სისტემური"
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "system": "Sistema"
   }
 }
