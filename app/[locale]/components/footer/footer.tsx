@@ -2,7 +2,7 @@ import { Link } from "@/i18n/routing";
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="flex gap-4 justify-center items-center bg-red-600 dark:bg-yellow-500 p-1">
       <nav>
         <ul>
           <li>

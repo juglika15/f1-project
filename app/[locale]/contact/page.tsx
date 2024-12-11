@@ -1,9 +1,9 @@
-const AboutPage = () => {
+const Contact = () => {
   return (
     <main className="flex flex-grow flex-col justify-center items-center">
-      <h1 className="text-white">About</h1>
+      <div>Contact</div>
     </main>
   );
 };
 
-export default AboutPage;
+export default Contact;

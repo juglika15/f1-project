@@ -1,9 +1,10 @@
-const AboutPage = () => {
+const Tickets = () => {
   return (
     <main className="flex flex-grow flex-col justify-center items-center">
-      <h1 className="text-white">About</h1>
+      <h1>Tickets</h1>
+      <p>Buy Tickets</p>
     </main>
   );
 };
 
-export default AboutPage;
+export default Tickets;

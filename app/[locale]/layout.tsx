@@ -28,12 +28,6 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <Providers>
         <Header />
-        <script
-          async
-          src="https://telegram.org/js/telegram-widget.js?22"
-          data-telegram-post="integratesystem/110"
-          data-width="100%"
-        ></script>
         {children}
         <Footer />
       </Providers>
