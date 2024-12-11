@@ -1,26 +1,42 @@
 import LocaleSwitcher from "../Switchers/LocaleSwitcher";
 import ThemeSwitcher from "../Switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
+import Image from "next/image";
+import logo from "../../../../public/images/F1.svg";
+import { useTranslations } from "next-intl";
 
 const Header = () => {
+  const t = useTranslations("Navigation");
+
   return (
-    <header className="flex gap-4 justify-center items-center bg-red-600 dark:bg-yellow-500 p-1">
+    <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-1">
+      <Image
+        src={logo}
+        alt="f1 logo"
+        width="100"
+        height="100"
+        priority
+        style={{ width: "6rem", height: "auto" }}
+      />
       <nav>
-        <ul className="flex gap-3 justify-center">
+        <ul className="flex gap-3 justify-center text-white">
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/">{t("home")}</Link>
           </li>
           <li>
-            <Link href="/tickets">F1 Tickets</Link>
+            <Link href="/tickets">{t("tickets")}</Link>
           </li>
           <li>
-            <Link href="/faqs">FAQs</Link>
+            <Link href="/merchandise">{t("merchandise")}</Link>
           </li>
           <li>
-            <Link href="/contact">Contanct Us</Link>
+            <Link href="/help">{t("help")}</Link>
           </li>
           <li>
-            <Link href="/about">About</Link>
+            <Link href="/contact">{t("contact")}</Link>
+          </li>
+          <li>
+            <Link href="/about">{t("about")}</Link>
           </li>
         </ul>
       </nav>

@@ -1,7 +1,7 @@
 const AboutPage = () => {
   return (
-    <main className="flex flex-grow flex-col justify-center items-center">
-      <h1 className="text-white">About</h1>
+    <main className="flex flex-grow flex-col justify-center items-center dark:bg-dark">
+      <h1>About</h1>
     </main>
   );
 };

@@ -1,4 +1,12 @@
 {
+  "Navigation": {
+    "home": "Home",
+    "tickets": "Tickets",
+    "merchandise": "Merchandise",
+    "help": "Help",
+    "contact": "Contact Us",
+    "about": "About"
+  },
   "HomePage": {
     "title": "Hello world!",
     "about": "Go to the about page"

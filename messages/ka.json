@@ -1,4 +1,12 @@
 {
+  "Navigation": {
+    "home": "მთავარი",
+    "tickets": "ბილეთები",
+    "merchandise": "კოლექცია",
+    "help": "დახმარება",
+    "contact": "დაგვიკავშირდი",
+    "about": "ჩვენს შესახებ"
+  },
   "HomePage": {
     "title": "გამარჯობა",
     "about": "about გვერდზე გადასვლა"

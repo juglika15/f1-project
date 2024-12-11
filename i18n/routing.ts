@@ -3,13 +3,18 @@ import { createNavigation } from "next-intl/navigation";
 
 export const routing = defineRouting({
   // A list of all locales that are supported
-  locales: ["en", "ka", "it"],
+  locales: ["en", "ka"],
 
   // Used when no locale matches
   defaultLocale: "en",
-  //   pathnames: {
-  //     "/about": { en: "/about", ka: "/ჩვენს-შესახებ", it: "/informazioni" },
-  //   },
+  pathnames: {
+    "/": { en: "/", ka: "/" },
+    "/tickets": { en: "/tickets", ka: "/ბილეთები" },
+    "/merchandise": { en: "/merchandise", ka: "/კოლექცია" },
+    "/help": { en: "/help", ka: "/დახმარება" },
+    "/contact": { en: "/contact", ka: "/დაგვიკავშირდი" },
+    "/about": { en: "/about", ka: "/ჩვენს-შესახებ" },
+  },
 });
 
 // Lightweight wrappers around Next.js' navigation APIs
