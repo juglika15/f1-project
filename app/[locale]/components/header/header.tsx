@@ -42,6 +42,9 @@ const Header = () => {
       </nav>
       <LocaleSwitcher />
       <ThemeSwitcher />
+      <Link className="text-primary underline text-white" href="/sign-in">
+        Sign in
+      </Link>
     </header>
   );
 };

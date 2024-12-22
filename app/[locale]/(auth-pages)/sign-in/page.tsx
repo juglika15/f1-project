@@ -2,7 +2,7 @@
 import { useState } from "react";
 // import { useRouter } from "next/navigation";
 import Link from "next/link";
-import logo from "../../../public/images/F1.svg";
+import logo from "../../../../public/images/F1.svg";
 import { CiLock } from "react-icons/ci";
 import { GoEyeClosed } from "react-icons/go";
 import { GoEye } from "react-icons/go";
@@ -133,7 +133,7 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-between mb-4">
           <span className="text-gray-500 text-sm">new to F1 Plus?</span>
-          <Link href={"/register"}>
+          <Link href={"/sign-up"}>
             <span className="cursor-pointer text-blue-500 text-base font-bold hover:underline">
               Sign Up
             </span>

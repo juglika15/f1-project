@@ -9,6 +9,8 @@ export const routing = defineRouting({
   defaultLocale: "en",
   pathnames: {
     "/": { en: "/", ka: "/" },
+    "/sign-in": { en: "/sign-in", ka: "/შესვლა" },
+    "/sign-up": { en: "/sign-up", ka: "/რეგისტრაცია" },
     "/tickets": { en: "/tickets", ka: "/ბილეთები" },
     "/merchandise": { en: "/merchandise", ka: "/კოლექცია" },
     "/help": { en: "/help", ka: "/დახმარება" },

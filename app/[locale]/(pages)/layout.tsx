@@ -2,9 +2,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Locale, routing } from "@/i18n/routing";
-import Header from "./components/header/header";
-import { Providers } from "../providers";
-import Footer from "./components/footer/footer";
+import Header from "../components/header/header";
+import { Providers } from "../../providers";
+import Footer from "../components/footer/footer";
 
 export default async function LocaleLayout({
   children,
