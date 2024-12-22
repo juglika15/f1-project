@@ -6,7 +6,7 @@ import logo from "../../../../public/images/F1.svg";
 import { CiLock } from "react-icons/ci";
 import { GoEyeClosed } from "react-icons/go";
 import { GoEye } from "react-icons/go";
-import { CgProfile } from "react-icons/cg";
+import { CiMail } from "react-icons/ci";
 import Image from "next/image";
 
 interface FormData {
@@ -55,7 +55,7 @@ const Login = () => {
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-bold text-black mb-6 dark:text-white">
-          Login
+          Sign In
         </h2>
         {/* {message.message && (
           <p className={`mb-4 text-center text-${message.color}-500`}>
@@ -67,7 +67,7 @@ const Login = () => {
             Username or Email
           </label>
           <div className="relative flex items-center">
-            <CgProfile
+            <CiMail
               size="25"
               color="gray"
               className="absolute left-2 top-1/2 transform -translate-y-1/2"
