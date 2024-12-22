@@ -11,6 +11,7 @@ export const routing = defineRouting({
     "/": { en: "/", ka: "/" },
     "/sign-in": { en: "/sign-in", ka: "/შესვლა" },
     "/sign-up": { en: "/sign-up", ka: "/რეგისტრაცია" },
+    "/forgot-password": { en: "/forgot-password", ka: "/პაროლის-აღდგება" },
     "/tickets": { en: "/tickets", ka: "/ბილეთები" },
     "/merchandise": { en: "/merchandise", ka: "/კოლექცია" },
     "/help": { en: "/help", ka: "/დახმარება" },
