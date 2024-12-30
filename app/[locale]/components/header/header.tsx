@@ -4,25 +4,25 @@ import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import logo from "../../../../public/images/F1.svg";
 import { useTranslations } from "next-intl";
+import { FaShoppingCart } from "react-icons/fa";
 
 const Header = () => {
   const t = useTranslations("Navigation");
 
   return (
     <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-1">
-      <Image
-        src={logo}
-        alt="f1 logo"
-        width="100"
-        height="100"
-        priority
-        style={{ width: "6rem", height: "auto" }}
-      />
+      <Link href="/">
+        <Image
+          src={logo}
+          alt="f1 logo"
+          width="100"
+          height="100"
+          priority
+          style={{ width: "6rem", height: "auto" }}
+        />
+      </Link>
       <nav>
         <ul className="flex gap-3 justify-center text-white">
-          <li>
-            <Link href="/">{t("home")}</Link>
-          </li>
           <li>
             <Link href="/tickets">{t("tickets")}</Link>
           </li>
@@ -42,6 +42,13 @@ const Header = () => {
       </nav>
       <LocaleSwitcher />
       <ThemeSwitcher />
+      <Link href={"/cart"}>
+        <FaShoppingCart
+          width={"10rem"}
+          height={"10rem"}
+          className="text-white dark:text-gray-800"
+        />
+      </Link>
       <Link className="text-primary underline text-white" href="/sign-in">
         Sign in
       </Link>
