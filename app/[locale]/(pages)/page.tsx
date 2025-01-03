@@ -1,10 +1,55 @@
-import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+// import { useTranslations } from "next-intl";s
+import Image from "next/image";
 
 export default function HomePage() {
-  const t = useTranslations("HomePage");
+  // const t = useTranslations("HomePage");
   return (
     <main className="flex dark:bg-dark flex-grow flex-col justify-center items-center">
-      <h1 className="text-orange-400">{t("title")}</h1>
+      <ul className="card-list">
+        <li>
+          <Link
+            href="/donate-with-embedded-checkout"
+            className="card checkout-style-background"
+          >
+            <h2 className="bottom">Donate with embedded Checkout</h2>
+            <Image
+              src="/checkout-one-time-payments.svg"
+              alt="f1 logo"
+              width={100}
+              height={100}
+            />
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/donate-with-checkout"
+            className="card checkout-style-background"
+          >
+            <h2 className="bottom">Donate with hosted Checkout</h2>
+            <Image
+              src="/checkout-one-time-payments.svg"
+              alt="f1 logo"
+              width={100}
+              height={100}
+            />
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/donate-with-elements"
+            className="card elements-style-background"
+          >
+            <h2 className="bottom">Donate with Elements</h2>
+            <Image
+              src="/elements-card-payment.svg"
+              alt="f1 logo"
+              width={100}
+              height={100}
+            />
+          </Link>
+        </li>
+      </ul>
     </main>
   );
 }
