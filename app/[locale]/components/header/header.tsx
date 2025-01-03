@@ -3,11 +3,20 @@ import ThemeSwitcher from "../Switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import logo from "../../../../public/images/F1.svg";
-import { useTranslations } from "next-intl";
+// import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { FaShoppingCart } from "react-icons/fa";
+// import { createClient } from "@/utils/supabase/server";
 
-const Header = () => {
-  const t = useTranslations("Navigation");
+const Header = async () => {
+  const t = await getTranslations("Navigation");
+
+  // const supabase = await createClient();
+
+  // const {
+  //   data: { user },
+  //   error: userError,
+  // } = await supabase.auth.getUser();
 
   return (
     <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-1">
@@ -49,6 +58,7 @@ const Header = () => {
           className="text-white dark:text-gray-800"
         />
       </Link>
+      {/* <h1 className="text-white">{user?.email}</h1> */}
       <Link className="text-primary underline text-white" href="/sign-in">
         Sign in
       </Link>
