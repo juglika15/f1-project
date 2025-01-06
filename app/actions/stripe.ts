@@ -16,6 +16,7 @@ export async function createCheckoutSession(
   ) as Stripe.Checkout.SessionCreateParams.UiMode;
 
   const origin: string = (await headers()).get("origin") as string;
+  const locale = data.get("locale") || "en";
 
   const checkoutSession: Stripe.Checkout.Session =
     await stripe.checkout.sessions.create({
@@ -37,11 +38,11 @@ export async function createCheckoutSession(
         },
       ],
       ...(ui_mode === "hosted" && {
-        success_url: `${origin}/donate-with-checkout/result?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${origin}/donate-with-checkout`,
+        success_url: `${origin}/${locale}/donate-with-checkout/result?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/${locale}/donate-with-checkout`,
       }),
       ...(ui_mode === "embedded" && {
-        return_url: `${origin}/donate-with-embedded-checkout/result?session_id={CHECKOUT_SESSION_ID}`,
+        return_url: `${origin}/${locale}/donate-with-embedded-checkout/result?session_id={CHECKOUT_SESSION_ID}`,
       }),
       ui_mode,
     });

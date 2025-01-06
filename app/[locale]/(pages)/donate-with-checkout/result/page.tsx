@@ -1,5 +1,4 @@
 import type { Stripe } from "stripe";
-
 import PrintObject from "@/app/[locale]/components/PrintObject";
 import { stripe } from "@/lib/stripe";
 
