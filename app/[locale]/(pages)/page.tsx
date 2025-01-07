@@ -1,6 +1,6 @@
 "use client";
 import { Link } from "@/i18n/routing";
-// import { useTranslations } from "next-intl";s
+// import { useTranslations } from "next-intl";
 import Image from "next/image";
 // import { createClient } from "../../../utils/supabase/client";
 // import { useState } from "react";

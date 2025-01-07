@@ -33,21 +33,25 @@ const LocaleSwitcherSelect = ({ children, defaultValue, label }: Props) => {
 
   return (
     <label
+      htmlFor="language-selector"
       className={clsx(
         "relative text-gray-400",
         isPending && "transition-opacity [&:disabled]:opacity-30"
       )}
     >
-      <p className="sr-only">{label}</p>
+      <span className="sr-only">{label}</span>
       <select
-        className="inline-flex appearance-none bg-transparent py-3 pl-2 pr-6"
+        id="language-selector"
+        className="inline-flex appearance-none bg-transparent py-3 pl-2 pr-6 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
         defaultValue={defaultValue}
         disabled={isPending}
         onChange={onSelectChange}
       >
         {children}
       </select>
-      <span className="pointer-events-none absolute right-2 top-[8px]">⌄</span>
+      <span className="pointer-events-none absolute right-2 top-1/2 transform -translate-y-1/2">
+        ⌄
+      </span>
     </label>
   );
 };
