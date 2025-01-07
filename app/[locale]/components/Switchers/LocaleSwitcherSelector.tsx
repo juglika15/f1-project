@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import "flag-icons/css/flag-icons.min.css";
 import { useParams } from "next/navigation";
 import { ChangeEvent, ReactNode, useTransition } from "react";
 import { Locale, usePathname, useRouter } from "@/i18n/routing";
