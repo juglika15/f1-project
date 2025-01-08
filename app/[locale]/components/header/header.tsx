@@ -3,13 +3,13 @@ import ThemeSwitcher from "../Switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import logo from "../../../../public/images/F1.svg";
-// import { useTranslations } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
+// import { getTranslations } from "next-intl/server";
 import { FaShoppingCart } from "react-icons/fa";
 // import { createClient } from "@/utils/supabase/server";
 
-const Header = async () => {
-  const t = await getTranslations("Navigation");
+const Header = () => {
+  const t = useTranslations("Navigation");
 
   // const supabase = await createClient();
 

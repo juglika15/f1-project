@@ -1,6 +1,7 @@
 "use client";
 
 import type { StripeError } from "@stripe/stripe-js";
+import { usePathname } from "next/navigation";
 
 import * as React from "react";
 import {
@@ -19,6 +20,8 @@ import getStripe from "@/utils/stripe-helpers";
 import { createPaymentIntent } from "@/app/actions/stripe";
 
 function CheckoutForm(): JSX.Element {
+  const locale = usePathname().split("/")[1] || "en";
+
   const [input, setInput] = React.useState<{
     customDonation: number;
     cardholderName: string;
@@ -98,7 +101,7 @@ function CheckoutForm(): JSX.Element {
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}/donate-with-elements/result`,
+          return_url: `${window.location.origin}/${locale}/donate-with-elements/result`,
           payment_method_data: {
             billing_details: {
               name: input.cardholderName,

@@ -17,7 +17,6 @@ export default async function LocaleLayout({
   // Ensure that the incoming `locale` is valid
   if (!routing.locales.includes(locale as Locale)) {
     redirect("/");
-    // redirect(());
   }
 
   // Providing all messages to the client
