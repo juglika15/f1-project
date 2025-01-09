@@ -22,28 +22,27 @@ const authPages = [
   "/ka/forgot-password",
 ];
 
-export default async function middleware(req: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const supabase = await createClient();
 
-  const response = createMiddleware(routing)(req);
+  const response = createMiddleware(routing)(request);
 
   const { data: sessionData } = await supabase.auth.getSession();
   const session = sessionData?.session;
 
   const isAuthenticated = !!session;
-  const currentPath = req.nextUrl.pathname;
+  const currentPath = request.nextUrl.pathname;
+  const locale = await getLocale();
 
   if (authPages.includes(currentPath) && isAuthenticated) {
-    const locale = currentPath.startsWith("/ka") ? "ka" : "en";
-    const homeUrl = new URL(`/${locale}`, req.url);
+    const homeUrl = new URL(`/${locale}`, request.url);
     return NextResponse.redirect(homeUrl);
   }
 
   if (restrictedPages.includes(currentPath)) {
     if (!isAuthenticated) {
-      const locale = await getLocale();
-      const loginUrl = new URL(`/${locale}/sign-in`, req.url);
-      return NextResponse.redirect(loginUrl);
+      const signInUrl = new URL(`/${locale}/sign-in`, request.url);
+      return NextResponse.redirect(signInUrl);
     }
   }
 
