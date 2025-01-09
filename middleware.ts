@@ -2,24 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./i18n/routing";
 import { createClient } from "./utils/supabase/server";
+import { getLocale } from "next-intl/server";
 
 const restrictedPages = [
-  "/en",
-  "/en/about",
-  "/en/blogs",
-  "/en/contact",
-  "/en/create-product",
-  "/en/pricing",
-  "/en/products",
-  "/en/profile",
-  "/ka",
-  "/ka/about",
-  "/ka/blogs",
-  "/ka/contact",
-  "/ka/create-product",
-  "/ka/pricing",
-  "/ka/products",
-  "/ka/profile",
+  "/en/cart",
+  "/ka/cart",
+  "/ka/protected",
+  "/en/protected",
+  "/en/protected/reset-password",
+  "/ka/protected/reset-password",
 ];
 
 const authPages = [
@@ -50,7 +41,7 @@ export default async function middleware(req: NextRequest) {
 
   if (restrictedPages.includes(currentPath)) {
     if (!isAuthenticated) {
-      const locale = currentPath.startsWith("/ka") ? "ka" : "en";
+      const locale = await getLocale();
       const loginUrl = new URL(`/${locale}/sign-in`, req.url);
       return NextResponse.redirect(loginUrl);
     }
