@@ -1,7 +1,7 @@
 "use client";
 
 import type { StripeError } from "@stripe/stripe-js";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 
 import * as React from "react";
 import {
@@ -18,9 +18,10 @@ import { formatAmountForDisplay } from "@/utils/get-stripejs";
 import * as config from "@/config";
 import getStripe from "@/utils/stripe-helpers";
 import { createPaymentIntent } from "@/app/actions/stripe";
+import { useLocale } from "next-intl";
 
 function CheckoutForm(): JSX.Element {
-  const locale = usePathname().split("/")[1] || "en";
+  const locale = useLocale();
 
   const [input, setInput] = React.useState<{
     customDonation: number;

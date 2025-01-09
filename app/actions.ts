@@ -4,12 +4,14 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
+  const locale = formData.get("locale") || "en";
 
   if (!email || !password) {
     return encodedRedirect(
@@ -29,13 +31,9 @@ export const signUpAction = async (formData: FormData) => {
 
   if (error) {
     console.error(error.code + " " + error.message);
-    return encodedRedirect("error", "/sign-up", error.message);
+    return encodedRedirect("error", `${locale}/sign-up`, error.message);
   } else {
-    return encodedRedirect(
-      "success",
-      "/sign-up",
-      "Thanks for signing up! Please check your email for a verification link."
-    );
+    return encodedRedirect("success", "/", "Thanks for signing up.");
   }
 };
 
@@ -137,8 +135,10 @@ type Provider = "facebook" | "twitter" | "apple" | "github" | "google";
 
 const signInWith = (provider: Provider) => async () => {
   const supabase = await createClient();
+  const origin = (await headers()).get("origin");
+  const locale = await getLocale();
 
-  const auth_callback_url = `${process.env.SITE_URL}/auth/callback`;
+  const auth_callback_url = `${origin}/${locale}/auth/callback`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
