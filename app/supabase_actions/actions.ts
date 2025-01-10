@@ -7,24 +7,33 @@ import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData) => {
+  const displayName = formData.get("displayName")?.toString();
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
+  const confirmPassword = formData.get("confirmPassword")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
   const locale = formData.get("locale") || "en";
 
-  if (!email || !password) {
+  if (!displayName || !email || !password || !confirmPassword) {
     return encodedRedirect(
       "error",
-      "/sign-up",
-      "Email and password are required"
+      `/${locale}/sign-up`,
+      "name,email and passwords are required"
     );
+  }
+
+  if (password !== confirmPassword) {
+    encodedRedirect("error", `/${locale}/sign-up`, "Passwords do not match");
   }
 
   const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
+      data: {
+        displayName,
+      },
       emailRedirectTo: `${origin}/auth/callback`,
     },
   });
@@ -33,7 +42,7 @@ export const signUpAction = async (formData: FormData) => {
     console.error(error.code + " " + error.message);
     return encodedRedirect("error", `/${locale}/sign-up`, error.message);
   } else {
-    return encodedRedirect("success", "/", "Thanks for signing up.");
+    return encodedRedirect("success", `/${locale}`, "Thanks for signing up.");
   }
 };
 
