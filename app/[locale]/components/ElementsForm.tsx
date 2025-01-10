@@ -1,8 +1,6 @@
 "use client";
 
 import type { StripeError } from "@stripe/stripe-js";
-// import { usePathname } from "next/navigation";
-
 import * as React from "react";
 import {
   useStripe,

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Donate with embedded Checkout | Next.js + TypeScript Example",
 };
 
-export default function DonatePage(): JSX.Element {
+export default function DonatePage() {
   return (
     <div className="page-container">
       <h1>Donate with embedded Checkout</h1>
