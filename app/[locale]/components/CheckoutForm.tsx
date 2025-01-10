@@ -9,7 +9,7 @@ import StripeTestCards from "./StripeTestCards";
 
 import { formatAmountForDisplay } from "@/utils/get-stripejs";
 import * as config from "@/config";
-import { createCheckoutSession } from "@/app/actions/stripe";
+import { createCheckoutSession } from "@/app/stripe_actions/stripe";
 import getStripe from "@/utils/stripe-helpers";
 import {
   EmbeddedCheckout,
