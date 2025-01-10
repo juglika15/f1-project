@@ -20,7 +20,7 @@ import getStripe from "@/utils/stripe-helpers";
 import { createPaymentIntent } from "@/app/stripe_actions/stripe";
 import { useLocale } from "next-intl";
 
-function CheckoutForm(): JSX.Element {
+function CheckoutForm() {
   const locale = useLocale();
 
   const [input, setInput] = React.useState<{
@@ -173,7 +173,7 @@ function CheckoutForm(): JSX.Element {
   );
 }
 
-export default function ElementsForm(): JSX.Element {
+export default function ElementsForm() {
   return (
     <Elements
       stripe={getStripe()}

@@ -7,8 +7,9 @@ import { useTranslations } from "next-intl";
 // import { getTranslations } from "next-intl/server";
 import { FaShoppingCart } from "react-icons/fa";
 // import { createClient } from "@/utils/supabase/server";
+import Display from "../display";
 
-const Header = () => {
+export default function Header() {
   const t = useTranslations("Navigation");
 
   // const supabase = await createClient();
@@ -58,12 +59,12 @@ const Header = () => {
           className="text-white dark:text-gray-800"
         />
       </Link>
-      {/* <h1 className="text-white">{user?.email}</h1> */}
+      <Display />
       <Link className="text-primary underline text-white" href="/sign-in">
         Sign in
       </Link>
     </header>
   );
-};
+}
 
-export default Header;
+// export default Header;
