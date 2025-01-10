@@ -1,6 +1,6 @@
 "use client";
+
 import { Link } from "@/i18n/routing";
-import Image from "next/image";
 
 export default function HomePage() {
   return (
@@ -12,12 +12,6 @@ export default function HomePage() {
             className="card checkout-style-background"
           >
             <h2 className="bottom">Donate with embedded Checkout</h2>
-            <Image
-              src="/checkout-one-time-payments.svg"
-              alt="f1 logo"
-              width={100}
-              height={100}
-            />
           </Link>
         </li>
         <li>
@@ -26,12 +20,6 @@ export default function HomePage() {
             className="card checkout-style-background"
           >
             <h2 className="bottom">Donate with hosted Checkout</h2>
-            <Image
-              src="/checkout-one-time-payments.svg"
-              alt="f1 logo"
-              width={100}
-              height={100}
-            />
           </Link>
         </li>
         <li>
@@ -40,12 +28,6 @@ export default function HomePage() {
             className="card elements-style-background"
           >
             <h2 className="bottom">Donate with Elements</h2>
-            <Image
-              src="/elements-card-payment.svg"
-              alt="f1 logo"
-              width={100}
-              height={100}
-            />
           </Link>
         </li>
       </ul>

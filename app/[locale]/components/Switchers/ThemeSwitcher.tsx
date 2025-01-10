@@ -17,6 +17,7 @@ const ThemeSwitcher = () => {
     <div className="">
       <label className="theme-switch">
         <input
+          name="theme-switcher"
           type="checkbox"
           className="theme-switch__checkbox"
           checked={resolvedTheme === "light" ? false : true}

@@ -41,7 +41,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-self-center bg-gray-100 dark:bg-gray-700 gap-28">
-      <Image
+      {/* <Image
         className="mt-32"
         src={logo}
         alt="f1 logo"
@@ -49,7 +49,7 @@ const Login = () => {
         height="200"
         priority
         style={{ width: "10rem", height: "auto" }}
-      />
+      /> */}
       <form
         className="w-full max-w-md bg-white p-8 dark:bg-dark rounded shadow text-black"
         onSubmit={handleSubmit}
