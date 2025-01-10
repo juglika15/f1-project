@@ -23,8 +23,14 @@ export default async function ForgotPassword(props: {
           </p>
         </div>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
+          <Label htmlFor="forgot-password-email">Email</Label>
+          <Input
+            id="forgot-password-email"
+            name="email"
+            placeholder="you@example.com"
+            required
+            autoComplete="email"
+          />
           <SubmitButton formAction={forgotPasswordAction}>
             Reset Password
           </SubmitButton>
