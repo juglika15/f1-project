@@ -2,12 +2,12 @@
 import { useState } from "react";
 // import { useRouter } from "next/navigation";
 import Link from "next/link";
-import logo from "../../../../public/images/F1.svg";
+// import logo from "../../../../public/images/F1.svg";
 import { CiLock } from "react-icons/ci";
 import { GoEyeClosed } from "react-icons/go";
 import { GoEye } from "react-icons/go";
 import { CiMail } from "react-icons/ci";
-import Image from "next/image";
+// import Image from "next/image";
 
 interface FormData {
   username: string;

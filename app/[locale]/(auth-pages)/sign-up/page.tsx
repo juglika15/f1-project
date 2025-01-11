@@ -1,8 +1,8 @@
 import { signUpAction } from "../../../supabase_actions/actions";
-import { FormMessage, Message } from "../../components/form-message";
-import { SubmitButton } from "../../components/submit-button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { FormMessage, Message } from "../../components/FormMessage";
+import { SubmitButton } from "../../components/SubmitButton";
+import { Input } from "../../components/Ui/input";
+import { Label } from "../../components/Ui/label";
 import { Link } from "@/i18n/routing";
 import { SmtpMessage } from "../smtp-message";
 

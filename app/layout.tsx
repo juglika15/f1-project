@@ -1,5 +1,4 @@
 import "./globals.css";
-import Analytics from "./[locale]/components/analitics/Analytics";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,9 +12,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html suppressHydrationWarning>
-      <head>
-        <Analytics />
-      </head>
+      <head></head>
       <body className="flex flex-col min-h-screen">{children}</body>
     </html>
   );
