@@ -18,7 +18,7 @@ const DisplayUser = async () => {
   }
 
   return (
-    <div>
+    <div className="text-white flex flex-row items-center gap-4">
       Hello {user.user_metadata.displayName.split(" ")[0]}
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"}>

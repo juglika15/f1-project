@@ -171,3 +171,4 @@ const signInWith = (provider: Provider) => async () => {
 };
 
 export const signInWithGithub = signInWith("github");
+export const signInWithGoogle = signInWith("google");

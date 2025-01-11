@@ -1,6 +1,7 @@
 import {
   signInAction,
   signInWithGithub,
+  signInWithGoogle,
 } from "../../../supabase_actions/actions";
 import { FormMessage, Message } from "../../components/form-message";
 import { SubmitButton } from "../../components/submit-button";
@@ -58,6 +59,9 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       </form>
       <form action={signInWithGithub}>
         <button>Git</button>
+      </form>
+      <form action={signInWithGoogle}>
+        <button>Google</button>
       </form>
     </div>
   );
