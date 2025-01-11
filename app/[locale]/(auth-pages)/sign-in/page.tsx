@@ -2,11 +2,11 @@ import {
   signInAction,
   signInWithGithub,
   signInWithGoogle,
-} from "../../../supabase_actions/actions";
-import { FormMessage, Message } from "../../components/FormMessage";
-import { SubmitButton } from "../../components/SubmitButton";
-import { Input } from "../../components/Ui/input";
-import { Label } from "../../components/Ui/label";
+} from "../../../actions/supabase_actions";
+import { FormMessage, Message } from "../../../components/FormMessage";
+import { SubmitButton } from "../../../components/SubmitButton";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
 import { Link } from "@/i18n/routing";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {

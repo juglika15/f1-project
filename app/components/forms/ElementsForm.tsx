@@ -9,13 +9,13 @@ import {
   Elements,
 } from "@stripe/react-stripe-js";
 
-import CustomDonationInput from "./CustomDonationInput";
-import StripeTestCards from "./StripeTestCards";
+import CustomDonationInput from "../CustomDonationInput";
+import StripeTestCards from "../StripeTestCards";
 
 import { formatAmountForDisplay } from "@/utils/get-stripejs";
 import * as config from "@/config";
 import getStripe from "@/utils/stripe-helpers";
-import { createPaymentIntent } from "@/app/stripe_actions/stripe";
+import { createPaymentIntent } from "@/app/actions/stripe_actions";
 import { useLocale } from "next-intl";
 
 function CheckoutForm() {

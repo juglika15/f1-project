@@ -1,11 +1,11 @@
-import LocaleSwitcher from "../Switchers/LocaleSwitcher";
-import ThemeSwitcher from "../Switchers/ThemeSwitcher";
+import LocaleSwitcher from "../switchers/LocaleSwitcher";
+import ThemeSwitcher from "../switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import logo from "../../../../public/images/F1.svg";
+import logo from "../../../public/images/F1.svg";
 import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
-import DisplayUser from "../DisplayUser";
+import DisplayUser from "./DisplayUser";
 
 const Header = () => {
   const t = useTranslations("Navigation");

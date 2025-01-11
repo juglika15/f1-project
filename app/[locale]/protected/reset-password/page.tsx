@@ -1,8 +1,8 @@
-import { resetPasswordAction } from "../../../supabase_actions/actions";
-import { FormMessage, Message } from "../../components/FormMessage";
-import { SubmitButton } from "../../components/SubmitButton";
-import { Input } from "../../components/Ui/input";
-import { Label } from "../../components/Ui/label";
+import { resetPasswordAction } from "../../../actions/supabase_actions";
+import { FormMessage, Message } from "../../../components/FormMessage";
+import { SubmitButton } from "../../../components/SubmitButton";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
 
 export default async function ResetPassword(props: {
   searchParams: Promise<Message>;

@@ -1,10 +1,10 @@
-import { forgotPasswordAction } from "../../../supabase_actions/actions";
-import { FormMessage, Message } from "../../components/FormMessage";
-import { SubmitButton } from "../../components/SubmitButton";
-import { Input } from "../../components/Ui/input";
-import { Label } from "../../components/Ui/label";
+import { forgotPasswordAction } from "../../../actions/supabase_actions";
+import { FormMessage, Message } from "../../../components/FormMessage";
+import { SubmitButton } from "../../../components/SubmitButton";
+import { Input } from "../../../components/ui/input";
+import { Label } from "../../../components/ui/label";
 import { Link } from "@/i18n/routing";
-import { SmtpMessage } from "../smtp-message";
+import { SmtpMessage } from "../SmtpMessage";
 
 export default async function ForgotPassword(props: {
   searchParams: Promise<Message>;
