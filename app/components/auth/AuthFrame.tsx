@@ -3,9 +3,9 @@ import logo from "../../../public/images/F1.svg";
 
 const AuthFrame = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-self-center bg-gray-100 dark:bg-gray-700 gap-28">
+    <div className="min-h-screen flex flex-col items-center justify-self-center bg-gray-100 dark:bg-gray-700 gap-28 pb-20">
       <Image
-        className="mt-32"
+        className="mt-24"
         src={logo}
         alt="f1 logo"
         width="200"

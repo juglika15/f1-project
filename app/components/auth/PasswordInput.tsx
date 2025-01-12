@@ -1,21 +1,25 @@
 "use client";
+
 import { Input } from "@/app/components/ui/Input";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
 import { CiLock } from "react-icons/ci";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 
 const PasswordInput = ({
+  passwordVisible,
+  setPasswordVisible,
+  passwordName = "password",
   passwordId,
   passwordType,
-  placeholder = "******",
+  placeholder,
 }: {
+  passwordVisible: boolean;
+  setPasswordVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  passwordName?: string;
   passwordId: string;
   passwordType: string;
   placeholder?: string;
 }) => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-
   return (
     <div>
       <Label htmlFor={`${passwordId}-password`}>Password</Label>
@@ -27,8 +31,8 @@ const PasswordInput = ({
         />
         <Input
           id={`${passwordId}-password`}
-          type="password"
-          name="password"
+          type={passwordVisible ? "text" : "password"}
+          name={passwordName}
           placeholder={placeholder}
           autoComplete={`${passwordType}-password`}
           required

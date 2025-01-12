@@ -4,10 +4,10 @@ import { SubmitButton } from "../../../components/auth/SubmitButton";
 import { Input } from "../../../components/ui/Input";
 import { Label } from "../../../components/ui/label";
 import { Link } from "@/i18n/routing";
-import Password from "../../../components/auth/PasswordInput";
 import EmailInput from "../../../components/auth/EmailInput";
 import { LuUserRound } from "react-icons/lu";
 import AuthFrame from "@/app/components/auth/AuthFrame";
+import PasswordFrame from "@/app/components/auth/PasswordFrame";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
@@ -23,7 +23,7 @@ export default async function Signup(props: {
 
   return (
     <AuthFrame>
-      <form className="w-full max-w-md bg-white p-8 dark:bg-dark rounded shadow text-black dark:text-white">
+      <form className="w-full  max-w-md bg-white p-8 dark:bg-dark rounded shadow text-black dark:text-white">
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
@@ -31,7 +31,7 @@ export default async function Signup(props: {
             Sign in
           </Link>
         </p>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <div className="flex flex-col gap-3">
           <Label htmlFor="displayName">Full Name</Label>
           <div className="relative flex items-center">
             <LuUserRound
@@ -49,15 +49,11 @@ export default async function Signup(props: {
             />
           </div>
           <EmailInput emailId="sign-up" />
-          <Password
-            passwordId="sign-up"
+          <PasswordFrame
+            passwordId="signup"
             passwordType="new"
             placeholder="at least 6 characters"
-          />
-          <Password
-            passwordId="sign-up-confirm"
-            passwordType="new"
-            placeholder="confirm password"
+            confirm={true}
           />
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Sign up & Sign in

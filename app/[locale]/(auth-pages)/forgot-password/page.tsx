@@ -21,7 +21,7 @@ export default async function ForgotPassword(props: {
             </Link>
           </p>
         </div>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <div className="flex flex-col gap-3 [&>input]:mb-3 mt-8">
           <EmailInput emailId="forgot-password" />
           <SubmitButton formAction={forgotPasswordAction}>
             Reset Password
