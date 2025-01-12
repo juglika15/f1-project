@@ -1,10 +1,13 @@
 import { signUpAction } from "../../../actions/supabase_actions";
-import { FormMessage, Message } from "../../../components/FormMessage";
-import { SubmitButton } from "../../../components/SubmitButton";
-import { Input } from "../../../components/ui/input";
+import { FormMessage, Message } from "../../../components/auth/FormMessage";
+import { SubmitButton } from "../../../components/auth/SubmitButton";
+import { Input } from "../../../components/ui/Input";
 import { Label } from "../../../components/ui/label";
 import { Link } from "@/i18n/routing";
-import { SmtpMessage } from "../SmtpMessage";
+import Password from "../../../components/auth/PasswordInput";
+import EmailInput from "../../../components/auth/EmailInput";
+import { LuUserRound } from "react-icons/lu";
+import AuthFrame from "@/app/components/auth/AuthFrame";
 
 export default async function Signup(props: {
   searchParams: Promise<Message>;
@@ -19,8 +22,8 @@ export default async function Signup(props: {
   }
 
   return (
-    <>
-      <form className="flex flex-col min-w-64 max-w-64 mx-auto">
+    <AuthFrame>
+      <form className="w-full max-w-md bg-white p-8 dark:bg-dark rounded shadow text-black dark:text-white">
         <h1 className="text-2xl font-medium">Sign up</h1>
         <p className="text-sm text text-foreground">
           Already have an account?{" "}
@@ -30,41 +33,31 @@ export default async function Signup(props: {
         </p>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
           <Label htmlFor="displayName">Full Name</Label>
-          <Input
-            id="displayName"
-            type="text"
-            name="displayName"
-            placeholder="first and last name"
-            required
-            autoComplete="name"
-          />
-          <Label htmlFor="sign-up-email">Email</Label>
-          <Input
-            id="sign-up-email"
-            type="email"
-            name="email"
-            placeholder="name@example.com"
-            required
-            autoComplete="email"
-          />
-          <Label htmlFor="sign-up-password">Password</Label>
-          <Input
-            id="sign-up-password"
-            type="password"
-            name="password"
+          <div className="relative flex items-center">
+            <LuUserRound
+              size="25"
+              color="gray"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2"
+            />
+            <Input
+              id="displayName"
+              type="text"
+              name="displayName"
+              placeholder="first and last name"
+              required
+              autoComplete="name"
+            />
+          </div>
+          <EmailInput emailId="sign-up" />
+          <Password
+            passwordId="sign-up"
+            passwordType="new"
             placeholder="at least 6 characters"
-            minLength={6}
-            required
-            autoComplete="new-password"
           />
-          <Label htmlFor="sign-up-confirmPassword">Confirm password</Label>
-          <Input
-            id="sign-up-confirmPassword"
-            type="password"
-            name="confirmPassword"
+          <Password
+            passwordId="sign-up-confirm"
+            passwordType="new"
             placeholder="confirm password"
-            required
-            autoComplete="new-password"
           />
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Sign up & Sign in
@@ -72,7 +65,6 @@ export default async function Signup(props: {
           <FormMessage message={searchParams} />
         </div>
       </form>
-      <SmtpMessage />
-    </>
+    </AuthFrame>
   );
 }

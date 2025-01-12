@@ -1,18 +1,17 @@
 import { forgotPasswordAction } from "../../../actions/supabase_actions";
-import { FormMessage, Message } from "../../../components/FormMessage";
-import { SubmitButton } from "../../../components/SubmitButton";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
+import { FormMessage, Message } from "../../../components/auth/FormMessage";
+import { SubmitButton } from "../../../components/auth/SubmitButton";
 import { Link } from "@/i18n/routing";
-import { SmtpMessage } from "../SmtpMessage";
+import EmailInput from "../../../components/auth/EmailInput";
+import AuthFrame from "@/app/components/auth/AuthFrame";
 
 export default async function ForgotPassword(props: {
   searchParams: Promise<Message>;
 }) {
   const searchParams = await props.searchParams;
   return (
-    <>
-      <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
+    <AuthFrame>
+      <form className="w-full max-w-md bg-white p-8 dark:bg-dark rounded shadow text-black dark:text-white">
         <div>
           <h1 className="text-2xl font-medium">Reset Password</h1>
           <p className="text-sm text-secondary-foreground">
@@ -23,21 +22,13 @@ export default async function ForgotPassword(props: {
           </p>
         </div>
         <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="forgot-password-email">Email</Label>
-          <Input
-            id="forgot-password-email"
-            name="email"
-            placeholder="you@example.com"
-            required
-            autoComplete="email"
-          />
+          <EmailInput emailId="forgot-password" />
           <SubmitButton formAction={forgotPasswordAction}>
             Reset Password
           </SubmitButton>
           <FormMessage message={searchParams} />
         </div>
       </form>
-      <SmtpMessage />
-    </>
+    </AuthFrame>
   );
 }
