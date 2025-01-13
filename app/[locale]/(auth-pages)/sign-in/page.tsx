@@ -43,7 +43,11 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
               </Link>
             </div>
             <PasswordFrame passwordId="signin" passwordType="new" />
-            <SubmitButton pendingText="Signing In..." formAction={signInAction}>
+            <SubmitButton
+              pendingText="Signing In..."
+              formAction={signInAction}
+              dataCy="sign-in"
+            >
               Sign in
             </SubmitButton>
             <FormMessage message={searchParams} />

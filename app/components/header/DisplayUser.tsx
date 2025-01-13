@@ -9,15 +9,7 @@ const DisplayUser = async () => {
 
   const user = data.user;
 
-  if (!user) {
-    return (
-      <Link className="text-primary underline text-white" href="/sign-in">
-        Sign in
-      </Link>
-    );
-  }
-
-  return (
+  return user ? (
     <div className="text-white flex flex-row items-center gap-4">
       Hello {user.user_metadata.displayName.split(" ")[0]}
       <form action={signOutAction}>
@@ -26,6 +18,16 @@ const DisplayUser = async () => {
         </Button>
       </form>
     </div>
+  ) : (
+    <button>
+      <Link
+        className="text-primary underline text-white"
+        href="/sign-in"
+        data-cy="sign-in"
+      >
+        Sign in
+      </Link>
+    </button>
   );
 };
 
