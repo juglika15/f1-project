@@ -20,6 +20,7 @@ export default async function ResetPassword(props: {
           passwordType="new"
           placeholder="at least 6 characters"
           confirm={true}
+          dataCy="reset-password"
         />
 
         <SubmitButton formAction={resetPasswordAction}>

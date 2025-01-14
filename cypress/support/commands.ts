@@ -35,3 +35,11 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("signIn", (email, password) => {
+  cy.visit("/");
+  cy.get('[data-cy="sign-in"]').click();
+  cy.get('[data-cy="sign-in-email"]').type(email);
+  cy.get('[data-cy="sign-in-password"]').type(password);
+  cy.get('[data-cy="sign-in-button"]').click();
+});

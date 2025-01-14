@@ -1,16 +1,25 @@
 describe("auth", () => {
   it("signs in successfully", () => {
-    cy.visit(Cypress.env("baseUrl") as string);
-    cy.get('[data-cy="sign-in"]').click();
+    cy.signIn(Cypress.env("testEmail"), Cypress.env("testPassword"));
 
-    cy.get("input[name=email]").type(Cypress.env("testEmail") as string);
-    cy.get("input[name=password]").type(Cypress.env("testPassword") as string);
-    cy.get('[data-cy="sign-in"]').click();
-
-    cy.get('[data-cy="sign-out"]').click();
+    cy.get('[data-cy="sign-out"]').should("exist");
   });
 
-  // it("fails to signs in if incorrect credentials are provided", () => {
-  //   cy.visit("https://example.cypress.io");
-  // });
+  it("fails to signs in, incorrect email is provided", () => {
+    cy.signIn("******", Cypress.env("testPassword"));
+
+    cy.get('[data-cy="sign-out"]').should("not.exist");
+  });
+
+  it("fails to signs in, incorrect password is provided", () => {
+    cy.signIn(Cypress.env("testEmail"), "******");
+
+    cy.get('[data-cy="sign-out"]').should("not.exist");
+  });
+
+  it("fails to signs in, incorrect credentials are provided", () => {
+    cy.signIn("******", "******");
+
+    cy.get('[data-cy="sign-out"]').should("not.exist");
+  });
 });

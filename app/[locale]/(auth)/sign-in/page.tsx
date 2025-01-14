@@ -33,7 +33,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             </Link>
           </p>
           <div className="flex flex-col gap-4 [&>input]:mb-3 mt-8">
-            <EmailInput emailId="sign-in" />
+            <EmailInput emailId="sign-in" dataCy="sign-in-email" />
             <div className="flex justify-between items-center">
               <Link
                 className="text-xs text-foreground underline"
@@ -42,11 +42,15 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                 Forgot Password?
               </Link>
             </div>
-            <PasswordFrame passwordId="signin" passwordType="new" />
+            <PasswordFrame
+              passwordId="signin"
+              passwordType="new"
+              dataCy="sign-in-password"
+            />
             <SubmitButton
               pendingText="Signing In..."
               formAction={signInAction}
-              dataCy="sign-in"
+              dataCy="sign-in-button"
             >
               Sign in
             </SubmitButton>

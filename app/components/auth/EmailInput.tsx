@@ -2,7 +2,13 @@ import { Input } from "@/app/components/ui/Input";
 import { Label } from "@radix-ui/react-label";
 import { CiMail } from "react-icons/ci";
 
-const EmailInput = ({ emailId }: { emailId: string }) => {
+const EmailInput = ({
+  emailId,
+  dataCy,
+}: {
+  emailId: string;
+  dataCy: string;
+}) => {
   return (
     <>
       <Label htmlFor={`${emailId}-email`}>Email</Label>
@@ -19,6 +25,7 @@ const EmailInput = ({ emailId }: { emailId: string }) => {
           placeholder="you@example.com"
           required
           autoComplete="email"
+          dataCy={dataCy}
         />
       </div>
     </>

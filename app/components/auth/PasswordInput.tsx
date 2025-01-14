@@ -12,6 +12,7 @@ const PasswordInput = ({
   passwordId,
   passwordType,
   placeholder,
+  dataCy,
 }: {
   passwordVisible: boolean;
   setPasswordVisible: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,6 +20,7 @@ const PasswordInput = ({
   passwordId: string;
   passwordType: string;
   placeholder?: string;
+  dataCy: string;
 }) => {
   return (
     <div>
@@ -36,6 +38,7 @@ const PasswordInput = ({
           placeholder={placeholder}
           autoComplete={`${passwordType}-password`}
           required
+          dataCy={dataCy}
         />
         {passwordVisible ? (
           <GoEye

@@ -8,11 +8,13 @@ const PasswordFrame = ({
   passwordType,
   confirm = false,
   placeholder = "******",
+  dataCy,
 }: {
   passwordId: string;
   passwordType: string;
   confirm?: boolean;
   placeholder?: string;
+  dataCy: string;
 }) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
 
@@ -24,6 +26,7 @@ const PasswordFrame = ({
         setPasswordVisible={setPasswordVisible}
         passwordType={passwordType}
         placeholder={placeholder}
+        dataCy={dataCy}
       />
       {confirm && (
         <PasswordInput
@@ -33,6 +36,7 @@ const PasswordFrame = ({
           setPasswordVisible={setPasswordVisible}
           passwordType={passwordType}
           placeholder="confirm password"
+          dataCy={`${dataCy}-confirm`}
         />
       )}
     </>

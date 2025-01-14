@@ -48,12 +48,13 @@ export default async function Signup(props: {
               autoComplete="name"
             />
           </div>
-          <EmailInput emailId="sign-up" />
+          <EmailInput emailId="sign-up" dataCy="sign-up-email" />
           <PasswordFrame
             passwordId="signup"
             passwordType="new"
             placeholder="at least 6 characters"
             confirm={true}
+            dataCy="sign-up-password"
           />
           <SubmitButton formAction={signUpAction} pendingText="Signing up...">
             Sign up & Sign in
