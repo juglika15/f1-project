@@ -181,7 +181,6 @@ export const signInWithGoogle = signInWith("google");
 
 export const deleteAccountAction = async () => {
   const supabase = await createClient();
-  const locale = await getLocale();
 
   const {
     data: { user },

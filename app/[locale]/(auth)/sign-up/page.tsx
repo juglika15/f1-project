@@ -2,7 +2,7 @@ import { signUpAction } from "../../../actions/supabase_actions";
 import { FormMessage, Message } from "../../../components/auth/FormMessage";
 import { SubmitButton } from "../../../components/auth/SubmitButton";
 import { Input } from "../../../components/ui/Input";
-import { Label } from "../../../components/ui/label";
+import { Label } from "../../../components/ui/Label";
 import { Link } from "@/i18n/routing";
 import EmailInput from "../../../components/auth/EmailInput";
 import { LuUserRound } from "react-icons/lu";
