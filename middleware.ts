@@ -7,6 +7,8 @@ import { getLocale } from "next-intl/server";
 const restrictedPages = [
   "/en/cart",
   "/ka/cart",
+  "/en/profile",
+  "/ka/profile",
   "/ka/protected",
   "/en/protected",
   "/en/protected/reset-password",

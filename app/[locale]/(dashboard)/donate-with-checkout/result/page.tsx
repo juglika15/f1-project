@@ -1,5 +1,5 @@
 import type { Stripe } from "stripe";
-import PrintObject from "@/app/[locale]/components/PrintObject";
+import PrintObject from "@/app/components/PrintObject";
 import { stripe } from "@/lib/stripe";
 
 export default async function ResultPage({
