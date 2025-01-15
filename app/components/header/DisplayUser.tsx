@@ -2,6 +2,8 @@ import { signOutAction } from "@/app/actions/supabase_actions";
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
 import { Button } from "../ui/button";
+import { CgProfile } from "react-icons/cg";
+
 const DisplayUser = async () => {
   const supabase = await createClient();
 
@@ -11,7 +13,9 @@ const DisplayUser = async () => {
 
   return user ? (
     <div className="text-white flex flex-row items-center gap-4">
-      Hello {user.user_metadata.displayName.split(" ")[0]}
+      <Link href="/profile">
+        <CgProfile className="w-7 h-7" />
+      </Link>
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"} dataCy="sign-out">
           Sign out

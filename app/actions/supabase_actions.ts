@@ -150,7 +150,7 @@ export const resetPasswordAction = async (formData: FormData) => {
 export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return redirect("/sign-in");
+  return redirect("/");
 };
 
 type Provider = "facebook" | "twitter" | "apple" | "github" | "google";
@@ -181,6 +181,7 @@ export const signInWithGoogle = signInWith("google");
 
 export const deleteAccountAction = async () => {
   const supabase = await createClient();
+  const locale = await getLocale();
 
   const {
     data: { user },
@@ -192,9 +193,13 @@ export const deleteAccountAction = async () => {
 
   const auth = await createClient("deleteAccount");
 
+  await supabase.auth.signOut();
   const { error } = await auth.auth.admin.deleteUser(user.id);
 
   if (error) {
     console.error(error.message);
+    return;
   }
+
+  return redirect("/");
 };
