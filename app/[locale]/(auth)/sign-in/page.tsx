@@ -12,7 +12,7 @@ import github from "../../../../public/images/github.svg";
 import githubDark from "../../../../public/images/github_dark.svg";
 import google from "../../../../public/images/google.svg";
 import Image from "next/image";
-import { Button } from "@/app/components/ui/Button";
+import { Button } from "@/app/components/ui/button";
 import PasswordFrame from "@/app/components/auth/PasswordFrame";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
