@@ -10,15 +10,20 @@ const Profile = async () => {
 
   const user = data.user;
 
+  const name = user?.user_metadata?.name
+    ? user.user_metadata.name
+    : user?.user_metadata?.displayName;
+
   return (
     <main className="flex flex-grow flex-col justify-center dark:bg-dark items-center">
-      <h1>Hello {user?.user_metadata?.displayName.split(" ")[0]}</h1>
+      <h1>Hello, {name.split(" ")[0]}</h1>
 
       <Image
         alt="profile picture"
         src={
-          user?.user_metadata?.avatar_url ??
-          "https://img.freepik.com/premium-photo/formula-one-driver-awaits-beginning-race-generative-ai_914383-426.jpg?w=360"
+          user?.user_metadata?.picture
+            ? user?.user_metadata?.picture
+            : "https://img.freepik.com/premium-photo/formula-one-driver-awaits-beginning-race-generative-ai_914383-426.jpg?w=360"
         }
         width={100}
         height={100}
