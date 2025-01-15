@@ -1,7 +1,7 @@
 import { signOutAction } from "@/app/actions/supabase_actions";
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 import { CgProfile } from "react-icons/cg";
 
 const DisplayUser = async () => {

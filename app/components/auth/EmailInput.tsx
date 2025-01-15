@@ -1,4 +1,4 @@
-import { Input } from "@/app/components/ui/Input";
+import { Input } from "@/app/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { CiMail } from "react-icons/ci";
 
