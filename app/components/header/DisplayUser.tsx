@@ -13,7 +13,7 @@ const DisplayUser = async () => {
 
   return user ? (
     <div className="text-white flex flex-row items-center gap-4">
-      <Link href="/profile">
+      <Link href="/profile" data-cy="profile">
         <CgProfile className="w-7 h-7" />
       </Link>
       <form action={signOutAction}>

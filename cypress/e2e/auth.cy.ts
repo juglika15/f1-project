@@ -41,10 +41,50 @@ describe("auth", () => {
     cy.get('[data-cy="sign-out"]').should("exist");
 
     // delete created account
-    // cy.request("POST", "/api/delete-user").then((response) => {
-    //   expect(response.status).to.eq(200);
-    //   expect(response.body.message).to.eq("User deleted successfully");
-    // });
+    cy.get('[data-cy="profile"]').click();
+    cy.get('[data-cy="delete-account-button"]').click();
+  });
+
+  it("failed to signs up with existing email", () => {
+    cy.visit("/");
+    cy.get('[data-cy="sign-in"]').click();
+    cy.get('[data-cy="sign-up"]').click();
+    cy.get('[data-cy="sign-up-name"]').type("test name");
+    cy.get('[data-cy="sign-up-email"]').type(Cypress.env("testEmail"));
+    cy.get('[data-cy="sign-up-password"]').type(
+      Cypress.env("testPassword_signup")
+    );
+    cy.get('[data-cy="sign-up-password-confirm"]').type(
+      Cypress.env("testPassword_signup")
+    );
+    cy.get('[data-cy="sign-up-button"]').click();
+    cy.get('[data-cy="sign-out"]').should("not.exist");
+  });
+
+  it("failed to signs up with mismatched passwords", () => {
+    cy.visit("/");
+    cy.get('[data-cy="sign-in"]').click();
+    cy.get('[data-cy="sign-up"]').click();
+    cy.get('[data-cy="sign-up-name"]').type("test name");
+    cy.get('[data-cy="sign-up-email"]').type(Cypress.env("testEmail_signup"));
+    cy.get('[data-cy="sign-up-password"]').type(
+      Cypress.env("testPassword_signup")
+    );
+    cy.get('[data-cy="sign-up-password-confirm"]').type("******");
+    cy.get('[data-cy="sign-up-button"]').click();
+    cy.get('[data-cy="sign-out"]').should("not.exist");
+  });
+
+  it("failed to signs up without providing nececery credentials", () => {
+    cy.visit("/");
+    cy.get('[data-cy="sign-in"]').click();
+    cy.get('[data-cy="sign-up"]').click();
+    cy.get('[data-cy="sign-up-name"]').type("test name");
+    cy.get('[data-cy="sign-up-email"]').type("******");
+    cy.get('[data-cy="sign-up-password"]').type("11");
+    cy.get('[data-cy="sign-up-password-confirm"]').type("11");
+    cy.get('[data-cy="sign-up-button"]').click();
+    cy.get('[data-cy="sign-out"]').should("not.exist");
   });
 
   // sign out

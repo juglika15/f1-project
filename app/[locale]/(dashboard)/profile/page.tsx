@@ -28,7 +28,9 @@ const Profile = async () => {
       <div>Your Email:</div>
       {user?.user_metadata?.email && <p>{user.user_metadata.email}</p>}
       <form action={deleteAccountAction}>
-        <SubmitButton>delete account</SubmitButton>
+        <SubmitButton dataCy="delete-account-button">
+          delete account
+        </SubmitButton>
       </form>
     </main>
   );
