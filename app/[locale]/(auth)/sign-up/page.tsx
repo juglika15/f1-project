@@ -46,6 +46,7 @@ export default async function Signup(props: {
               placeholder="first and last name"
               required
               autoComplete="name"
+              dataCy="sign-up-name"
             />
           </div>
           <EmailInput emailId="sign-up" dataCy="sign-up-email" />
@@ -56,7 +57,11 @@ export default async function Signup(props: {
             confirm={true}
             dataCy="sign-up-password"
           />
-          <SubmitButton formAction={signUpAction} pendingText="Signing up...">
+          <SubmitButton
+            formAction={signUpAction}
+            pendingText="Signing up..."
+            dataCy="sign-up-button"
+          >
             Sign up & Sign in
           </SubmitButton>
           <FormMessage message={searchParams} />

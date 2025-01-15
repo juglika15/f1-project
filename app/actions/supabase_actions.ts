@@ -178,3 +178,23 @@ const signInWith = (provider: Provider) => async () => {
 
 export const signInWithGithub = signInWith("github");
 export const signInWithGoogle = signInWith("google");
+
+export const deleteAccountAction = async () => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return;
+  }
+
+  const auth = await createClient("deleteAccount");
+
+  const { error } = await auth.auth.admin.deleteUser(user.id);
+
+  if (error) {
+    console.error(error.message);
+  }
+};
