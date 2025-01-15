@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/app/components/ui/Input";
+import { Input } from "../ui/Input";
 import { Label } from "@radix-ui/react-label";
 import { CiLock } from "react-icons/ci";
 import { GoEye, GoEyeClosed } from "react-icons/go";
