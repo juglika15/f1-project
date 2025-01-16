@@ -23,7 +23,7 @@ const Header = () => {
         />
       </Link>
       <nav>
-        <ul className="flex gap-3 justify-center text-white">
+        <ul className="flex gap-5 justify-center text-white">
           <li>
             <Link href="/tickets">{t("tickets")}</Link>
           </li>
@@ -35,6 +35,9 @@ const Header = () => {
           </li>
           <li>
             <Link href="/contact">{t("contact")}</Link>
+          </li>
+          <li>
+            <Link href="/pricing">{t("pricing")}</Link>
           </li>
           <li>
             <Link href="/about">{t("about")}</Link>

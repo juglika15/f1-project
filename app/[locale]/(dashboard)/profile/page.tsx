@@ -15,7 +15,7 @@ const Profile = async () => {
     : user?.user_metadata?.displayName;
 
   return (
-    <main className="flex flex-grow flex-col justify-center dark:bg-dark items-center">
+    <main className="flex flex-grow flex-col justify-center dark:bg-dark items-center bg-gray-100">
       <h1>Hello, {name.split(" ")[0]}</h1>
 
       <Image

@@ -2,7 +2,7 @@ import { Link } from "@/i18n/routing";
 
 export default function HomePage() {
   return (
-    <main className="flex dark:bg-dark flex-grow flex-col justify-center items-center">
+    <main className="flex dark:bg-dark flex-grow flex-col bg-gray-100  justify-center items-center">
       <ul className="card-list">
         <li>
           <Link
