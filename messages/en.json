@@ -7,17 +7,8 @@
     "contact": "Contact Us",
     "about": "About"
   },
-  "HomePage": {
-    "title": "Hello!",
-    "about": "Go to the about page"
-  },
   "LocaleSwitcher": {
     "label": "Change language",
-    "locale": "{locale, select,  en {🇺🇸 English} ka {🇬🇪 ქართული } it {🇮🇹 italiano} other {Unknown}}"
-  },
-  "Modes": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
+    "locale": "{locale, select,  en {🇺🇸 English} ka {🇬🇪 ქართული }  other {Unknown}}"
   }
 }

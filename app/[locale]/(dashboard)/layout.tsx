@@ -3,7 +3,6 @@ import { getMessages } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Locale, routing } from "@/i18n/routing";
 import Header from "../../components/header/Header";
-import { Providers } from "../../components/Providers";
 import Footer from "../../components/footer/Footer";
 
 export default async function LocaleLayout({
@@ -11,7 +10,7 @@ export default async function LocaleLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   // Ensure that the incoming `locale` is valid
@@ -25,11 +24,9 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <Providers>
-        <Header />
-        {children}
-        <Footer />
-      </Providers>
+      <Header />
+      {children}
+      <Footer />
     </NextIntlClientProvider>
   );
 }

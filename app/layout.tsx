@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Metadata } from "next";
+import { Providers } from "./components/Providers";
 
 export const metadata: Metadata = {
   title: "F1 Plus",
@@ -9,11 +10,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html>
       <head></head>
-      <body className="flex flex-col min-h-screen">{children}</body>
+      <body className="flex flex-col min-h-screen">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
