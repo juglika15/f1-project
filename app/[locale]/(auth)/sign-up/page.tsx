@@ -32,7 +32,7 @@ export default async function Signup(props: {
           </Link>
         </p>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="displayName">Full Name</Label>
+          <Label htmlFor="name">Full Name</Label>
           <div className="relative flex items-center">
             <LuUserRound
               size="25"
@@ -40,9 +40,9 @@ export default async function Signup(props: {
               className="absolute left-3 top-1/2 transform -translate-y-1/2"
             />
             <Input
-              id="displayName"
+              id="name"
               type="text"
-              name="displayName"
+              name="name"
               placeholder="first and last name"
               required
               autoComplete="name"

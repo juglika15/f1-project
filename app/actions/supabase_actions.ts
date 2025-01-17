@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData) => {
-  const displayName = formData.get("displayName")?.toString();
+  const name = formData.get("name")?.toString();
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const confirmPassword = formData.get("confirmPassword")?.toString();
@@ -15,7 +15,7 @@ export const signUpAction = async (formData: FormData) => {
   const origin = (await headers()).get("origin");
   const locale = formData.get("locale") || "en";
 
-  if (!displayName || !email || !password || !confirmPassword) {
+  if (!name || !email || !password || !confirmPassword) {
     return encodedRedirect(
       "error",
       `/${locale}/sign-up`,
@@ -36,7 +36,7 @@ export const signUpAction = async (formData: FormData) => {
     password,
     options: {
       data: {
-        displayName,
+        name,
       },
       emailRedirectTo: `${origin}/auth/callback`,
     },
@@ -64,6 +64,8 @@ export const signInAction = async (formData: FormData) => {
   if (error) {
     return encodedRedirect("error", `/${locale}/sign-in`, error.message);
   }
+
+  // const { data: existingUser } = await supabase.auth.f
 
   return redirect(`/${locale}`);
 };
