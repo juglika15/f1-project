@@ -4,7 +4,6 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData) => {
   const name = formData.get("name")?.toString();
@@ -86,7 +85,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${origin}/${locale}/auth/callback?redirect_to=/${locale}/reset-password`,
+    redirectTo: `${origin}/auth/callback?redirect_to=/${locale}/reset-password`,
   });
 
   if (error) {
@@ -160,9 +159,8 @@ type Provider = "facebook" | "twitter" | "apple" | "github" | "google";
 const signInWith = (provider: Provider) => async () => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
-  const locale = await getLocale();
 
-  const auth_callback_url = `${origin}/${locale}/auth/callback`;
+  const auth_callback_url = `${origin}/auth/callback`;
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
