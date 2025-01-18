@@ -10,13 +10,11 @@ const Profile = async () => {
 
   const user = data.user;
 
-  const name = user?.user_metadata?.name
-    ? user.user_metadata.name
-    : user?.user_metadata?.displayName;
+  const name = user?.user_metadata?.name;
 
   return (
-    <main className="flex flex-grow flex-col justify-center dark:bg-dark items-center">
-      <h1>Hello, {name.split(" ")[0]}</h1>
+    <main className="flex flex-grow flex-col justify-center dark:bg-dark items-center bg-gray-100">
+      <h1>Hello, {name && name.split(" ")[0]}</h1>
 
       <Image
         alt="profile picture"

@@ -1,9 +1,10 @@
-import { Link } from "@/i18n/routing";
+// import { Link } from "@/i18n/routing";
 
 export default function HomePage() {
   return (
-    <main className="flex dark:bg-dark flex-grow flex-col justify-center items-center">
-      <ul className="card-list">
+    <main className="flex dark:bg-dark flex-grow flex-col bg-gray-100  justify-center items-center">
+      <h1>Home</h1>
+      {/* <ul className="card-list">
         <li>
           <Link
             href="/donate-with-embedded-checkout"
@@ -28,7 +29,7 @@ export default function HomePage() {
             <h2 className="bottom">Donate with Elements</h2>
           </Link>
         </li>
-      </ul>
+      </ul> */}
     </main>
   );
 }

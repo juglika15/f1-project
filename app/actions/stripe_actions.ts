@@ -66,3 +66,25 @@ export async function createPaymentIntent(
 
   return { client_secret: paymentIntent.client_secret as string };
 }
+
+export const subscribeAction = async ({ userId }: { userId: string }) => {
+  const origin: string = (await headers()).get("origin") as string;
+
+  const { client_secret, url } = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price: process.env.SUBSCRIBE_PRICE_ID as string,
+        quantity: 1,
+      },
+    ],
+    metadata: {
+      userId,
+    },
+    mode: "subscription",
+    success_url: origin,
+    cancel_url: origin,
+  });
+
+  return { client_secret, url };
+};
