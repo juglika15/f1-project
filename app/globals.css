@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  font-family: var(--font-roboto-condensed), sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-roboto-condensed), sans-serif;
+  font-weight: 700;
+}
+
+p {
+  font-weight: 400;
+}
+
 .theme-switch {
   --toggle-size: 0.75rem;
   --container-width: 5.625em;

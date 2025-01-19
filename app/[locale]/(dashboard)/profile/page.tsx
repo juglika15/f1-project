@@ -19,8 +19,8 @@ const Profile = async () => {
       <Image
         alt="profile picture"
         src={
-          user?.user_metadata?.picture
-            ? user?.user_metadata?.picture
+          user?.user_metadata?.avatar_url
+            ? user?.user_metadata?.avatar_url
             : "https://img.freepik.com/premium-photo/formula-one-driver-awaits-beginning-race-generative-ai_914383-426.jpg?w=360"
         }
         width={100}

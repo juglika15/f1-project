@@ -3,7 +3,7 @@
 export default function HomePage() {
   return (
     <main className="flex dark:bg-dark flex-grow flex-col bg-gray-100  justify-center items-center">
-      <h1>Home</h1>
+      <h1>HOME</h1>
       {/* <ul className="card-list">
         <li>
           <Link

@@ -1,12 +1,12 @@
 {
   "Navigation": {
     "home": "Home",
-    "tickets": "Tickets",
-    "merchandise": "Merchandise",
-    "help": "Help",
-    "contact": "Contact",
-    "pricing": "Pricing",
-    "about": "About"
+    "tickets": "TICKETS",
+    "merchandise": "MERCHANDISE",
+    "help": "HELP",
+    "contact": "CONTACT",
+    "pricing": "PRICING",
+    "about": "ABOUT"
   },
   "LocaleSwitcher": {
     "label": "Change language",

@@ -1,6 +1,14 @@
 import "./globals.css";
 import { Metadata } from "next";
 import { Providers } from "./components/Providers";
+import { Roboto_Condensed } from "next/font/google";
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-roboto-condensed",
+});
 
 export const metadata: Metadata = {
   title: "F1 Plus",
@@ -16,7 +24,9 @@ export default function RootLayout({
   return (
     <html>
       <head></head>
-      <body className="flex flex-col min-h-screen">
+      <body
+        className={`${robotoCondensed.variable} flex flex-col min-h-screen`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
