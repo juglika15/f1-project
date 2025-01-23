@@ -3,7 +3,6 @@ import ThemeSwitcher from "../switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import logo from "../../../public/images/F1.svg";
-import tickets from "../../../public/images/icon-F1.svg";
 import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
 import DisplayUser from "./DisplayUser";
@@ -26,16 +25,7 @@ const Header = () => {
       <nav>
         <ul className="flex gap-5 justify-center align-middle text-white">
           <li>
-            <Link href="/tickets/1">
-              <Image
-                src={tickets}
-                alt="f1 logo"
-                width="100"
-                height="100"
-                priority
-                style={{ width: "6rem", height: "auto" }}
-              />
-            </Link>
+            <Link href="/tickets/1">{t("tickets")}</Link>
           </li>
           <li>
             <Link href="/merchandise">{t("merchandise")}</Link>

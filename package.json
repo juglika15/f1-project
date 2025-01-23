@@ -10,7 +10,7 @@
     "test:e2e": "cypress open",
     "test:e2e:ci": "cypress run",
     "prepare": "husky",
-    "stripe": "stripe listen --forward-to localhost:3000/api/stripe"
+    "stripe": "stripe listen --forward-to localhost:3000/api/webhooks"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.1",
