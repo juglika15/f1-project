@@ -91,7 +91,6 @@ export const subscribeAction = async ({ userId }: { userId: string }) => {
   return url;
 };
 
-
 export async function cancelSubscriptionImmediately(subscriptionId: string) {
   try {
     await stripe.subscriptions.cancel(subscriptionId);
@@ -101,10 +100,13 @@ export async function cancelSubscriptionImmediately(subscriptionId: string) {
   }
 }
 
-export async function cancelSubscription(subscriptionId: string) {
+export async function cancelSubscription(
+  subscriptionId: string,
+  subscriptionState: boolean = true
+) {
   try {
     await stripe.subscriptions.update(subscriptionId, {
-      cancel_at_period_end: true,
+      cancel_at_period_end: subscriptionState,
     });
   } catch (error) {
     console.error("Error canceling subscription:", error);

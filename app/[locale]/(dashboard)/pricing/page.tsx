@@ -90,9 +90,13 @@ const PricingPage = async ({
     .eq("id", user.id)
     .single();
 
-  console.log(subData?.end_date);
   if (subData?.is_subscribed && subData?.end_date) {
-    return <CanceleSubscriptionPricingPage endDate={subData?.end_date} />;
+    return (
+      <CanceleSubscriptionPricingPage
+        subscriptionId={subData?.stripe_subscription_id}
+        endDate={subData?.end_date}
+      />
+    );
   }
 
   if (subData?.is_subscribed) {

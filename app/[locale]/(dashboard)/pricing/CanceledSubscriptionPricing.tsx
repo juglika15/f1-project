@@ -1,4 +1,12 @@
-const CanceleSubscriptionPricing = ({ endDate }: { endDate: string }) => {
+import RenewSubscription from "@/app/components/RenewSubscription";
+
+const CanceleSubscriptionPricing = ({
+  subscriptionId,
+  endDate,
+}: {
+  subscriptionId: string;
+  endDate: string;
+}) => {
   return (
     <main className="flex flex-grow flex-col justify-center bg-gray-100  dark:bg-dark items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -14,7 +22,7 @@ const CanceleSubscriptionPricing = ({ endDate }: { endDate: string }) => {
               day: "numeric",
             })}
           </p>
-          renew your subscription
+          <RenewSubscription subscriptionId={subscriptionId} />
         </div>
       </div>
     </main>

@@ -225,3 +225,20 @@ export const updateProfileAction = async (
     })
     .eq("id", userId);
 };
+
+export const updateEndDate = async () => {
+  const supabase = await createClient();
+  const { data: existingUser } = await supabase.auth.getUser();
+  const userId = existingUser.user?.id;
+
+  if (!userId) {
+    return;
+  }
+
+  await supabase
+    .from("user_profiles")
+    .update({
+      end_date: null,
+    })
+    .eq("id", userId);
+};
