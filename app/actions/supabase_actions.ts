@@ -64,8 +64,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", `/${locale}/sign-in`, error.message);
   }
 
-  // const { data: existingUser } = await supabase.auth.f
-
   return redirect(`/${locale}`);
 };
 
@@ -201,4 +199,29 @@ export const deleteAccountAction = async () => {
   }
 
   return redirect("/");
+};
+
+export const updateProfileAction = async (
+  subscriptionStatus: boolean,
+  subscriptionId: string | null,
+  startDate: string | null = null,
+  endDate: string | null = null
+) => {
+  const supabase = await createClient();
+  const { data: existingUser } = await supabase.auth.getUser();
+  const userId = existingUser.user?.id;
+
+  if (!userId) {
+    return;
+  }
+
+  await supabase
+    .from("user_profiles")
+    .update({
+      is_subscribed: subscriptionStatus,
+      stripe_subscription_id: subscriptionId,
+      start_date: startDate,
+      end_date: endDate,
+    })
+    .eq("id", userId);
 };

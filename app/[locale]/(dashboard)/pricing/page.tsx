@@ -1,6 +1,13 @@
 import SubscribeButton from "@/app/components/SubscribeButton";
 import { Link } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
+import type { Stripe } from "stripe";
+import { stripe } from "@/lib/stripe";
+import { updateProfileAction } from "@/app/actions/supabase_actions";
+import NoUserPricingPage from "./NoUserPricing";
+import CanceleSubscriptionPricingPage from "./CanceledSubscriptionPricing";
+import SubscribedPricing from "./SubscribedPricing";
+
 interface Plan {
   name: string;
   price: string;
@@ -23,7 +30,7 @@ const plans: Plan[] = [
   },
   {
     name: "Pro Plan",
-    price: "$29/month",
+    price: "$19.99/month",
     features: [
       "Get Premium offers",
       "Advanced Feature 2",
@@ -34,26 +41,66 @@ const plans: Plan[] = [
   },
 ];
 
-const Pricing = async () => {
+const PricingPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id: string }>;
+}) => {
   const supabase = await createClient();
 
   const { data } = await supabase.auth.getUser();
   const user = data?.user;
 
+  const { session_id } = await searchParams;
+
+  const { data: checkData } = await supabase
+    .from("user_profiles")
+    .select("is_subscribed")
+    .eq("id", user?.id)
+    .single();
+
+  if (session_id && !checkData?.is_subscribed) {
+    try {
+      const checkoutSession: Stripe.Checkout.Session =
+        await stripe.checkout.sessions.retrieve(session_id, {
+          expand: ["line_items", "payment_intent"],
+        });
+      if (checkoutSession.status === "complete") {
+        const startDate = new Date(
+          checkoutSession.created * 1000
+        ).toLocaleString();
+        await updateProfileAction(
+          true,
+          checkoutSession.subscription as string,
+          startDate
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   if (!user) {
+    return <NoUserPricingPage />;
+  }
+
+  const { data: subData } = await supabase
+    .from("user_profiles")
+    .select("is_subscribed, stripe_subscription_id, start_date, end_date")
+    .eq("id", user.id)
+    .single();
+
+  console.log(subData?.end_date);
+  if (subData?.is_subscribed && subData?.end_date) {
+    return <CanceleSubscriptionPricingPage endDate={subData?.end_date} />;
+  }
+
+  if (subData?.is_subscribed) {
     return (
-      <main className="flex flex-grow flex-col justify-center bg-gray-100  dark:bg-dark items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-              Pricing Plans
-            </h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              You are not logged in
-            </p>
-          </div>
-        </div>
-      </main>
+      <SubscribedPricing
+        subscriptionId={subData?.stripe_subscription_id}
+        startDate={subData?.start_date}
+      />
     );
   }
 
@@ -61,9 +108,7 @@ const Pricing = async () => {
     <main className="flex flex-grow flex-col justify-center bg-gray-100  dark:bg-dark items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-            Pricing Plans
-          </h2>
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100"></h2>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
             Choose the plan that best fits your needs.
           </p>
@@ -121,4 +166,4 @@ const Pricing = async () => {
   );
 };
 
-export default Pricing;
+export default PricingPage;

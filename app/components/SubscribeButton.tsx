@@ -8,7 +8,7 @@ function SubscribeButton({ userId }: { userId: string }) {
 
   const handleClickSubscribeButton = async () => {
     startTransition(async () => {
-      const { url } = await subscribeAction({ userId });
+      const url = await subscribeAction({ userId });
       if (url) {
         window.location.assign(url);
       } else {
