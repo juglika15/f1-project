@@ -7,13 +7,15 @@ const LocaleSwitcher = () => {
   const locale = useLocale();
 
   return (
-    <LocaleSwitcherSelect defaultValue={locale} label={t("label")}>
-      {routing.locales.map((cur) => (
-        <option key={cur} value={cur}>
-          {t("locale", { locale: cur })}
-        </option>
-      ))}
-    </LocaleSwitcherSelect>
+    <div className="flex justify-center items-center">
+      <LocaleSwitcherSelect defaultValue={locale} label={t("label")}>
+        {routing.locales.map((cur) => (
+          <option key={cur} value={cur}>
+            {t("locale", { locale: cur })}
+          </option>
+        ))}
+      </LocaleSwitcherSelect>
+    </div>
   );
 };
 

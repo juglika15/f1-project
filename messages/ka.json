@@ -10,6 +10,6 @@
   },
   "LocaleSwitcher": {
     "label": "Change language",
-    "locale": "{locale, select,  en {🇺🇸 English} ka {🇬🇪 ქართული } other {Unknown}}"
+    "locale": "{locale, select,  en {🇬🇧 Eng} ka {🇬🇪 ქარ } other {Unknown}}"
   }
 }

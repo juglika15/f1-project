@@ -2,6 +2,7 @@ import { deleteAccountAction } from "@/app/actions/supabase_actions";
 import { SubmitButton } from "@/app/components/auth/SubmitButton";
 import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
+import defaultImg from "@/public/images/default_image.jpeg";
 
 const Profile = async () => {
   const supabase = await createClient();
@@ -21,11 +22,14 @@ const Profile = async () => {
         src={
           user?.user_metadata?.avatar_url
             ? user?.user_metadata?.avatar_url
-            : "https://img.freepik.com/premium-photo/formula-one-driver-awaits-beginning-race-generative-ai_914383-426.jpg?w=360"
+            : defaultImg
         }
         width={100}
         height={100}
-        style={{ width: "9rem", height: "auto" }}
+        style={{
+          width: "9rem",
+          height: "auto",
+        }}
         priority
       />
       <div>Your Email:</div>

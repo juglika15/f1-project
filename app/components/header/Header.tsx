@@ -6,6 +6,7 @@ import logo from "../../../public/images/F1.svg";
 import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
 import DisplayUser from "./DisplayUser";
+import Li from "../ui/li";
 
 const Header = () => {
   const t = useTranslations("Navigation");
@@ -23,25 +24,25 @@ const Header = () => {
         />
       </Link>
       <nav>
-        <ul className="flex gap-5 justify-center align-middle text-white">
-          <li>
+        <ul className="flex gap-5 justify-center align-middle text-white ">
+          <Li>
             <Link href="/tickets/1">{t("tickets")}</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <Link href="/merchandise">{t("merchandise")}</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <Link href="/help">{t("help")}</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <Link href="/contact">{t("contact")}</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <Link href="/pricing">{t("pricing")}</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <Link href="/about">{t("about")}</Link>
-          </li>
+          </Li>
         </ul>
       </nav>
       <LocaleSwitcher />
