@@ -1,5 +1,4 @@
 import SubscribeButton from "@/app/components/SubscribeButton";
-import { Link } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
 import type { Stripe } from "stripe";
 import { stripe } from "@/lib/stripe";

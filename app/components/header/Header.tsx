@@ -25,12 +25,12 @@ const Header = () => {
         />
       </Link>
       <nav>
-        <ul className="flex gap-5 justify-center align-middle text-white ">
+        <ul className="flex gap-5 justify-center align-middle text-white">
           <Li>
             <Link
               href={{
-                pathname: "/tickets/[id]",
-                params: { id: 1 },
+                pathname: "/tickets/[raceId]",
+                params: { raceId: 1 },
               }}
             >
               {t("tickets")}

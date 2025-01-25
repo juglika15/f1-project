@@ -7,11 +7,10 @@ export default async function RacesList() {
     data: races,
     error,
     status,
-  } = await supabase.from("f1_races").select("*");
+  } = await supabase.from("f1_races").select("id, name");
   if (error && status !== 406) {
     throw error;
   }
-  console.log("Data:", races);
   if (!races) {
     return <p>No races found</p>;
   }
@@ -23,11 +22,11 @@ export default async function RacesList() {
           <li key={race.id}>
             <Link
               href={{
-                pathname: "/tickets/[id]",
-                params: { id: `${race.id}` },
+                pathname: "/tickets/[raceId]",
+                params: { raceId: race.id },
               }}
             >
-              {race.name}
+              {race.id}. {race.name}
             </Link>
           </li>
         ))}

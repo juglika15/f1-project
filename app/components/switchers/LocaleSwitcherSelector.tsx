@@ -20,6 +20,10 @@ const LocaleSwitcherSelect = ({ children, defaultValue, label }: Props) => {
 
   const onSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const nextLocale = event.target.value as Locale;
+    console.log("pathname", pathname);
+    console.log("params", params);
+    console.log("nextLocale", nextLocale);
+
     startTransition(() => {
       router.replace(
         // @ts-expect-error -- TypeScript will validate that only known `params`

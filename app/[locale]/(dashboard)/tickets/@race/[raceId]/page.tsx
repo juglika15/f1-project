@@ -7,6 +7,8 @@ interface Race {
   date: string;
   is_sprint: string;
   country: string;
+  city: string;
+  circuit: string;
 }
 
 export default async function RaceDetails({
@@ -19,15 +21,12 @@ export default async function RaceDetails({
   const supabase = await createClient();
   const { data: races }: PostgrestSingleResponse<Race[]> = await supabase
     .from("f1_races")
-    .select("*")
-    .eq("id", raceId);
+    .select("*");
 
-  console.log("Data:", races);
-
-  if (!races) {
+  if (!races?.[0]) {
     return <p>Race not found</p>;
   }
-  const race = races[0];
+  const race = races[Number(raceId) - 1];
 
   return (
     <div>
@@ -35,6 +34,8 @@ export default async function RaceDetails({
       <p>{race?.date}</p>
       <p>{race?.is_sprint ? "sprint weekend" : "normal weekend"}</p>
       <p>{race?.country}</p>
+      <p>{race?.city}</p>
+      <p>{race?.circuit}</p>
     </div>
   );
 }
