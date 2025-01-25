@@ -1,6 +1,7 @@
 import LocaleSwitcher from "../switchers/LocaleSwitcher";
 import ThemeSwitcher from "../switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
+
 import Image from "next/image";
 import logo from "../../../public/images/F1.svg";
 import { useTranslations } from "next-intl";
@@ -26,7 +27,14 @@ const Header = () => {
       <nav>
         <ul className="flex gap-5 justify-center align-middle text-white ">
           <Li>
-            <Link href="/tickets/1">{t("tickets")}</Link>
+            <Link
+              href={{
+                pathname: "/tickets/[id]",
+                params: { id: 1 },
+              }}
+            >
+              {t("tickets")}
+            </Link>
           </Li>
           <Li>
             <Link href="/merchandise">{t("merchandise")}</Link>

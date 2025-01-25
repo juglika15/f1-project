@@ -7,17 +7,22 @@ export const routing = defineRouting({
 
   // Used when no locale matches
   defaultLocale: "en",
-  // pathnames: {
-  //   "/": { en: "/", ka: "/" },
-  //   "/sign-in": { en: "/sign-in", ka: "/შესვლა" },
-  //   "/sign-up": { en: "/sign-up", ka: "/რეგისტრაცია" },
-  //   "/forgot-password": { en: "/forgot-password", ka: "/პაროლის-აღდგება" },
-  //   "/tickets": { en: "/tickets", ka: "/ბილეთები" },
-  //   "/merchandise": { en: "/merchandise", ka: "/კოლექცია" },
-  //   "/help": { en: "/help", ka: "/დახმარება" },
-  //   "/contact": { en: "/contact", ka: "/დაგვიკავშირდი" },
-  //   "/about": { en: "/about", ka: "/ჩვენს-შესახებ" },
-  // },
+  pathnames: {
+    "/": { en: "/", ka: "/" },
+    "/sign-in": { en: "/sign-in", ka: "/შესვლა" },
+    "/sign-up": { en: "/sign-up", ka: "/რეგისტრაცია" },
+    "/forgot-password": { en: "/forgot-password", ka: "/პაროლის-აღდგება" },
+    "/tickets/[id]": { en: "/tickets/[id]", ka: "/ბილეთები/[id]" },
+    "/tickets/${any}": { en: "/tickets/1", ka: "/ბილეთები/1" },
+    "/merchandise": { en: "/merchandise", ka: "/კოლექცია" },
+    "/help": { en: "/help", ka: "/დახმარება" },
+    "/contact": { en: "/contact", ka: "/დაგვიკავშირდი" },
+    "/about": { en: "/about", ka: "/ჩვენს-შესახებ" },
+    "/pricing": { en: "/pricing", ka: "/ფასები" },
+    "/reset-password": { en: "/reset-password", ka: "/პაროლის-აღდგება" },
+    "/profile": { en: "/profile", ka: "/პროფილი" },
+    "/cart": { en: "/cart", ka: "/კალათა" },
+  },
 });
 
 // Lightweight wrappers around Next.js' navigation APIs

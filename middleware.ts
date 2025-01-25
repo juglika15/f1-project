@@ -9,10 +9,10 @@ const restrictedPages = [
   "/ka/cart",
   "/en/profile",
   "/ka/profile",
-  "/ka/protected",
-  "/en/protected",
-  "/en/protected/reset-password",
-  "/ka/protected/reset-password",
+  "/ka/",
+  "/en/",
+  "/en/reset-password",
+  "/ka/reset-password",
 ];
 
 const authPages = [

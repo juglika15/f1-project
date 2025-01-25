@@ -21,7 +21,14 @@ export default async function RacesList() {
       <ul>
         {races.map((race) => (
           <li key={race.id}>
-            <Link href={`/tickets/${race.id}`}>{race.name}</Link>
+            <Link
+              href={{
+                pathname: "/tickets/[id]",
+                params: { id: `${race.id}` },
+              }}
+            >
+              {race.name}
+            </Link>
           </li>
         ))}
       </ul>

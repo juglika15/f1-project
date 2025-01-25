@@ -154,11 +154,6 @@ const PricingPage = async ({
                       </li>
                     ))}
                   </ul>
-                  <Link href={plan.link}>
-                    <button className="mt-8 w-full bg-f1red text-white py-2 px-4 rounded-md hover:bg-red-700">
-                      {plan.cta}
-                    </button>
-                  </Link>
                   <SubscribeButton userId={user?.id} />
                 </div>
               </div>
