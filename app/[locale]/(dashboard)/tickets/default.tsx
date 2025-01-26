@@ -1,5 +1,5 @@
-function defaultPage() {
+function TicketsDefaultPage() {
   return null;
 }
 
-export default defaultPage;
+export default TicketsDefaultPage;
