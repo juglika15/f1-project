@@ -21,6 +21,7 @@ export const routing = defineRouting({
     "/reset-password": { en: "/reset-password", ka: "/პაროლის-აღდგება" },
     "/profile": { en: "/profile", ka: "/პროფილი" },
     "/cart": { en: "/cart", ka: "/კალათა" },
+    "/orders": { en: "/orders", ka: "/შეკვებარები" },
   },
 });
 
