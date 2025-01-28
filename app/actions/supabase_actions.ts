@@ -184,6 +184,27 @@ export const getUserAction = async () => {
   return existingUser.user;
 };
 
+export const updateUserMetadata = async (formData: FormData) => {
+  const supabase = await createClient();
+
+  const email = formData.get("email") as string;
+  const name = formData.get("name") as string;
+  const avatar_url = formData.get("avatarUrl") as string | "";
+  const locale = formData.get("locale") || "en";
+
+  const { data, error } = await supabase.auth.updateUser({
+    email,
+    data: { name, avatar_url },
+  });
+
+  if (error) {
+    console.error("Error updating user metadata:", error.message);
+  } else {
+    console.log("Updated user metadata:", data);
+  }
+  redirect(`/${locale}/profile`);
+};
+
 export const geUserDataAction = async (user: User) => {
   const supabase = await createClient();
 

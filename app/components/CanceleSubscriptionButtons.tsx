@@ -1,4 +1,5 @@
 "use client";
+
 import {
   cancelSubscription,
   cancelSubscriptionImmediately,
@@ -6,7 +7,7 @@ import {
 import { updateProfileAction } from "../actions/supabase_actions";
 import { Button } from "./ui/button";
 
-const CanceleSubscription = ({
+const CanceleSubscriptionButtons = ({
   subscriptionId,
   startDate,
 }: {
@@ -41,4 +42,4 @@ const CanceleSubscription = ({
     </>
   );
 };
-export default CanceleSubscription;
+export default CanceleSubscriptionButtons;

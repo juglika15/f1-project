@@ -1,4 +1,4 @@
-import CanceleSubscription from "@/app/components/CanceleSubscription";
+import CanceleSubscriptionButtons from "@/app/components/CanceleSubscriptionButtons";
 
 const SubscribedPricing = ({
   subscriptionId,
@@ -17,7 +17,7 @@ const SubscribedPricing = ({
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
             You are Subscribed
           </p>
-          <CanceleSubscription
+          <CanceleSubscriptionButtons
             subscriptionId={subscriptionId}
             startDate={startDate}
           />
