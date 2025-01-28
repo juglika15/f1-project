@@ -1,4 +1,4 @@
-const AboutPage = () => {
+const About = () => {
   return (
     <main className="flex flex-grow flex-col justify-center items-center dark:bg-dark bg-gray-100">
       <h1>About</h1>
@@ -6,4 +6,4 @@ const AboutPage = () => {
   );
 };
 
-export default AboutPage;
+export default About;

@@ -1,12 +1,10 @@
 import AuthFrame from "@/app/components/auth/AuthFrame";
-import { resetPasswordAction } from "../../../actions/supabase_actions";
-import { FormMessage, Message } from "../../../components/auth/FormMessage";
-import { SubmitButton } from "../../../components/auth/SubmitButton";
+import { resetPasswordAction } from "@/app/actions/supabase_actions";
+import { FormMessage, Message } from "@/app/components/auth/FormMessage";
+import { SubmitButton } from "@/app/components/auth/SubmitButton";
 import PasswordFrame from "@/app/components/auth/PasswordFrame";
 
-export default async function ResetPassword(props: {
-  searchParams: Promise<Message>;
-}) {
+const ResetPassword = async (props: { searchParams: Promise<Message> }) => {
   const searchParams = await props.searchParams;
   return (
     <AuthFrame>
@@ -30,4 +28,6 @@ export default async function ResetPassword(props: {
       </form>
     </AuthFrame>
   );
-}
+};
+
+export default ResetPassword;

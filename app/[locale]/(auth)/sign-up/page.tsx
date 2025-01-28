@@ -1,17 +1,15 @@
-import { signUpAction } from "../../../actions/supabase_actions";
-import { FormMessage, Message } from "../../../components/auth/FormMessage";
-import { SubmitButton } from "../../../components/auth/SubmitButton";
-import { Input } from "../../../components/ui/input";
-import { Label } from "../../../components/ui/label";
+import { signUpAction } from "@/app/actions/supabase_actions";
+import { FormMessage, Message } from "@/app/components/auth/FormMessage";
+import { SubmitButton } from "@/app/components/auth/SubmitButton";
+import { Input } from "@/app/components/ui/input";
+import { Label } from "@/app/components/ui/label";
 import { Link } from "@/i18n/routing";
-import EmailInput from "../../../components/auth/EmailInput";
+import EmailInput from "@/app/components/auth/EmailInput";
 import { LuUserRound } from "react-icons/lu";
 import AuthFrame from "@/app/components/auth/AuthFrame";
 import PasswordFrame from "@/app/components/auth/PasswordFrame";
 
-export default async function Signup(props: {
-  searchParams: Promise<Message>;
-}) {
+const Signup = async (props: { searchParams: Promise<Message> }) => {
   const searchParams = await props.searchParams;
   if ("message" in searchParams) {
     return (
@@ -69,4 +67,6 @@ export default async function Signup(props: {
       </form>
     </AuthFrame>
   );
-}
+};
+
+export default Signup;

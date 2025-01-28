@@ -4,6 +4,7 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { User } from "@supabase/supabase-js";
 
 export const signUpAction = async (formData: FormData) => {
   const name = formData.get("name")?.toString();
@@ -176,6 +177,24 @@ const signInWith = (provider: Provider) => async () => {
 
 export const signInWithGithub = signInWith("github");
 export const signInWithGoogle = signInWith("google");
+
+export const getUserAction = async () => {
+  const supabase = await createClient();
+  const { data: existingUser } = await supabase.auth.getUser();
+  return existingUser.user;
+};
+
+export const geUserDataAction = async (user: User) => {
+  const supabase = await createClient();
+
+  const { data: userData } = await supabase
+    .from("user_profiles")
+    .select("is_subscribed, stripe_subscription_id, start_date, end_date")
+    .eq("id", user.id)
+    .single();
+
+  return userData;
+};
 
 export const deleteAccountAction = async () => {
   const supabase = await createClient();

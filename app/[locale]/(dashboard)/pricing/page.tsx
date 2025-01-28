@@ -1,18 +1,18 @@
 import SubscribeButton from "@/app/components/SubscribeButton";
-import { createClient } from "@/utils/supabase/server";
-import type { Stripe } from "stripe";
-import { stripe } from "@/lib/stripe";
-import { updateProfileAction } from "@/app/actions/supabase_actions";
+
+import {
+  getUserAction,
+  geUserDataAction,
+} from "@/app/actions/supabase_actions";
 import NoUserPricingPage from "./NoUserPricing";
 import CanceleSubscriptionPricingPage from "./CanceledSubscriptionPricing";
 import SubscribedPricing from "./SubscribedPricing";
+import updateSubscription from "@/hooks/updateSubscription";
 
 interface Plan {
   name: string;
   price: string;
   features: string[];
-  link: string;
-  cta: string;
 }
 
 const plans: Plan[] = [
@@ -24,8 +24,6 @@ const plans: Plan[] = [
       "Buy Newest F1 Merchandise",
       "Follow latest F1 trends",
     ],
-    link: "merchandise",
-    cta: "Get Started",
   },
   {
     name: "Pro Plan",
@@ -35,8 +33,6 @@ const plans: Plan[] = [
       "Advanced Feature 2",
       "Advanced Feature 3",
     ],
-    link: "subscribe",
-    cta: "Subscribe Now",
   },
 ];
 
@@ -45,64 +41,32 @@ const PricingPage = async ({
 }: {
   searchParams: Promise<{ session_id: string }>;
 }) => {
-  const supabase = await createClient();
-
-  const { data } = await supabase.auth.getUser();
-  const user = data?.user;
-
   const { session_id } = await searchParams;
 
-  const { data: checkData } = await supabase
-    .from("user_profiles")
-    .select("is_subscribed")
-    .eq("id", user?.id)
-    .single();
-
-  if (session_id && !checkData?.is_subscribed) {
-    try {
-      const checkoutSession: Stripe.Checkout.Session =
-        await stripe.checkout.sessions.retrieve(session_id, {
-          expand: ["line_items", "payment_intent"],
-        });
-      if (checkoutSession.status === "complete") {
-        const startDate = new Date(
-          checkoutSession.created * 1000
-        ).toLocaleString();
-        await updateProfileAction(
-          true,
-          checkoutSession.subscription as string,
-          startDate
-        );
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const user = await getUserAction();
 
   if (!user) {
     return <NoUserPricingPage />;
   }
 
-  const { data: subData } = await supabase
-    .from("user_profiles")
-    .select("is_subscribed, stripe_subscription_id, start_date, end_date")
-    .eq("id", user.id)
-    .single();
+  await updateSubscription(session_id, user);
 
-  if (subData?.is_subscribed && subData?.end_date) {
+  const userData = await geUserDataAction(user);
+
+  if (userData?.is_subscribed && userData?.end_date) {
     return (
       <CanceleSubscriptionPricingPage
-        subscriptionId={subData?.stripe_subscription_id}
-        endDate={subData?.end_date}
+        subscriptionId={userData?.stripe_subscription_id}
+        endDate={userData?.end_date}
       />
     );
   }
 
-  if (subData?.is_subscribed) {
+  if (userData?.is_subscribed) {
     return (
       <SubscribedPricing
-        subscriptionId={subData?.stripe_subscription_id}
-        startDate={subData?.start_date}
+        subscriptionId={userData?.stripe_subscription_id}
+        startDate={userData?.start_date}
       />
     );
   }
