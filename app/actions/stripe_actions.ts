@@ -15,7 +15,7 @@ export async function createCheckoutSession(
   ) as Stripe.Checkout.SessionCreateParams.UiMode;
 
   const origin: string = (await headers()).get("origin") as string;
-  const locale = data.get("locale") || "en";
+  const locale = getLocale();
 
   const checkoutSession: Stripe.Checkout.Session =
     await stripe.checkout.sessions.create({
@@ -100,7 +100,7 @@ export async function cancelSubscriptionImmediately(subscriptionId: string) {
   }
 }
 
-export async function cancelSubscription(
+export async function updateSubscription(
   subscriptionId: string,
   subscriptionState: boolean = true
 ) {

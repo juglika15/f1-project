@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { User } from "@supabase/supabase-js";
+import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData) => {
   const name = formData.get("name")?.toString();
@@ -13,7 +14,7 @@ export const signUpAction = async (formData: FormData) => {
   const confirmPassword = formData.get("confirmPassword")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   if (!name || !email || !password || !confirmPassword) {
     return encodedRedirect(
@@ -54,7 +55,7 @@ export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = await createClient();
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -73,7 +74,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
   const callbackUrl = formData.get("callbackUrl")?.toString();
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   if (!email) {
     return encodedRedirect(
@@ -113,8 +114,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
   const origin = (await headers()).get("origin");
-
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   if (!password || !confirmPassword) {
     return encodedRedirect(
@@ -190,7 +190,7 @@ export const updateUserMetadata = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const name = formData.get("name") as string;
   const avatar_url = formData.get("avatarUrl") as string | "";
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   const { data, error } = await supabase.auth.updateUser({
     email,
@@ -250,6 +250,7 @@ export const updateProfileAction = async (
   const supabase = await createClient();
   const { data: existingUser } = await supabase.auth.getUser();
   const userId = existingUser.user?.id;
+  const locale = (await getLocale()) || "en";
 
   if (!userId) {
     return;
@@ -264,12 +265,15 @@ export const updateProfileAction = async (
       end_date: endDate,
     })
     .eq("id", userId);
+
+  redirect(`/${locale}/pricing`);
 };
 
 export const updateEndDate = async () => {
   const supabase = await createClient();
   const { data: existingUser } = await supabase.auth.getUser();
   const userId = existingUser.user?.id;
+  const locale = (await getLocale()) || "en";
 
   if (!userId) {
     return;
@@ -281,4 +285,6 @@ export const updateEndDate = async () => {
       end_date: null,
     })
     .eq("id", userId);
+
+  redirect(`/${locale}/pricing`);
 };
