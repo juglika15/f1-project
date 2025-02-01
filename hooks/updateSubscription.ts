@@ -1,4 +1,4 @@
-import { updateProfileAction } from "@/app/actions/supabase_actions";
+import { updateProfileAction } from "@/app/actions/supabase";
 import { createClient } from "@/utils/supabase/server";
 import { User } from "@supabase/supabase-js";
 import type { Stripe } from "stripe";

@@ -3,7 +3,7 @@
 import {
   deleteAccountAction,
   updateUserMetadata,
-} from "@/app/actions/supabase_actions";
+} from "@/app/actions/supabase";
 import { SubmitButton } from "@/app/components/auth/SubmitButton";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
@@ -15,6 +15,7 @@ import { CiMail } from "react-icons/ci";
 import { GiFullMotorcycleHelmet } from "react-icons/gi";
 import { LuUserRound } from "react-icons/lu";
 import ConfirmModal from "@/app/components/ConfirmModal";
+import validateImageURL from "@/app/actions/validate_imageUrl";
 
 const Profile = () => {
   const supabase = createClient();
@@ -24,8 +25,10 @@ const Profile = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isValidUrl, setIsValidUrl] = useState<boolean>(true);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,29 +46,45 @@ const Profile = () => {
     fetchUser();
   }, [supabase.auth, updateUser]);
 
-  const handleAction = () => {
-    setIsEditModalOpen(true);
-  };
-
-  const handleConfirm = () => {
-    setIsEditModalOpen(false);
-    setUpdateUser(false);
-  };
-
-  const handleDeleteClose = () => {
-    setIsDeleteModalOpen(false);
+  const handleUpdateAction = () => {
+    setIsUpdateModalOpen(true);
   };
 
   const handleDeleteAction = () => {
     setIsDeleteModalOpen(true);
   };
 
+  const handleUpdateConfirm = () => {
+    setIsUpdateModalOpen(false);
+    setUpdateUser(false);
+  };
+
   const handleDeleteConfirm = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const handleClose = () => {
-    setIsEditModalOpen(false);
+  const handleUpdateClose = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+  const handleDeleteClose = () => {
+    setIsDeleteModalOpen(false);
+  };
+
+  const validateUrl = async (value: string) => {
+    if (value) {
+      const isValid: boolean = await validateImageURL(value);
+      if (!isValid) {
+        setIsValidUrl(false);
+        setMessage("Invalid image URL");
+      } else {
+        setIsValidUrl(true);
+        setMessage("valid image URL");
+      }
+    } else {
+      setIsValidUrl(true);
+      setMessage("");
+    }
   };
 
   if (loading) {
@@ -123,11 +142,17 @@ const Profile = () => {
               type="link"
               name="avatarUrl"
               value={avatarUrl ?? ""}
-              onChange={(e) => setAvatarUrl(e.target.value)}
+              onChange={async (e) => {
+                setAvatarUrl(e.target.value);
+                await validateUrl(e.target.value);
+              }}
               autoComplete="name"
               className="w-full pl-10 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
+          <p className={`${isValidUrl ? "text-green-600" : "text-red-600"}`}>
+            {message}
+          </p>
         </div>
         <div className="mb-6">
           <Label
@@ -191,16 +216,17 @@ const Profile = () => {
         <button
           type="button"
           className="w-full py-2 bg-f1red text-white rounded-lg hover:bg-red-600  transition disabled:opacity-70 disabled:cursor-not-allowed"
-          onClick={handleAction}
-          disabled={!updateUser}
+          onClick={handleUpdateAction}
+          disabled={!updateUser || !isValidUrl}
         >
           Update User Info
         </button>
         <ConfirmModal
-          isOpen={isEditModalOpen}
-          onClose={handleClose}
-          onConfirm={handleConfirm}
+          isOpen={isUpdateModalOpen}
+          onClose={handleUpdateClose}
+          onConfirm={handleUpdateConfirm}
           message="Are you sure you want to update your user info?"
+          type="update"
         />
       </form>
       <form
@@ -220,6 +246,7 @@ const Profile = () => {
           onClose={handleDeleteClose}
           onConfirm={handleDeleteConfirm}
           message="Are you sure you want to delete your user?"
+          type="delete"
         />
       </form>
     </main>

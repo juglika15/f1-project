@@ -192,16 +192,16 @@ export const updateUserMetadata = async (formData: FormData) => {
   const avatar_url = formData.get("avatarUrl") as string | "";
   const locale = (await getLocale()) || "en";
 
-  const { data, error } = await supabase.auth.updateUser({
-    email,
-    data: { name, avatar_url },
-  });
-
-  if (error) {
-    console.error("Error updating user metadata:", error.message);
-  } else {
+  try {
+    const { data } = await supabase.auth.updateUser({
+      email,
+      data: { name, avatar_url },
+    });
     console.log("Updated user metadata:", data);
+  } catch (error) {
+    console.error("Error updating user metadata:", error);
   }
+
   redirect(`/${locale}/profile`);
 };
 

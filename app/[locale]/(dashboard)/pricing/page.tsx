@@ -1,9 +1,6 @@
 import SubscribeButton from "@/app/components/SubscribeButton";
 
-import {
-  getUserAction,
-  geUserDataAction,
-} from "@/app/actions/supabase_actions";
+import { getUserAction, geUserDataAction } from "@/app/actions/supabase";
 import NoUserPricingPage from "./NoUserPricing";
 import CanceleSubscriptionPricingPage from "./CanceledSubscriptionPricing";
 import SubscribedPricing from "./SubscribedPricing";

@@ -3,8 +3,8 @@
 import {
   updateSubscription,
   cancelSubscriptionImmediately,
-} from "@/app/actions/stripe_actions";
-import { updateProfileAction } from "../actions/supabase_actions";
+} from "@/app/actions/stripe";
+import { updateProfileAction } from "../actions/supabase";
 import { Button } from "./ui/button";
 import ConfirmModal from "./ConfirmModal";
 import { useState } from "react";
@@ -74,6 +74,7 @@ const CanceleSubscriptionButtons = ({
         onClose={handleClose}
         onConfirm={handleConfirm}
         message={message}
+        type={'subscription-cancel'}
       />
     </>
   );

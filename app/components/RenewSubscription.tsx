@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { updateSubscription } from "../actions/stripe_actions";
-import { updateEndDate } from "../actions/supabase_actions";
+import { updateSubscription } from "../actions/stripe";
+import { updateEndDate } from "../actions/supabase";
 import ConfirmModal from "./ConfirmModal";
 import { Button } from "./ui/button";
 
@@ -34,6 +34,7 @@ const RenewSubscription = ({ subscriptionId }: { subscriptionId: string }) => {
         onClose={handleClose}
         onConfirm={handleConfirm}
         message="Are you sure you want to renew your subscription?"
+        type="renew-subscription"
       />
     </>
   );

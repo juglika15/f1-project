@@ -8,6 +8,24 @@
     "pricing": "PRICING",
     "about": "ABOUT"
   },
+
+  "Tickets": {
+    "sprint": "Sprint Weekend"
+  },
+  "CreateProduct": {
+    "name": "Create Product",
+    "price": "Price",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter product description",
+    "image": "Image",
+    "failMessage": "Failed to create product",
+    "creating": "Creating product",
+    "creatingProduct": "Creating Product",
+    "createAnother": "Create another product",
+    "retry": "Retry",
+    "create": "Create",
+    "successMessage": "Product Created SuccessFully"
+  },
   "LocaleSwitcher": {
     "label": "Change language",
     "locale": "{locale, select,  en {🇬🇧 Eng} ka {🇬🇪 ქარ }  other {Unknown}}"

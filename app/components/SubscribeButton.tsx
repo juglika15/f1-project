@@ -1,6 +1,6 @@
 "use client";
 
-import { subscribeAction } from "../actions/stripe_actions";
+import { subscribeAction } from "../actions/stripe";
 import { useTransition } from "react";
 
 function SubscribeButton({ userId }: { userId: string }) {

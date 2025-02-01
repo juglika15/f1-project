@@ -15,7 +15,7 @@ import StripeTestCards from "../StripeTestCards";
 import { formatAmountForDisplay } from "@/utils/stripe-helpers";
 import * as config from "@/config";
 import getStripe from "@/utils/get-stripe";
-import { createPaymentIntent } from "@/app/actions/stripe_actions";
+import { createPaymentIntent } from "@/app/actions/stripe";
 import { useLocale } from "next-intl";
 
 function CheckoutForm() {

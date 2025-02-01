@@ -1,7 +1,8 @@
 import { Locale } from "@/i18n/routing";
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+
 interface LangTypes {
   en: string;
   ka: string;
@@ -23,7 +24,7 @@ export default async function RaceDetails({
 }) {
   const { raceId } = await params;
   const locale = (await getLocale()) as Locale;
-
+  const t = await getTranslations("Tickets");
   const supabase = await createClient();
   const { data: races }: PostgrestSingleResponse<Race[]> = await supabase
     .from("f1_races")
@@ -40,7 +41,7 @@ export default async function RaceDetails({
     <div>
       {/* <h1>{race?.name}</h1> */}
       <p>{race?.date}</p>
-      <p>{race?.is_sprint ? "sprint weekend" : "normal weekend"}</p>
+      <p>{race?.is_sprint ? t("sprint") : ""}</p>
       <p>{race?.country?.[locale]}</p>
       <p>{race?.city?.[locale]}</p>
       <p>{race?.circuit}</p>

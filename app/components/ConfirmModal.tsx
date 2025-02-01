@@ -5,11 +5,13 @@ const ConfirmModal = ({
   onClose,
   onConfirm,
   message,
+  type,
 }: {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   message: string;
+  type: string;
 }) => {
   return (
     <div
@@ -28,12 +30,15 @@ const ConfirmModal = ({
           <button
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
             onClick={onClose}
+            type="button"
           >
             Cancel
           </button>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            data-cy={`${type}-confirm-button`}
             onClick={onConfirm}
+            type="submit"
           >
             Confirm
           </button>
