@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
 import DisplayUser from "./DisplayUser";
 import Li from "../ui/li";
+import LanguageToggle2 from "../Bla";
 
 const Header = () => {
   const t = useTranslations("Navigation");
@@ -63,6 +64,7 @@ const Header = () => {
         />
       </Link>
       <DisplayUser />
+      <LanguageToggle2 />
     </header>
   );
 };

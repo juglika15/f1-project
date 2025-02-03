@@ -119,7 +119,7 @@ const Profile = () => {
             src={avatar ? avatar : defaultImg}
             width={100}
             height={100}
-            className="w-44 h-auto rounded-[50%] border-2 border-gray-200 dark:border-gray-700"
+            className="w-44 h-auto rounded-full border-2 border-gray-200 dark:border-gray-700"
             unoptimized
             priority
           />

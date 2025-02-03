@@ -13,6 +13,7 @@ export function SubmitButton({
   children,
   pendingText = "Submitting...",
   dataCy,
+  className,
   ...props
 }: Props) {
   const { pending } = useFormStatus();
@@ -23,9 +24,9 @@ export function SubmitButton({
       aria-disabled={pending}
       dataCy={dataCy}
       {...props}
-      className={`w-full bg-red-600 text-white font-bold py-2 px-4 rounded  hover:text-gray-100 transition-colors  hover:bg-red-800  ${
+      className={`w-full bg-f1red text-white font-bold py-2 px-4 rounded  hover:text-gray-100 transition-colors  hover:bg-red-700  ${
         pending ? "opacity-50 cursor-not-allowed" : ""
-      }`}
+      } ${className}`}
     >
       {pending ? pendingText : children}
     </Button>

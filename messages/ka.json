@@ -13,19 +13,24 @@
     "sprint": "სპრინტის კვირა"
   },
 
-  "CreateProduct": {
-    "name": "შექმენი პროდუქტი",
+  "AddProductForm": {
+    "name": "პროდუქტის სახელი",
+    "name_placeholder": "პროდუქტის სახელი",
     "price": "ფასი",
     "description": "აღწერა",
-    "descriptionPlaceholder": "მიუთითეთ პროდუქტის აღწერა",
-    "image": "ფოტო",
-    "failMessage": "ვერ მოხერხდა პროდუქტის შექმნა",
-    "creating": "იქმნება პროდუქტი",
-    "creatingProduct": "იქმნება პროდუქტი",
-    "createAnother": "შექმენი სხვა პროდუქტი",
+    "description_placeholder": "მინიმუმ 10 სიმბოლო",
+    "images": "ფოტოები",
+    "fail_message": "ვერ მოხერხდა პროდუქტის დამატება",
+    "add": "დაამატე პროდუქტი",
+    "adding": "ემატება პროდუქტი",
     "retry": "სცადე თავიდან",
-    "create": "შექმნა",
-    "successMessage": "პროდუქტი წარმატებით შეიქმნა"
+    "success_message": "პროდუქტი დაემატა წარმატებით",
+    "name_required": "მიუთითეთ პროდუქტის სახელი",
+    "price_required": "მიუთითეთ პროდუქტის ფასი",
+    "description_required": "პროდუქტის აღწერა უნდა იყოს 10 სიმბოლო",
+    "images_required": "მიუთითეთ მინიმუმ 1 ფოტო",
+    "language_mismatch": "პროდუქტის სახელი და აღწერა უნდა იყოს ერთსა და იმავე ენაზე.",
+    "unknown_error": "მოულოდნელი შეცდომა დაფიქსირდა."
   },
   "Pricing": {},
   "Profile": {},

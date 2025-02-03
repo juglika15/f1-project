@@ -12,19 +12,24 @@
   "Tickets": {
     "sprint": "Sprint Weekend"
   },
-  "CreateProduct": {
-    "name": "Create Product",
+  "AddProductForm": {
+    "name": "Product Name",
+    "name_placeholder": "enter product name",
     "price": "Price",
     "description": "Description",
-    "descriptionPlaceholder": "Enter product description",
-    "image": "Image",
-    "failMessage": "Failed to create product",
-    "creating": "Creating product",
-    "creatingProduct": "Creating Product",
-    "createAnother": "Create another product",
+    "description_placeholder": "at least 10 characters",
+    "images": "Images",
+    "fail_message": "Failed to add product",
+    "add": "add product",
+    "adding": "adding Product",
     "retry": "Retry",
-    "create": "Create",
-    "successMessage": "Product Created SuccessFully"
+    "success_message": "Product added successFully",
+    "name_required": "Product name is required",
+    "price_required": "Product price is required",
+    "description_required": "Product description must be at least 10 characters",
+    "images_required": "At least one product image is required",
+    "language_mismatch": "The product name and description must be in the same language.",
+    "unknown_error": "An unexpected error occurred"
   },
   "LocaleSwitcher": {
     "label": "Change language",
