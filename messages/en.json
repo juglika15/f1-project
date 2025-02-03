@@ -13,6 +13,7 @@
     "sprint": "Sprint Weekend"
   },
   "AddProductForm": {
+    "title": "Add Product",
     "name": "Product Name",
     "name_placeholder": "enter product name",
     "price": "Price",
@@ -29,6 +30,12 @@
     "description_required": "Product description must be at least 10 characters",
     "images_required": "At least one product image is required",
     "language_mismatch": "The product name and description must be in the same language.",
-    "unknown_error": "An unexpected error occurred"
+    "unknown_error": "An unexpected error occurred",
+    "team": "Select a team",
+    "sizes": "Select product sizes",
+    "colors": "Select product colors",
+    "sizes_required": "At least one size is required",
+    "colors_required": "At least one color is required",
+    "team_required": "Please select a team"
   }
 }

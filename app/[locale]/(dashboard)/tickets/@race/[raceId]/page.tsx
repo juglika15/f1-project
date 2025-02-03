@@ -27,7 +27,7 @@ export default async function RaceDetails({
   const t = await getTranslations("Tickets");
   const supabase = await createClient();
   const { data: races }: PostgrestSingleResponse<Race[]> = await supabase
-    .from("f1_races")
+    .from("races")
     .select("*")
     .order("id", {
       ascending: true,

@@ -9,7 +9,7 @@ export default async function RacesList() {
     data: races,
     error,
     status,
-  } = await supabase.from("f1_races").select("id, name").order("id", {
+  } = await supabase.from("races").select("id, name").order("id", {
     ascending: true,
   });
   if (error && status !== 406) {

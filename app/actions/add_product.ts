@@ -15,6 +15,9 @@ export async function addNewProduct(formData: FormData) {
   const productPrice = Number(formData.get("productPrice")) * 100;
   const productDescription = formData.get("productDescription") as string;
   const productImages = formData.getAll("productImages") as File[];
+  const productTeam = formData.get("productTeam") as string;
+  const productSizes = formData.getAll("productSizes") as string[];
+  const productColors = formData.getAll("productColors") as string[];
 
   if (!productName) throw new Error("Product name is required.");
   if (!productPrice || isNaN(productPrice) || productPrice <= 0)
@@ -24,16 +27,15 @@ export async function addNewProduct(formData: FormData) {
     throw new Error("At least one product image is required.");
 
   try {
-    // Upload images to Supabase storage
     for (const imageFile of productImages) {
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("merchandise_images")
+        .from("f1")
         .upload(`merchandise/${Date.now()}_${imageFile.name}`, imageFile);
 
       if (uploadError) throw new Error("Failed to upload image to Supabase.");
 
       const { data: publicUrlData } = supabase.storage
-        .from("merchandise_images")
+        .from("f1")
         .getPublicUrl(uploadData.path);
 
       if (!publicUrlData?.publicUrl)
@@ -87,6 +89,9 @@ export async function addNewProduct(formData: FormData) {
         stripe_product_id: addedStripeProduct.id,
         stripe_price_id: addedStripePrice.id,
         images: uploadedImageUrls,
+        team: productTeam,
+        sizes: productSizes,
+        colors: productColors,
       })
       .single();
 
