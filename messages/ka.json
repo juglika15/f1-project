@@ -34,10 +34,6 @@
   },
   "Pricing": {},
   "Profile": {},
-  "LocaleSwitcher": {
-    "label": "Change language",
-    "locale": "{locale, select,  en {🇬🇧 Eng} ka {🇬🇪 ქარ } other {Unknown}}"
-  },
   "Contact": {},
   "Help": {},
   "About": {},

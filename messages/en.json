@@ -30,9 +30,5 @@
     "images_required": "At least one product image is required",
     "language_mismatch": "The product name and description must be in the same language.",
     "unknown_error": "An unexpected error occurred"
-  },
-  "LocaleSwitcher": {
-    "label": "Change language",
-    "locale": "{locale, select,  en {🇬🇧 Eng} ka {🇬🇪 ქარ }  other {Unknown}}"
   }
 }

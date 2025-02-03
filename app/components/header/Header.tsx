@@ -8,13 +8,12 @@ import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
 import DisplayUser from "./DisplayUser";
 import Li from "../ui/li";
-import LanguageToggle2 from "../Bla";
 
 const Header = () => {
   const t = useTranslations("Navigation");
 
   return (
-    <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-1">
+    <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-2">
       <Link href="/">
         <Image
           src={logo}
@@ -26,7 +25,7 @@ const Header = () => {
         />
       </Link>
       <nav>
-        <ul className="flex gap-5 justify-center align-middle text-white">
+        <ul className="flex gap-5 justify-center align-middle text-white w-[25rem]">
           <Li>
             <Link
               href={{
@@ -40,18 +39,18 @@ const Header = () => {
           <Li>
             <Link href="/merchandise">{t("merchandise")}</Link>
           </Li>
-          <Li>
+          {/* <Li>
             <Link href="/help">{t("help")}</Link>
-          </Li>
+          </Li> */}
           <Li>
             <Link href="/contact">{t("contact")}</Link>
           </Li>
           <Li>
             <Link href="/pricing">{t("pricing")}</Link>
           </Li>
-          <Li>
+          {/* <Li>
             <Link href="/about">{t("about")}</Link>
-          </Li>
+          </Li> */}
         </ul>
       </nav>
       <LocaleSwitcher />
@@ -64,7 +63,6 @@ const Header = () => {
         />
       </Link>
       <DisplayUser />
-      <LanguageToggle2 />
     </header>
   );
 };
