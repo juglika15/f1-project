@@ -16,8 +16,9 @@ export async function addNewProduct(formData: FormData) {
   const productDescription = formData.get("productDescription") as string;
   const productImages = formData.getAll("productImages") as File[];
   const productTeam = formData.get("productTeam") as string;
-  const productCategory = formData.getAll("productCategory") as string[];
+  const productCategory = formData.get("productCategory") as string;
   const productSizes = formData.getAll("productSizes") as string[];
+  const productSex = formData.get("productSex") as string;
   const productColors = formData.getAll("productColors") as string[];
   const productStock = Number(formData.get("productStock"));
 
@@ -29,7 +30,7 @@ export async function addNewProduct(formData: FormData) {
     throw new Error("At least one product image is required.");
   if (!productTeam) throw new Error("Product team is required.");
   if (!productCategory) throw new Error("Product category is required.");
-  if (!productColors || productColors.length === 0)
+  if (!productSizes || productSizes.length === 0)
     throw new Error("At least one product size is required.");
   if (!productColors || productColors.length === 0)
     throw new Error("At least one product color is required.");
@@ -40,6 +41,7 @@ export async function addNewProduct(formData: FormData) {
     productStock % 1 !== 0
   )
     throw new Error("A valid stock is required.");
+  if (!productSex) throw new Error("Product sex is required.");
 
   try {
     for (const imageFile of productImages) {
@@ -109,6 +111,7 @@ export async function addNewProduct(formData: FormData) {
         sizes: productSizes,
         colors: productColors,
         stock: productStock,
+        sex: productSex,
       })
       .single();
 

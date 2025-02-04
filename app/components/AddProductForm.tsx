@@ -11,46 +11,17 @@ import Image from "next/image";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
-// Available size options by category.
-const sizeOptions = {
-  clothes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL"],
-  shoes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-  headwear: ["One size only", "S/M", "L/XL"],
-  accessories: ["One size only"],
-};
-
-const colorOptions: { name: string; value: string }[] = [
-  { name: "red", value: "#EF1A2D" },
-  { name: "blue", value: "#23326A" },
-  { name: "orange", value: "#FF8000" },
-  { name: "grey", value: "#C8CCCE" },
-  { name: "dark-green", value: "#0A7968" },
-  { name: "white", value: "#F9FAFB" },
-  { name: "black", value: "#111827" },
-  { name: "yellow", value: "#FFF200" },
-  { name: "green", value: "#15e102" },
-  { name: "purple", value: "#8B5CF6" },
-];
-
-const categoryOptions = [
-  "Shirts",
-  "Hoodies",
-  "Jackets",
-  "Headwear",
-  "Shoes",
-  "Accessories",
-];
-
 interface ProductFormErrors {
   productName?: string | string[];
-  productPrice?: string | string[] | number;
+  productPrice?: string | string[];
   productDescription?: string | string[];
   productImages?: string | string[];
   productSizes?: string | string[];
   productColors?: string | string[];
   productTeam?: string | string[];
   productCategory?: string | string[];
-  productStock?: string | string[] | number;
+  productStock?: string | string[];
+  productSex?: string | string[];
 }
 
 interface Team {
@@ -59,19 +30,53 @@ interface Team {
   code: string;
 }
 
+const sizeOptions = {
+  clothes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL"],
+  shoes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+  headwear: ["One size only", "S/M", "L/XL"],
+  accessories: ["One size only"],
+};
+
 const AddProductForm = () => {
   const t = useTranslations("AddProductForm");
   const [teamOptions, setTeamOptions] = useState<Team[]>([]);
   const [hasFiles, setHasFiles] = useState<boolean | null>(false);
 
-  // New state for category, sizes, colors, team and stock.
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
+  const [selectedSex, setSelectedSex] = useState<string>("");
   const [stock, setStock] = useState<string>("");
 
-  // Fetch F1 team options.
+  const colorOptions: { code: string; value: string; name: string }[] = [
+    { code: "red", value: "#EF1A2D", name: t("red") },
+    { code: "blue", value: "#23326A", name: t("blue") },
+    { code: "orange", value: "#FF8000", name: t("orange") },
+    { code: "grey", value: "#C8CCCE", name: t("grey") },
+    { code: "dark-green", value: "#0A7968", name: t("dark-green") },
+    { code: "white", value: "#F9FAFB", name: t("white") },
+    { code: "black", value: "#111827", name: t("black") },
+    { code: "yellow", value: "#FFF200", name: t("yellow") },
+    { code: "green", value: "#15e102", name: t("green") },
+    { code: "purple", value: "#8B5CF6", name: t("purple") },
+  ];
+
+  const categoryOptions: { name: string; value: string }[] = [
+    { name: "shirts", value: t("shirts") },
+    { name: "hoodies", value: t("hoodies") },
+    { name: "jackets", value: t("jackets") },
+    { name: "headwear", value: t("headwear") },
+    { name: "shoes", value: t("shoes") },
+    { name: "accessories", value: t("accessories") },
+  ];
+  const sexOptions = [
+    { name: "mens", value: t("mens") },
+    { name: "womens", value: t("womens") },
+    { name: "unisex", value: t("unisex") },
+  ];
+
+  // fetch F1 team options
   useEffect(() => {
     const fetchTeams = async () => {
       const supabase = createClient();
@@ -85,14 +90,12 @@ const AddProductForm = () => {
     fetchTeams();
   }, []);
 
-  // When category changes, update sizes.
   useEffect(() => {
-    if (selectedCategory === "Accessories") {
+    if (selectedCategory === "accessories") {
       setSelectedSizes(["One size only"]);
     } else {
       setSelectedSizes([]);
     }
-    // Clear error on category change.
     setFieldErrors((prev) => ({ ...prev, productCategory: undefined }));
   }, [selectedCategory]);
 
@@ -101,11 +104,13 @@ const AddProductForm = () => {
     return geoRegex.test(input) ? "ka" : "en";
   };
 
-  // Extend the schema to include category and stock.
   const productSchema = z
     .object({
       productName: z.string().min(3, { message: t("name_required") }),
-      productPrice: z.number().min(0.01, { message: t("price_required") }),
+      productPrice: z.preprocess((val) => {
+        if (typeof val === "string" && val.trim() === "") return undefined;
+        return parseFloat(val as string);
+      }, z.number({ invalid_type_error: t("price_required") }).min(0.01, { message: t("price_required") })),
       productDescription: z
         .string()
         .min(10, { message: t("description_required") }),
@@ -125,14 +130,12 @@ const AddProductForm = () => {
         .array(z.string())
         .min(1, { message: t("colors_required") }),
       productTeam: z.string().min(1, { message: t("team_required") }),
+      productSex: z.string().min(1, { message: t("sex_required") }),
       productCategory: z.string().min(1, { message: t("category_required") }),
-      productStock: z.preprocess(
-        (val) => parseInt(val as string, 10),
-        z
-          .number()
-          .int()
-          .positive({ message: t("stock_invalid") })
-      ),
+      productStock: z.preprocess((val) => {
+        if (typeof val === "string" && val.trim() === "") return undefined;
+        return parseFloat(val as string);
+      }, z.number({ invalid_type_error: t("stock_invalid") }).min(1, { message: t("stock_invalid") })),
     })
     .refine(
       (data) =>
@@ -153,7 +156,6 @@ const AddProductForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  // Automatically clear global messages after 5 seconds.
   useEffect(() => {
     if (globalMsg.error || globalMsg.success) {
       const timer = setTimeout(() => {
@@ -164,11 +166,10 @@ const AddProductForm = () => {
   }, [globalMsg]);
 
   const toggleSize = (size: string) => {
-    if (selectedCategory === "Accessories") return;
+    if (selectedCategory === "accessories") return;
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
     );
-    // Clear size error on toggle.
     setFieldErrors((prev) => ({ ...prev, productSizes: undefined }));
   };
 
@@ -176,7 +177,6 @@ const AddProductForm = () => {
     setSelectedColors((prev) =>
       prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
     );
-    // Clear color error on toggle.
     setFieldErrors((prev) => ({ ...prev, productColors: undefined }));
   };
 
@@ -192,8 +192,9 @@ const AddProductForm = () => {
       productTeam: selectedTeam,
       productCategory: selectedCategory,
       productSizes: selectedSizes,
+      productSex: selectedSex,
       productColors: selectedColors,
-      productStock: rawData.get("productStock") as string,
+      productStock: parseFloat(rawData.get("productStock") as string),
     };
 
     setFieldErrors({});
@@ -211,6 +212,7 @@ const AddProductForm = () => {
       const formData = new FormData(formElem);
       formData.append("productTeam", selectedTeam);
       formData.append("productCategory", selectedCategory);
+      formData.append("productSex", selectedSex);
       formData.append("productStock", rawData.get("productStock") as string);
       selectedSizes.forEach((size) => formData.append("productSizes", size));
       selectedColors.forEach((color) =>
@@ -223,6 +225,7 @@ const AddProductForm = () => {
       setSelectedSizes([]);
       setSelectedColors([]);
       setSelectedTeam("");
+      setSelectedSex("");
       setSelectedCategory("");
       setStock("");
     } catch (err) {
@@ -239,13 +242,12 @@ const AddProductForm = () => {
     }
   };
 
-  // Determine current size options based on selected category.
   const currentSizeOptions =
-    selectedCategory === "Shoes"
+    selectedCategory === "shoes"
       ? sizeOptions.shoes
-      : selectedCategory === "Headwear"
+      : selectedCategory === "headwear"
       ? sizeOptions.headwear
-      : selectedCategory === "Accessories"
+      : selectedCategory === "accessories"
       ? sizeOptions.accessories
       : sizeOptions.clothes;
 
@@ -257,8 +259,6 @@ const AddProductForm = () => {
       <h1 className="text-2xl font-semibold text-f1red mx-auto">
         {t("title")}
       </h1>
-
-      {/* Product Name Field */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="productName" className="font-semibold">
           {t("name")}
@@ -280,7 +280,6 @@ const AddProductForm = () => {
         )}
       </div>
 
-      {/* Product Price Field */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="productPrice" className="font-semibold">
           {t("price")}
@@ -310,11 +309,10 @@ const AddProductForm = () => {
         )}
       </div>
 
-      {/* Product Description Field */}
       <div className="flex flex-col gap-2">
-        <label htmlFor="productDescription" className="font-semibold">
+        <Label htmlFor="productDescription" className="font-semibold">
           {t("description")}
-        </label>
+        </Label>
         <textarea
           id="productDescription"
           name="productDescription"
@@ -335,7 +333,6 @@ const AddProductForm = () => {
         )}
       </div>
 
-      {/* Product Images Field */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="productImages" className="font-semibold">
           {t("images")}
@@ -350,8 +347,8 @@ const AddProductForm = () => {
             setHasFiles(e.target.files && e.target.files.length > 0);
             setFieldErrors((prev) => ({ ...prev, productImages: undefined }));
           }}
-          className={`block w-full text-sm text-gray-500 border rounded-lg cursor-pointer bg-gray-50 focus:outline-none 
-            file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold transition-colors duration-500 file:bg-gray-200 
+          className={`block w-full text-sm text-gray-500 border rounded-lg cursor-pointer bg-gray-50 focus:outline-none
+            file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold transition-colors duration-500 file:bg-gray-200
             ${
               fieldErrors.productImages
                 ? "border-red-500 bg-gradient-to-br from-gray-200 to-red-300 file:text-dark"
@@ -369,7 +366,7 @@ const AddProductForm = () => {
 
       {/* F1 Team Selector */}
       <div className="flex flex-col gap-2">
-        <Label className="font-semibold">{t("team")}</Label>
+        <span className="font-semibold">{t("team")}</span>
         <div className="flex flex-wrap gap-4">
           {teamOptions.map((team) => (
             <button
@@ -403,7 +400,6 @@ const AddProductForm = () => {
         )}
       </div>
 
-      {/* Product Category Selector as Dropdown */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="productCategory" className="font-semibold">
           {t("category")}
@@ -426,9 +422,9 @@ const AddProductForm = () => {
             }`}
         >
           <option value="">Select a category</option>
-          {categoryOptions.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
+          {categoryOptions.map(({ name, value }) => (
+            <option key={name} value={name}>
+              {value}
             </option>
           ))}
         </select>
@@ -439,12 +435,11 @@ const AddProductForm = () => {
         )}
       </div>
 
-      {/* Conditional: Display Size Selector only if a category is selected */}
       {selectedCategory && (
         <div className="flex flex-col gap-2">
           <span className="font-semibold">{t("sizes")}</span>
           <div className="flex flex-wrap gap-2">
-            {selectedCategory === "Accessories" ? (
+            {selectedCategory === "accessories" ? (
               <div className="pl-5 w-32 py-1 border rounded-md bg-blue-600 text-white border-blue-500">
                 {sizeOptions.accessories[0]}
               </div>
@@ -455,8 +450,8 @@ const AddProductForm = () => {
                   type="button"
                   onClick={() => toggleSize(size)}
                   className={`py-1 border-2 rounded-md transition-colors duration-200 hover:bg-blue-600 hover:text-white hover:border-blue-500 w-12 ${
-                    selectedCategory === "Headwear" && "w-36 "
-                  } ${selectedCategory === "Shoes" && "w-20"} ${
+                    selectedCategory === "headwear" && "w-36 "
+                  } ${selectedCategory === "shoes" && "w-20"} ${
                     selectedSizes.includes(size)
                       ? "bg-blue-600 text-white border-blue-500"
                       : "bg-white text-gray-800 border-gray-300"
@@ -475,22 +470,48 @@ const AddProductForm = () => {
         </div>
       )}
 
-      {/* Product Colors Selector */}
+      <div className="flex flex-col gap-2">
+        <span className="font-semibold">{t("sex")}</span>
+        <div className="flex flex-wrap gap-5">
+          {sexOptions.map(({ name, value }) => (
+            <button
+              key={name}
+              type="button"
+              onClick={() => {
+                setSelectedSex(name);
+                setFieldErrors((prev) => ({ ...prev, productSex: undefined }));
+              }}
+              className={`p-2 w-[8.5rem] border-2 rounded-md transition-all duration-200  hover:scale-110 hover:bg-blue-600 hover:text-white ${
+                selectedSex === name
+                  ? "bg-blue-600 text-white"
+                  : "bg-white border-gray-300"
+              }`}
+              aria-label={value}
+            >
+              {value.toLocaleUpperCase()}
+            </button>
+          ))}
+        </div>
+        {fieldErrors.productSex && (
+          <span className="text-sm text-red-500">{fieldErrors.productSex}</span>
+        )}
+      </div>
+
       <div className="flex flex-col gap-2">
         <span className="font-semibold">{t("colors")}</span>
         <div className="flex flex-wrap gap-3">
           {colorOptions.map((color) => (
             <button
-              key={color.value}
+              key={color.code}
               type="button"
-              onClick={() => toggleColor(color.value)}
-              className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:border-blue-500 ${
-                selectedColors.includes(color.value)
+              onClick={() => toggleColor(color.code)}
+              className={`w-8 h-8 rounded-full border-[0.22rem] transition-all duration-200 hover:border-blue-500 ${
+                selectedColors.includes(color.code)
                   ? "border-blue-500"
                   : "border-gray-300"
               }`}
               style={{ backgroundColor: color.value }}
-              aria-label={color.name}
+              aria-label={color.code}
             />
           ))}
         </div>
@@ -499,9 +520,21 @@ const AddProductForm = () => {
             {fieldErrors.productColors}
           </span>
         )}
+        <div className="mt-2 flex flex-wrap gap-2 items-center">
+          <span className="font-medium text-gray-700 dark:text-gray-300">
+            {t("selected_colors")}:
+          </span>
+          {selectedColors.map((colorName) => (
+            <span
+              key={colorName}
+              className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
+            >
+              {colorOptions.find((color) => color.code === colorName)?.name}
+            </span>
+          ))}
+        </div>
       </div>
 
-      {/* Product Stock Field */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="productStock" className="font-semibold">
           {t("stock")}
