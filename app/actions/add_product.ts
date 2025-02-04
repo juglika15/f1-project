@@ -16,8 +16,10 @@ export async function addNewProduct(formData: FormData) {
   const productDescription = formData.get("productDescription") as string;
   const productImages = formData.getAll("productImages") as File[];
   const productTeam = formData.get("productTeam") as string;
+  const productCategory = formData.getAll("productCategory") as string[];
   const productSizes = formData.getAll("productSizes") as string[];
   const productColors = formData.getAll("productColors") as string[];
+  const productStock = Number(formData.get("productStock"));
 
   if (!productName) throw new Error("Product name is required.");
   if (!productPrice || isNaN(productPrice) || productPrice <= 0)
@@ -25,6 +27,19 @@ export async function addNewProduct(formData: FormData) {
   if (!productDescription) throw new Error("Product description is required.");
   if (!productImages || productImages.length === 0)
     throw new Error("At least one product image is required.");
+  if (!productTeam) throw new Error("Product team is required.");
+  if (!productCategory) throw new Error("Product category is required.");
+  if (!productColors || productColors.length === 0)
+    throw new Error("At least one product size is required.");
+  if (!productColors || productColors.length === 0)
+    throw new Error("At least one product color is required.");
+  if (
+    !productPrice ||
+    isNaN(productPrice) ||
+    productPrice <= 0 ||
+    productStock % 1 !== 0
+  )
+    throw new Error("A valid stock is required.");
 
   try {
     for (const imageFile of productImages) {
@@ -90,8 +105,10 @@ export async function addNewProduct(formData: FormData) {
         stripe_price_id: addedStripePrice.id,
         images: uploadedImageUrls,
         team: productTeam,
+        category: productCategory,
         sizes: productSizes,
         colors: productColors,
+        stock: productStock,
       })
       .single();
 

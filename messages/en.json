@@ -21,9 +21,8 @@
     "description_placeholder": "at least 10 characters",
     "images": "Images",
     "fail_message": "Failed to add product",
-    "add": "add product",
+    "add": "Add Product",
     "adding": "adding Product",
-    "retry": "Retry",
     "success_message": "Product added successFully",
     "name_required": "Product name is required",
     "price_required": "Product price is required",
@@ -32,10 +31,14 @@
     "language_mismatch": "The product name and description must be in the same language.",
     "unknown_error": "An unexpected error occurred",
     "team": "Select a team",
+    "category": "Select a category",
+    "category_required": "Please select a category",
     "sizes": "Select product sizes",
     "colors": "Select product colors",
+    "stock": "Stock count",
     "sizes_required": "At least one size is required",
     "colors_required": "At least one color is required",
-    "team_required": "Please select a team"
+    "team_required": "Please select a team",
+    "stock_invalid": "Invalid stock count"
   }
 }
