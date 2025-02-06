@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { getTeams, Team } from "@/hooks/getTeams";
 import { Category, getCategories } from "@/hooks/gatCategories";
@@ -9,14 +9,16 @@ import { getSizes, Sizes } from "@/hooks/getSizes";
 import { getTypes, Type } from "@/hooks/getTypes";
 import { Color, getColors } from "@/hooks/getColors";
 import { Locale } from "@/i18n/routing";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const SidebarFilter = ({ locale }: { locale: Locale }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
   const sortType = searchParams?.get("sortBy") ?? "";
+  const t = useTranslations("Merchandise");
 
-  // Filter states
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -24,7 +26,6 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedStock, setSelectedStock] = useState<string>("all");
 
-  // Options from API/hooks
   const [teamOptions, setTeamOptions] = useState<Team[]>([]);
   const [colorOptions, setColorOptions] = useState<Color[]>([]);
   const [sizeOptions, setSizeOptions] = useState<Sizes | null>(null);
@@ -39,7 +40,6 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     ? sizeOptions?.accessories
     : sizeOptions?.clothes;
 
-  // Fetch filter options on mount
   useEffect(() => {
     const fetchData = async () => {
       const teams = (await getTeams()) as Team[];
@@ -57,69 +57,18 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     fetchData();
   }, []);
 
-  // When the pathname changes, push to the new URL (optional)
-  useEffect(() => {
-    router.push(`${pathname}`);
-  }, [router, pathname]);
-
-  // Sorting options remain unchanged
-  const sortOptions = [
-    { name: "Newest", value: "id-desc" },
-    { name: "Oldest", value: "id-asc" },
-    { name: "Name: A-Z", value: `name_${locale}-asc` },
-    { name: "Name: Z-A", value: `name_${locale}-desc` },
-    { name: "Price: Low to High", value: "price-asc" },
-    { name: "Price: High to Low", value: "price-desc" },
-  ];
-
-  // Memoize search params to avoid recreating the URLSearchParams object on every render
-  const memoizedSearchParams = useMemo(
-    () => new URLSearchParams(searchParams!),
-    [searchParams]
-  );
-
-  // Update search params based on the selected filters
-  const updateSearchParams = useCallback(() => {
-    // Remove existing filter keys
-    memoizedSearchParams.delete("team");
-    memoizedSearchParams.delete("category");
-    memoizedSearchParams.delete("size");
-    memoizedSearchParams.delete("color");
-    memoizedSearchParams.delete("type");
-    memoizedSearchParams.delete("stock");
-
-    // Set new values if they exist
-    if (selectedTeams.length > 0) {
-      memoizedSearchParams.set("team", selectedTeams.join(","));
-    }
-    if (selectedCategories.length > 0) {
-      memoizedSearchParams.set("category", selectedCategories.join(","));
-    }
-    if (selectedSizes.length > 0) {
-      memoizedSearchParams.set("size", selectedSizes.join(","));
-    }
-    if (selectedColors.length > 0) {
-      memoizedSearchParams.set("color", selectedColors.join(","));
-    }
-    if (selectedTypes.length > 0) {
-      memoizedSearchParams.set("type", selectedTypes.join(","));
-    }
-    if (selectedStock !== "all") {
-      memoizedSearchParams.set("stock", selectedStock);
-    } else {
-      memoizedSearchParams.delete("stock");
-    }
-
-    // Reset page to 1 if necessary
-    if (Number(memoizedSearchParams.get("page")) > 1) {
-      memoizedSearchParams.set("page", "1");
-    }
-
-    router.push(`${pathname}?${memoizedSearchParams.toString()}`);
+  const buildFilterParams = useCallback(() => {
+    const params = new URLSearchParams();
+    if (selectedTeams.length > 0) params.set("team", selectedTeams.join(","));
+    if (selectedCategories.length > 0)
+      params.set("category", selectedCategories.join(","));
+    if (selectedSizes.length > 0) params.set("size", selectedSizes.join(","));
+    if (selectedColors.length > 0)
+      params.set("color", selectedColors.join(","));
+    if (selectedTypes.length > 0) params.set("type", selectedTypes.join(","));
+    if (selectedStock !== "all") params.set("stock", selectedStock);
+    return params;
   }, [
-    memoizedSearchParams,
-    router,
-    pathname,
     selectedTeams,
     selectedCategories,
     selectedSizes,
@@ -128,22 +77,49 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     selectedStock,
   ]);
 
-  // Handlers for sort and search
+  const prevFilterParamsRef = useRef<string>("");
+
+  useEffect(() => {
+    const filterParams = buildFilterParams();
+    const currentFilterString = filterParams.toString();
+
+    if (prevFilterParamsRef.current !== currentFilterString) {
+      prevFilterParamsRef.current = currentFilterString;
+
+      const newParams = new URLSearchParams(searchParams?.toString() || "");
+      ["team", "category", "size", "color", "type", "stock"].forEach((key) =>
+        newParams.delete(key)
+      );
+      filterParams.forEach((value, key) => newParams.set(key, value));
+      newParams.set("page", "1");
+
+      router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
+    }
+  }, [buildFilterParams, router, pathname, searchParams]);
+
+  const sortOptions = [
+    { name: t("newest"), value: "id-desc" },
+    { name: t("oldest"), value: "id-asc" },
+    { name: t("name_a_z"), value: `name_${locale}-asc` },
+    { name: t("name_z_a"), value: `name_${locale}-desc` },
+    { name: t("price_low_to_high"), value: "price-asc" },
+    { name: t("price_high_to_low"), value: "price-desc" },
+  ];
+
   function handleSortChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    memoizedSearchParams.set("sortBy", e.target.value);
-    router.push(`${pathname}?${memoizedSearchParams.toString()}`);
+    const newParams = new URLSearchParams(searchParams?.toString() || "");
+    newParams.set("sortBy", e.target.value);
+    router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
   }
 
   const handleSearch = useDebouncedCallback((e) => {
     e.preventDefault();
-    memoizedSearchParams.set("search", e.target.value);
-    if (Number(memoizedSearchParams.get("page")) > 1) {
-      memoizedSearchParams.set("page", "1");
-    }
-    router.push(`${pathname}?${memoizedSearchParams.toString()}`);
+    const newParams = new URLSearchParams(searchParams?.toString() || "");
+    newParams.set("search", e.target.value);
+    newParams.set("page", "1");
+    router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
   }, 1000);
 
-  // Handlers for each filter option
   const handleTeamChange = (teamCode: string, checked: boolean) => {
     setSelectedTeams((prev) =>
       checked ? [...prev, teamCode] : prev.filter((t) => t !== teamCode)
@@ -180,35 +156,32 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     setSelectedStock(stock);
   };
 
-  useEffect(() => {
-    updateSearchParams();
-  }, [updateSearchParams]);
-
   return (
-    <div className="w-64 p-4 border-r border-gray-300">
-      {/* Search Bar */}
+    <div className="w-64 p-4 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
       <div className="mb-4">
         <input
           id="sidebar-search"
           name="sidebar-search"
           type="text"
-          placeholder="Search..."
+          placeholder={t("search_placeholder")}
           onChange={handleSearch}
-          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 dark:focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
         />
       </div>
 
-      {/* Sorting Options */}
       <div className="mb-4">
-        <label className="block mb-1 font-medium" htmlFor="sidebar-sort">
-          Sort Options
+        <label
+          className="block mb-1 font-medium text-gray-700 dark:text-gray-200"
+          htmlFor="sidebar-sort "
+        >
+          {t("sort_by")}
         </label>
         <select
           id="sidebar-sort"
           name="sidebar-sort"
           value={sortType}
           onChange={handleSortChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 dark:focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -218,23 +191,32 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
         </select>
       </div>
 
-      {/* Filters */}
       <div>
-        <h3 className="font-medium mb-2">Filters</h3>
+        <h3 className="font-medium mb-2 text-gray-700 dark:text-gray-200">
+          {t("filters")}
+        </h3>
 
-        {/* Team Filter */}
         <div className="mb-2">
           <details className="group">
-            <summary className="cursor-pointer font-medium text-gray-700">
-              Team
+            <summary className="cursor-pointer font-medium text-gray-700 dark:text-gray-200">
+              {t("team")}
             </summary>
-            <div className="mt-1 pl-4">
+            <div className="mt-1 pl-4 space-y-1">
               {teamOptions.map((team) => (
                 <label
                   key={team.id}
-                  className="block text-sm text-gray-600"
+                  className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                   htmlFor={`team-${team.id}`}
                 >
+                  {team.logo && (
+                    <Image
+                      src={team.logo}
+                      alt={team.name}
+                      width={36}
+                      height={36}
+                      className=" mr-2 object-contain rounded-full bg-white p-1 "
+                    />
+                  )}
                   <input
                     id={`team-${team.id}`}
                     name="team"
@@ -251,17 +233,16 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
           </details>
         </div>
 
-        {/* Category Filter */}
         <div className="mb-2">
           <details className="group">
-            <summary className="cursor-pointer font-medium text-gray-700">
-              Category
+            <summary className="cursor-pointer font-medium text-gray-700 dark:text-gray-200">
+              {t("category")}
             </summary>
-            <div className="mt-1 pl-4">
+            <div className="mt-1 pl-4 space-y-1">
               {categoryOptions.map((category) => (
                 <label
                   key={category.id}
-                  className="block text-sm text-gray-600"
+                  className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                   htmlFor={`category-${category.id}`}
                 >
                   <input
@@ -280,17 +261,16 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
           </details>
         </div>
 
-        {/* Size Filter */}
         <div className="mb-2">
           <details className="group">
-            <summary className="cursor-pointer font-medium text-gray-700">
-              Size
+            <summary className="cursor-pointer font-medium text-gray-700 dark:text-gray-200">
+              {t("size")}
             </summary>
-            <div className="mt-1 pl-4">
+            <div className="mt-1 pl-4 space-y-1">
               {currentSizeOptions?.map((size) => (
                 <label
                   key={size}
-                  className="block text-sm text-gray-600"
+                  className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                   htmlFor={`size-${size}`}
                 >
                   <input
@@ -307,19 +287,22 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
           </details>
         </div>
 
-        {/* Color Filter */}
         <div className="mb-2">
           <details className="group">
-            <summary className="cursor-pointer font-medium text-gray-700">
-              Color
+            <summary className="cursor-pointer font-medium text-gray-700 dark:text-gray-200">
+              {t("color")}
             </summary>
-            <div className="mt-1 pl-4">
+            <div className="mt-1 pl-4 space-y-1">
               {colorOptions.map((color) => (
                 <label
                   key={color.id}
-                  className="block text-sm text-gray-600"
+                  className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                   htmlFor={`color-${color.id}`}
                 >
+                  <span
+                    className="w-4 h-4 inline-block rounded-full mr-2 border"
+                    style={{ backgroundColor: color.value }}
+                  />
                   <input
                     id={`color-${color.id}`}
                     name="color"
@@ -336,17 +319,16 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
           </details>
         </div>
 
-        {/* Type Filter */}
         <div className="mb-2">
           <details className="group">
-            <summary className="cursor-pointer font-medium text-gray-700">
-              Type
+            <summary className="cursor-pointer font-medium text-gray-700 dark:text-gray-200">
+              {t("type")}
             </summary>
-            <div className="mt-1 pl-4">
+            <div className="mt-1 pl-4 space-y-1">
               {typeOptions.map((type) => (
                 <label
                   key={type.id}
-                  className="block text-sm text-gray-600"
+                  className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                   htmlFor={`type-${type.id}`}
                 >
                   <input
@@ -365,14 +347,16 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
           </details>
         </div>
 
-        {/* Stock Availability */}
         <div className="mb-2">
           <details className="group">
-            <summary className="cursor-pointer font-medium text-gray-700">
-              Stock
+            <summary className="cursor-pointer font-medium text-gray-700 dark:text-gray-200">
+              {t("stock")}
             </summary>
-            <div className="mt-1 pl-4">
-              <label className="block text-sm text-gray-600" htmlFor="stock-in">
+            <div className="mt-1 pl-4 space-y-1">
+              <label
+                className="flex items-center text-sm text-gray-600 dark:text-gray-300"
+                htmlFor="stock-in"
+              >
                 <input
                   id="stock-in"
                   name="stock"
@@ -381,10 +365,10 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                   onChange={() => handleStockChange("in")}
                   checked={selectedStock === "in"}
                 />
-                In Stock
+                {t("in_stock")}
               </label>
               <label
-                className="block text-sm text-gray-600"
+                className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                 htmlFor="stock-out"
               >
                 <input
@@ -395,10 +379,10 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                   onChange={() => handleStockChange("out")}
                   checked={selectedStock === "out"}
                 />
-                Out of Stock
+                {t("out_of_stock")}
               </label>
               <label
-                className="block text-sm text-gray-600"
+                className="flex items-center text-sm text-gray-600 dark:text-gray-300"
                 htmlFor="stock-all"
               >
                 <input
@@ -409,7 +393,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                   onChange={() => handleStockChange("all")}
                   checked={selectedStock === "all"}
                 />
-                All
+                {t("all")}
               </label>
             </div>
           </details>

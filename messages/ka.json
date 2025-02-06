@@ -14,7 +14,7 @@
   },
 
   "AddProductForm": {
-    "title": "დამატე პროდუქტი",
+    "title": "დაამატე პროდუქტი",
     "name": "პროდუქტის სახელი",
     "name_placeholder": "პროდუქტის სახელი",
     "price": "ფასი",
@@ -73,7 +73,28 @@
   "Contact": {},
   "Help": {},
   "About": {},
-  "Merchandise": {},
+  "Merchandise": {
+    "title": "კოლექცია",
+    "search_placeholder": "მოძებნე სახელით",
+    "sort_by": "სორტირება",
+    "team": "გუნდი",
+    "category": "კატეგორია",
+    "size": "ზომა",
+    "color": "ფერი",
+    "type": "ტიპი",
+    "stock": "მარაგი",
+    "newest": "ახალი",
+    "oldest": "ძველი",
+    "name_a_z": "სახელი: ა-ჰ",
+    "name_z_a": "სახელი: ჰ-ა",
+    "price_low_to_high": "ფასი: დაბალიდან მაღალ",
+    "price_high_to_low": "ფასი: High to Low",
+    "filters": "ფილტრები",
+    "in_stock": "მარაგშია",
+    "out_of_stock": "არ არის მარაგში",
+    "all": "ყველა",
+    "add_product": "დაამატე პროდუქტი"
+  },
   "Blog": {},
   "Cart": {}
 }

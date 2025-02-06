@@ -66,5 +66,28 @@
     "dark-green": "Dark Green",
     "select_category": "Select a category",
     "stock_placeholder": "enter stock count"
+  },
+  "Merchandise": {
+    "title": "Merchandise",
+    "search": "Search",
+    "search_placeholder": "Search by name",
+    "sort_by": "Sort By",
+    "team": "Team",
+    "category": "Category",
+    "size": "Size",
+    "color": "Color",
+    "type": "Type",
+    "stock": "Stock",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "name_a_z": "Name A-Z",
+    "name_z_a": "Name Z-A",
+    "price_low_to_high": "Price Low to High",
+    "price_high_to_low": "Price High to Low",
+    "filters": "Filters",
+    "in_stock": "In Stock",
+    "out_of_stock": "Out of Stock",
+    "all": "All",
+    "add_product": "Add Product"
   }
 }
