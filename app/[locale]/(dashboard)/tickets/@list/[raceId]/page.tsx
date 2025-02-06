@@ -1,23 +1,13 @@
-import { Link } from "@/i18n/routing";
-import { createClient } from "@/utils/supabase/server";
-import { getLocale } from "next-intl/server";
+import { getRaces, Race } from "@/hooks/getRaces";
+import { Link, Locale } from "@/i18n/routing";
 
-export default async function RacesList() {
-  const locale = await getLocale();
-  const supabase = await createClient();
-  const {
-    data: races,
-    error,
-    status,
-  } = await supabase.from("races").select("id, name").order("id", {
-    ascending: true,
-  });
-  if (error && status !== 406) {
-    throw error;
-  }
-  if (!races) {
-    return <p>No races found</p>;
-  }
+export default async function RacesList({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const races = (await getRaces()) as Race[];
 
   return (
     <ul className="flex flex-col gap-2 m-2">

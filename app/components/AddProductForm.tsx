@@ -8,8 +8,12 @@ import { SubmitButton } from "./auth/SubmitButton";
 import { Label } from "@radix-ui/react-label";
 import { BsCurrencyDollar } from "react-icons/bs";
 import Image from "next/image";
-import { createClient } from "@/utils/supabase/client";
-import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { getTeams, Team } from "@/hooks/getTeams";
+import { Color, getColors } from "@/hooks/getColors";
+import { Sizes, getSizes } from "@/hooks/getSizes";
+import { Category, getCategories } from "@/hooks/gatCategories";
+import { Locale } from "@/i18n/routing";
+import { getTypes, Type } from "@/hooks/getTypes";
 
 interface ProductFormErrors {
   productName?: string | string[];
@@ -21,80 +25,50 @@ interface ProductFormErrors {
   productTeam?: string | string[];
   productCategory?: string | string[];
   productStock?: string | string[];
-  productSex?: string | string[];
+  productType?: string | string[];
 }
 
-interface Team {
-  name: string;
-  logo: string;
-  code: string;
-}
-
-const sizeOptions = {
-  clothes: ["XXS", "XS", "S", "M", "L", "XL", "2XL", "3XL"],
-  shoes: ["36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-  headwear: ["One size only", "S/M", "L/XL"],
-  accessories: ["One size only"],
-};
-
-const AddProductForm = () => {
+const AddProductForm = ({ locale }: { locale: Locale }) => {
   const t = useTranslations("AddProductForm");
   const [teamOptions, setTeamOptions] = useState<Team[]>([]);
+  const [colorOptions, setColorOptions] = useState<Color[]>([]);
+  const [sizeOptions, setSizeOptions] = useState<Sizes | null>(null);
+  const [categoryOptions, setCategoryOptions] = useState<Category[]>([]);
+  const [typeOptions, setTypeOptions] = useState<Type[]>([]);
+
   const [hasFiles, setHasFiles] = useState<boolean | null>(false);
 
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
-  const [selectedSex, setSelectedSex] = useState<string>("");
+  const [selectedType, setSelectedType] = useState<string>("");
   const [stock, setStock] = useState<string>("");
 
-  const colorOptions: { code: string; value: string; name: string }[] = [
-    { code: "red", value: "#EF1A2D", name: t("red") },
-    { code: "blue", value: "#23326A", name: t("blue") },
-    { code: "orange", value: "#FF8000", name: t("orange") },
-    { code: "grey", value: "#C8CCCE", name: t("grey") },
-    { code: "dark-green", value: "#0A7968", name: t("dark-green") },
-    { code: "white", value: "#F9FAFB", name: t("white") },
-    { code: "black", value: "#111827", name: t("black") },
-    { code: "yellow", value: "#FFF200", name: t("yellow") },
-    { code: "green", value: "#15e102", name: t("green") },
-    { code: "purple", value: "#8B5CF6", name: t("purple") },
-  ];
-
-  const categoryOptions: { name: string; value: string }[] = [
-    { name: "shirts", value: t("shirts") },
-    { name: "hoodies", value: t("hoodies") },
-    { name: "jackets", value: t("jackets") },
-    { name: "headwear", value: t("headwear") },
-    { name: "shoes", value: t("shoes") },
-    { name: "accessories", value: t("accessories") },
-  ];
-  const sexOptions = [
-    { name: "mens", value: t("mens") },
-    { name: "womens", value: t("womens") },
-    { name: "unisex", value: t("unisex") },
-  ];
-
-  // fetch F1 team options
   useEffect(() => {
-    const fetchTeams = async () => {
-      const supabase = createClient();
-      const { data: teams, error }: PostgrestSingleResponse<Team[]> =
-        await supabase.from("teams").select("*");
-      if (error) {
-        throw error;
-      }
+    const fetchData = async () => {
+      const teams = (await getTeams()) as Team[];
+      const category = (await getCategories()) as Category[];
+      const sizes = (await getSizes()) as Sizes;
+      const types = (await getTypes()) as Type[];
+      const colors = (await getColors()) as Color[];
+
       setTeamOptions(teams);
+      setCategoryOptions(category);
+      setSizeOptions(sizes);
+      setTypeOptions(types);
+      setColorOptions(colors);
     };
-    fetchTeams();
+    fetchData();
   }, []);
 
   useEffect(() => {
     if (selectedCategory === "accessories") {
       setSelectedSizes(["One size only"]);
+      setSelectedType("none");
     } else {
       setSelectedSizes([]);
+      setSelectedType("");
     }
     setFieldErrors((prev) => ({ ...prev, productCategory: undefined }));
   }, [selectedCategory]);
@@ -130,7 +104,7 @@ const AddProductForm = () => {
         .array(z.string())
         .min(1, { message: t("colors_required") }),
       productTeam: z.string().min(1, { message: t("team_required") }),
-      productSex: z.string().min(1, { message: t("sex_required") }),
+      productType: z.string().min(1, { message: t("type_required") }),
       productCategory: z.string().min(1, { message: t("category_required") }),
       productStock: z.preprocess((val) => {
         if (typeof val === "string" && val.trim() === "") return undefined;
@@ -192,7 +166,7 @@ const AddProductForm = () => {
       productTeam: selectedTeam,
       productCategory: selectedCategory,
       productSizes: selectedSizes,
-      productSex: selectedSex,
+      productType: selectedType,
       productColors: selectedColors,
       productStock: parseFloat(rawData.get("productStock") as string),
     };
@@ -212,7 +186,7 @@ const AddProductForm = () => {
       const formData = new FormData(formElem);
       formData.append("productTeam", selectedTeam);
       formData.append("productCategory", selectedCategory);
-      formData.append("productSex", selectedSex);
+      formData.append("productType", selectedType);
       formData.append("productStock", rawData.get("productStock") as string);
       selectedSizes.forEach((size) => formData.append("productSizes", size));
       selectedColors.forEach((color) =>
@@ -225,7 +199,7 @@ const AddProductForm = () => {
       setSelectedSizes([]);
       setSelectedColors([]);
       setSelectedTeam("");
-      setSelectedSex("");
+      setSelectedType("");
       setSelectedCategory("");
       setStock("");
     } catch (err) {
@@ -244,12 +218,12 @@ const AddProductForm = () => {
 
   const currentSizeOptions =
     selectedCategory === "shoes"
-      ? sizeOptions.shoes
+      ? sizeOptions?.shoes
       : selectedCategory === "headwear"
-      ? sizeOptions.headwear
+      ? sizeOptions?.headwear
       : selectedCategory === "accessories"
-      ? sizeOptions.accessories
-      : sizeOptions.clothes;
+      ? sizeOptions?.accessories
+      : sizeOptions?.clothes;
 
   return (
     <form
@@ -421,10 +395,10 @@ const AddProductForm = () => {
                 : "bg-gray-50 border-gray-300"
             }`}
         >
-          <option value="">Select a category</option>
+          <option value="">{t("select_category")}</option>
           {categoryOptions.map(({ name, value }) => (
             <option key={name} value={name}>
-              {value}
+              {value[locale]}
             </option>
           ))}
         </select>
@@ -441,10 +415,10 @@ const AddProductForm = () => {
           <div className="flex flex-wrap gap-2">
             {selectedCategory === "accessories" ? (
               <div className="pl-5 w-32 py-1 border rounded-md bg-blue-600 text-white border-blue-500">
-                {sizeOptions.accessories[0]}
+                {sizeOptions?.accessories[0]}
               </div>
             ) : (
-              currentSizeOptions.map((size) => (
+              currentSizeOptions?.map((size) => (
                 <button
                   key={size}
                   type="button"
@@ -469,46 +443,52 @@ const AddProductForm = () => {
           )}
         </div>
       )}
-
-      <div className="flex flex-col gap-2">
-        <span className="font-semibold">{t("sex")}</span>
-        <div className="flex flex-wrap gap-5">
-          {sexOptions.map(({ name, value }) => (
-            <button
-              key={name}
-              type="button"
-              onClick={() => {
-                setSelectedSex(name);
-                setFieldErrors((prev) => ({ ...prev, productSex: undefined }));
-              }}
-              className={`p-2 w-[8.5rem] border-2 rounded-md transition-all duration-200  hover:scale-110 hover:bg-blue-600 hover:text-white ${
-                selectedSex === name
-                  ? "bg-blue-600 text-white"
-                  : "bg-white border-gray-300"
-              }`}
-              aria-label={value}
-            >
-              {value.toLocaleUpperCase()}
-            </button>
-          ))}
+      {selectedCategory !== "accessories" && (
+        <div className="flex flex-col gap-2">
+          <span className="font-semibold">{t("type")}</span>
+          <div className="flex flex-wrap gap-5">
+            {typeOptions.map(({ name, value }) => (
+              <button
+                key={name}
+                type="button"
+                onClick={() => {
+                  setSelectedType(name);
+                  setFieldErrors((prev) => ({
+                    ...prev,
+                    productTpe: undefined,
+                  }));
+                }}
+                className={`p-2 w-[8.5rem] border-2 rounded-md transition-all duration-200  hover:scale-110 hover:bg-blue-600 hover:text-white ${
+                  selectedType === name
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-dark border-gray-300"
+                }`}
+                aria-label={value[locale]}
+              >
+                {value[locale].toLocaleUpperCase()}
+              </button>
+            ))}
+          </div>
+          {fieldErrors.productType && (
+            <span className="text-sm text-red-500">
+              {fieldErrors.productType}
+            </span>
+          )}
         </div>
-        {fieldErrors.productSex && (
-          <span className="text-sm text-red-500">{fieldErrors.productSex}</span>
-        )}
-      </div>
+      )}
 
       <div className="flex flex-col gap-2">
         <span className="font-semibold">{t("colors")}</span>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-4">
           {colorOptions.map((color) => (
             <button
               key={color.code}
               type="button"
               onClick={() => toggleColor(color.code)}
-              className={`w-8 h-8 rounded-full border-[0.22rem] transition-all duration-200 hover:border-blue-500 ${
+              className={`w-10 h-10 rounded-full border-4 transition-all duration-200 hover:border-blue-500 ${
                 selectedColors.includes(color.code)
                   ? "border-blue-500"
-                  : "border-gray-300"
+                  : "border-gray-200"
               }`}
               style={{ backgroundColor: color.value }}
               aria-label={color.code}
@@ -529,7 +509,11 @@ const AddProductForm = () => {
               key={colorName}
               className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
             >
-              {colorOptions.find((color) => color.code === colorName)?.name}
+              {
+                colorOptions.find((color) => color.code === colorName)?.name[
+                  locale
+                ]
+              }
             </span>
           ))}
         </div>
@@ -543,7 +527,7 @@ const AddProductForm = () => {
           type="number"
           id="productStock"
           name="productStock"
-          placeholder="Enter stock quantity"
+          placeholder={t("stock_placeholder")}
           min="1"
           step="1"
           value={stock}

@@ -36,12 +36,12 @@
     "sizes": "Select product sizes",
     "colors": "Select product colors",
     "stock": "Stock count",
-    "sex": "Select product sex",
+    "type": "Select product tpe",
     "sizes_required": "At least one size is required",
     "colors_required": "At least one color is required",
     "team_required": "Please select a team",
     "stock_invalid": "Invalid stock count",
-    "sex_required": "Please select a Product Sex option",
+    "type_required": "Please select a Product type option",
     "shirts": "Shirts",
     "hoodies": "Hoodies",
     "jackets": "Jackets",
@@ -59,8 +59,12 @@
     "orange": "Orange",
     "black": "Black",
     "white": "White",
-    "grey": "Grey",
+    "silver": "Silver",
     "purple": "Purple",
-    "dark-green": "Dark Green"
+    "pink": "Pink",
+    "teal": "Teal",
+    "dark-green": "Dark Green",
+    "select_category": "Select a category",
+    "stock_placeholder": "enter stock count"
   }
 }
