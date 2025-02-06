@@ -27,10 +27,10 @@ const MerchandiseDisplay = async ({
   )) as MerchandiseResponse;
 
   return (
-    <main className="bg-white dark:bg-gray-900 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className=" font-extrabold text-gray-900 dark:text-gray-100 mb-4"></h2>
-        <div className="flex flex-col md:flex-row">
+    <main className="bg-white dark:bg-gray-900 py-8 flex-grow">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
+        <h2 className=" font-extrabold text-gray-900 dark:text-gray-100 mb-4 "></h2>
+        <div className="flex flex-col md:flex-row min-h-[40rem]">
           <aside className="md:w-1/4 mb-4 md:mb-0 md:mr-4 ">
             <div className="flex flex-col gap-3  items-center">
               <AddProductModal locale={locale} />

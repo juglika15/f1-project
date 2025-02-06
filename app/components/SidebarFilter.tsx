@@ -19,6 +19,9 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
   const sortType = searchParams?.get("sortBy") ?? "";
   const t = useTranslations("Merchandise");
 
+  // New state for search term
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -40,6 +43,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     ? sizeOptions?.accessories
     : sizeOptions?.clothes;
 
+  // Fetch data for options once on mount.
   useEffect(() => {
     const fetchData = async () => {
       const teams = (await getTeams()) as Team[];
@@ -56,6 +60,32 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     };
     fetchData();
   }, []);
+
+  // New effect: On mount (or when searchParams changes) read URL params and set initial filter values
+  useEffect(() => {
+    if (searchParams) {
+      const teamQuery = searchParams.get("team");
+      if (teamQuery) setSelectedTeams(teamQuery.split(","));
+
+      const categoryQuery = searchParams.get("category");
+      if (categoryQuery) setSelectedCategories(categoryQuery.split(","));
+
+      const sizeQuery = searchParams.get("size");
+      if (sizeQuery) setSelectedSizes(sizeQuery.split(","));
+
+      const colorQuery = searchParams.get("color");
+      if (colorQuery) setSelectedColors(colorQuery.split(","));
+
+      const typeQuery = searchParams.get("type");
+      if (typeQuery) setSelectedTypes(typeQuery.split(","));
+
+      const stockQuery = searchParams.get("stock");
+      if (stockQuery) setSelectedStock(stockQuery);
+
+      const searchQuery = searchParams.get("search");
+      if (searchQuery) setSearchTerm(searchQuery);
+    }
+  }, [searchParams]);
 
   const buildFilterParams = useCallback(() => {
     const params = new URLSearchParams();
@@ -118,7 +148,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     newParams.set("search", e.target.value);
     newParams.set("page", "1");
     router.push(`${pathname}?${newParams.toString()}`, { scroll: false });
-  }, 1000);
+  }, 500);
 
   const handleTeamChange = (teamCode: string, checked: boolean) => {
     setSelectedTeams((prev) =>
@@ -164,7 +194,11 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
           name="sidebar-search"
           type="text"
           placeholder={t("search_placeholder")}
-          onChange={handleSearch}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            handleSearch(e);
+          }}
+          value={searchTerm}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring focus:border-blue-300 dark:focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm"
         />
       </div>
@@ -172,7 +206,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
       <div className="mb-4">
         <label
           className="block mb-1 font-medium text-gray-700 dark:text-gray-200"
-          htmlFor="sidebar-sort "
+          htmlFor="sidebar-sort"
         >
           {t("sort_by")}
         </label>
@@ -214,7 +248,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                       alt={team.name}
                       width={36}
                       height={36}
-                      className=" mr-2 object-contain rounded-full bg-white p-1 "
+                      className="h-[2.25rem] w-[2.25rem] mr-2 object-contain rounded-full bg-white p-1"
                     />
                   )}
                   <input
@@ -225,6 +259,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                     onChange={(e) =>
                       handleTeamChange(team.code, e.target.checked)
                     }
+                    checked={selectedTeams.includes(team.code)}
                   />
                   {team.name}
                 </label>
@@ -253,6 +288,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                     onChange={(e) =>
                       handleCategoryChange(category.name, e.target.checked)
                     }
+                    checked={selectedCategories.includes(category.name)}
                   />
                   {category.value[locale]}
                 </label>
@@ -279,6 +315,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                     type="checkbox"
                     className="mr-2"
                     onChange={(e) => handleSizeChange(size, e.target.checked)}
+                    checked={selectedSizes.includes(size)}
                   />
                   {size}
                 </label>
@@ -311,6 +348,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                     onChange={(e) =>
                       handleColorChange(color.code, e.target.checked)
                     }
+                    checked={selectedColors.includes(color.code)}
                   />
                   {color.name[locale]}
                 </label>
@@ -339,6 +377,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                     onChange={(e) =>
                       handleTypeChange(type.name, e.target.checked)
                     }
+                    checked={selectedTypes.includes(type.name)}
                   />
                   {type.value[locale]}
                 </label>
