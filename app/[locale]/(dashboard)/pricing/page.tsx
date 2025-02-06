@@ -1,12 +1,15 @@
 import SubscribeButton from "@/app/components/SubscribeButton";
-import { Link } from "@/i18n/routing";
-import { createClient } from "@/utils/supabase/server";
+
+import { getUserAction, geUserDataAction } from "@/app/actions/supabase";
+import NoUserPricingPage from "./NoUserPricing";
+import CanceleSubscriptionPricingPage from "./CanceledSubscriptionPricing";
+import SubscribedPricing from "./SubscribedPricing";
+import updateSubscription from "@/hooks/updateSubscription";
+
 interface Plan {
   name: string;
   price: string;
   features: string[];
-  link: string;
-  cta: string;
 }
 
 const plans: Plan[] = [
@@ -18,42 +21,50 @@ const plans: Plan[] = [
       "Buy Newest F1 Merchandise",
       "Follow latest F1 trends",
     ],
-    link: "merchandise",
-    cta: "Get Started",
   },
   {
     name: "Pro Plan",
-    price: "$29/month",
+    price: "$19.99/month",
     features: [
       "Get Premium offers",
       "Advanced Feature 2",
       "Advanced Feature 3",
     ],
-    link: "subscribe",
-    cta: "Subscribe Now",
   },
 ];
 
-const Pricing = async () => {
-  const supabase = await createClient();
+const PricingPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ session_id: string }>;
+}) => {
+  const { session_id } = await searchParams;
 
-  const { data } = await supabase.auth.getUser();
-  const user = data?.user;
+  const user = await getUserAction();
 
   if (!user) {
+    return <NoUserPricingPage />;
+  }
+
+  await updateSubscription(session_id, user);
+
+  const userData = await geUserDataAction(user);
+
+  if (userData?.is_subscribed && userData?.end_date) {
     return (
-      <main className="flex flex-grow flex-col justify-center bg-gray-100  dark:bg-dark items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-              Pricing Plans
-            </h2>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-              You are not logged in
-            </p>
-          </div>
-        </div>
-      </main>
+      <CanceleSubscriptionPricingPage
+        subscriptionId={userData?.stripe_subscription_id}
+        endDate={userData?.end_date}
+      />
+    );
+  }
+
+  if (userData?.is_subscribed) {
+    return (
+      <SubscribedPricing
+        subscriptionId={userData?.stripe_subscription_id}
+        startDate={userData?.start_date}
+      />
     );
   }
 
@@ -61,9 +72,7 @@ const Pricing = async () => {
     <main className="flex flex-grow flex-col justify-center bg-gray-100  dark:bg-dark items-center">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-            Pricing Plans
-          </h2>
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100"></h2>
           <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
             Choose the plan that best fits your needs.
           </p>
@@ -105,11 +114,6 @@ const Pricing = async () => {
                       </li>
                     ))}
                   </ul>
-                  <Link href={plan.link}>
-                    <button className="mt-8 w-full bg-f1red text-white py-2 px-4 rounded-md hover:bg-red-700">
-                      {plan.cta}
-                    </button>
-                  </Link>
                   <SubscribeButton userId={user?.id} />
                 </div>
               </div>
@@ -121,4 +125,4 @@ const Pricing = async () => {
   );
 };
 
-export default Pricing;
+export default PricingPage;

@@ -1,19 +1,16 @@
 "use client";
 
-import { subscribeAction } from "../actions/stripe_actions";
-import { useRouter } from "next/navigation";
+import { subscribeAction } from "../actions/stripe";
 import { useTransition } from "react";
 
 function SubscribeButton({ userId }: { userId: string }) {
-  const router = useRouter();
-
   const [isPending, startTransition] = useTransition();
 
   const handleClickSubscribeButton = async () => {
     startTransition(async () => {
-      const { url } = await subscribeAction({ userId });
+      const url = await subscribeAction({ userId });
       if (url) {
-        router.push(url);
+        window.location.assign(url);
       } else {
         console.error("Failed to create subscription session");
       }

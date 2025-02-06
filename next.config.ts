@@ -18,6 +18,21 @@ const nextConfig: NextConfig = {
         hostname: "img.freepik.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+        pathname: "/**",
+      },
     ],
   },
 };

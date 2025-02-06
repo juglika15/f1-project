@@ -1,13 +1,11 @@
-import { forgotPasswordAction } from "../../../actions/supabase_actions";
-import { FormMessage, Message } from "../../../components/auth/FormMessage";
-import { SubmitButton } from "../../../components/auth/SubmitButton";
+import { forgotPasswordAction } from "@/app/actions/supabase";
+import { FormMessage, Message } from "@/app/components/auth/FormMessage";
+import { SubmitButton } from "@/app/components/auth/SubmitButton";
 import { Link } from "@/i18n/routing";
-import EmailInput from "../../../components/auth/EmailInput";
+import EmailInput from "@/app/components/auth/EmailInput";
 import AuthFrame from "@/app/components/auth/AuthFrame";
 
-export default async function ForgotPassword(props: {
-  searchParams: Promise<Message>;
-}) {
+const ForgotPassword = async (props: { searchParams: Promise<Message> }) => {
   const searchParams = await props.searchParams;
   return (
     <AuthFrame>
@@ -34,4 +32,6 @@ export default async function ForgotPassword(props: {
       </form>
     </AuthFrame>
   );
-}
+};
+
+export default ForgotPassword;

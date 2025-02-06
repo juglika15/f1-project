@@ -2,20 +2,20 @@ import {
   signInAction,
   signInWithGithub,
   signInWithGoogle,
-} from "../../../actions/supabase_actions";
-import { FormMessage, Message } from "../../../components/auth/FormMessage";
-import { SubmitButton } from "../../../components/auth/SubmitButton";
+} from "@/app/actions/supabase";
+import { FormMessage, Message } from "@/app/components/auth/FormMessage";
+import { SubmitButton } from "@/app/components/auth/SubmitButton";
 import { Link } from "@/i18n/routing";
-import EmailInput from "../../../components/auth/EmailInput";
+import EmailInput from "@/app/components/auth/EmailInput";
 import AuthFrame from "@/app/components/auth/AuthFrame";
-import github from "../../../../public/images/github.svg";
-import githubDark from "../../../../public/images/github_dark.svg";
-import google from "../../../../public/images/google.svg";
+import github from "@/public/images/github.svg";
+import githubDark from "@/public/images/github_dark.svg";
+import google from "@/public/images/google.svg";
 import Image from "next/image";
 import { Button } from "@/app/components/ui/button";
 import PasswordFrame from "@/app/components/auth/PasswordFrame";
 
-export default async function Login(props: { searchParams: Promise<Message> }) {
+const SignIn = async (props: { searchParams: Promise<Message> }) => {
   const searchParams = await props.searchParams;
 
   return (
@@ -90,4 +90,6 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
       </div>
     </AuthFrame>
   );
-}
+};
+
+export default SignIn;

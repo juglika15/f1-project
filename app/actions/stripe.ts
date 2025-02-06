@@ -3,8 +3,9 @@
 import type { Stripe } from "stripe";
 import { headers } from "next/headers";
 import { CURRENCY } from "@/config";
-import { formatAmountForStripe } from "@/utils/get-stripejs";
+import { formatAmountForStripe } from "@/utils/stripe-helpers";
 import { stripe } from "@/lib/stripe";
+import { getLocale } from "next-intl/server";
 
 export async function createCheckoutSession(
   data: FormData
@@ -14,7 +15,7 @@ export async function createCheckoutSession(
   ) as Stripe.Checkout.SessionCreateParams.UiMode;
 
   const origin: string = (await headers()).get("origin") as string;
-  const locale = data.get("locale") || "en";
+  const locale = getLocale();
 
   const checkoutSession: Stripe.Checkout.Session =
     await stripe.checkout.sessions.create({
@@ -69,8 +70,9 @@ export async function createPaymentIntent(
 
 export const subscribeAction = async ({ userId }: { userId: string }) => {
   const origin: string = (await headers()).get("origin") as string;
+  const locale = await getLocale();
 
-  const { client_secret, url } = await stripe.checkout.sessions.create({
+  const { url } = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     line_items: [
       {
@@ -82,9 +84,32 @@ export const subscribeAction = async ({ userId }: { userId: string }) => {
       userId,
     },
     mode: "subscription",
-    success_url: origin,
-    cancel_url: origin,
+    success_url: `${origin}/${locale}/pricing?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/${locale}/pricing`,
   });
 
-  return { client_secret, url };
+  return url;
 };
+
+export async function cancelSubscriptionImmediately(subscriptionId: string) {
+  try {
+    await stripe.subscriptions.cancel(subscriptionId);
+  } catch (error) {
+    console.error("Error canceling subscription:", error);
+    throw error;
+  }
+}
+
+export async function updateSubscription(
+  subscriptionId: string,
+  subscriptionState: boolean = true
+) {
+  try {
+    await stripe.subscriptions.update(subscriptionId, {
+      cancel_at_period_end: subscriptionState,
+    });
+  } catch (error) {
+    console.error("Error canceling subscription:", error);
+    throw error;
+  }
+}

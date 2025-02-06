@@ -1,17 +1,19 @@
 import LocaleSwitcher from "../switchers/LocaleSwitcher";
 import ThemeSwitcher from "../switchers/ThemeSwitcher";
 import { Link } from "@/i18n/routing";
+
 import Image from "next/image";
 import logo from "../../../public/images/F1.svg";
 import { useTranslations } from "next-intl";
 import { FaShoppingCart } from "react-icons/fa";
 import DisplayUser from "./DisplayUser";
+import Li from "../ui/li";
 
 const Header = () => {
   const t = useTranslations("Navigation");
 
   return (
-    <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-1">
+    <header className="flex gap-4 justify-center items-center bg-dark dark:bg-gold p-2">
       <Link href="/">
         <Image
           src={logo}
@@ -23,25 +25,32 @@ const Header = () => {
         />
       </Link>
       <nav>
-        <ul className="flex gap-5 justify-center text-white">
-          <li>
-            <Link href="/tickets">{t("tickets")}</Link>
-          </li>
-          <li>
+        <ul className="flex gap-5 justify-center align-middle text-white w-[25rem]">
+          <Li>
+            <Link
+              href={{
+                pathname: "/tickets/[raceId]",
+                params: { raceId: 1 },
+              }}
+            >
+              {t("tickets")}
+            </Link>
+          </Li>
+          <Li>
             <Link href="/merchandise">{t("merchandise")}</Link>
-          </li>
-          <li>
+          </Li>
+          {/* <Li>
             <Link href="/help">{t("help")}</Link>
-          </li>
-          <li>
+          </Li> */}
+          <Li>
             <Link href="/contact">{t("contact")}</Link>
-          </li>
-          <li>
+          </Li>
+          <Li>
             <Link href="/pricing">{t("pricing")}</Link>
-          </li>
-          <li>
+          </Li>
+          {/* <Li>
             <Link href="/about">{t("about")}</Link>
-          </li>
+          </Li> */}
         </ul>
       </nav>
       <LocaleSwitcher />

@@ -12,10 +12,10 @@ import {
 import CustomDonationInput from "../CustomDonationInput";
 import StripeTestCards from "../StripeTestCards";
 
-import { formatAmountForDisplay } from "@/utils/get-stripejs";
+import { formatAmountForDisplay } from "@/utils/stripe-helpers";
 import * as config from "@/config";
-import getStripe from "@/utils/stripe-helpers";
-import { createPaymentIntent } from "@/app/actions/stripe_actions";
+import getStripe from "@/utils/get-stripe";
+import { createPaymentIntent } from "@/app/actions/stripe";
 import { useLocale } from "next-intl";
 
 function CheckoutForm() {

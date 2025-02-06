@@ -4,6 +4,8 @@ import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { User } from "@supabase/supabase-js";
+import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData) => {
   const name = formData.get("name")?.toString();
@@ -12,7 +14,7 @@ export const signUpAction = async (formData: FormData) => {
   const confirmPassword = formData.get("confirmPassword")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   if (!name || !email || !password || !confirmPassword) {
     return encodedRedirect(
@@ -53,7 +55,7 @@ export const signInAction = async (formData: FormData) => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = await createClient();
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   const { error } = await supabase.auth.signInWithPassword({
     email,
@@ -64,8 +66,6 @@ export const signInAction = async (formData: FormData) => {
     return encodedRedirect("error", `/${locale}/sign-in`, error.message);
   }
 
-  // const { data: existingUser } = await supabase.auth.f
-
   return redirect(`/${locale}`);
 };
 
@@ -74,7 +74,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
   const callbackUrl = formData.get("callbackUrl")?.toString();
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   if (!email) {
     return encodedRedirect(
@@ -114,8 +114,7 @@ export const resetPasswordAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const confirmPassword = formData.get("confirmPassword") as string;
   const origin = (await headers()).get("origin");
-
-  const locale = formData.get("locale") || "en";
+  const locale = (await getLocale()) || "en";
 
   if (!password || !confirmPassword) {
     return encodedRedirect(
@@ -179,6 +178,45 @@ const signInWith = (provider: Provider) => async () => {
 export const signInWithGithub = signInWith("github");
 export const signInWithGoogle = signInWith("google");
 
+export const getUserAction = async () => {
+  const supabase = await createClient();
+  const { data: existingUser } = await supabase.auth.getUser();
+  return existingUser.user;
+};
+
+export const updateUserMetadata = async (formData: FormData) => {
+  const supabase = await createClient();
+
+  const email = formData.get("email") as string;
+  const name = formData.get("name") as string;
+  const avatar_url = formData.get("avatarUrl") as string | "";
+  const locale = (await getLocale()) || "en";
+
+  try {
+    const { data } = await supabase.auth.updateUser({
+      email,
+      data: { name, avatar_url },
+    });
+    console.log("Updated user metadata:", data);
+  } catch (error) {
+    console.error("Error updating user metadata:", error);
+  }
+
+  redirect(`/${locale}/profile`);
+};
+
+export const geUserDataAction = async (user: User) => {
+  const supabase = await createClient();
+
+  const { data: userData } = await supabase
+    .from("user_profiles")
+    .select("is_subscribed, stripe_subscription_id, start_date, end_date")
+    .eq("id", user.id)
+    .single();
+
+  return userData;
+};
+
 export const deleteAccountAction = async () => {
   const supabase = await createClient();
 
@@ -201,4 +239,52 @@ export const deleteAccountAction = async () => {
   }
 
   return redirect("/");
+};
+
+export const updateProfileAction = async (
+  subscriptionStatus: boolean,
+  subscriptionId: string | null,
+  startDate: string | null = null,
+  endDate: string | null = null
+) => {
+  const supabase = await createClient();
+  const { data: existingUser } = await supabase.auth.getUser();
+  const userId = existingUser.user?.id;
+  const locale = (await getLocale()) || "en";
+
+  if (!userId) {
+    return;
+  }
+
+  await supabase
+    .from("user_profiles")
+    .update({
+      is_subscribed: subscriptionStatus,
+      stripe_subscription_id: subscriptionId,
+      start_date: startDate,
+      end_date: endDate,
+    })
+    .eq("id", userId);
+
+  redirect(`/${locale}/pricing`);
+};
+
+export const updateEndDate = async () => {
+  const supabase = await createClient();
+  const { data: existingUser } = await supabase.auth.getUser();
+  const userId = existingUser.user?.id;
+  const locale = (await getLocale()) || "en";
+
+  if (!userId) {
+    return;
+  }
+
+  await supabase
+    .from("user_profiles")
+    .update({
+      end_date: null,
+    })
+    .eq("id", userId);
+
+  redirect(`/${locale}/pricing`);
 };
