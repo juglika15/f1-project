@@ -13,7 +13,6 @@ import EditProductModal from "@/app/components/EditProductModal";
 import { getUserAction, geUserDataAction } from "@/app/actions/supabase";
 import DeleteProductModal from "@/app/components/DeleteProductConfirm";
 import { Link } from "@/i18n/routing";
-import { User } from "@supabase/supabase-js";
 
 const MerchandiseDisplay = async ({
   params,
@@ -25,8 +24,12 @@ const MerchandiseDisplay = async ({
   const { locale } = await params;
   const searchedParams = await searchParams;
   const t = await getTranslations("Merchandise");
-  const user = (await getUserAction()) as User;
-  const userData = await geUserDataAction(user);
+  const user = await getUserAction();
+  let userData = null;
+
+  if (user) {
+    userData = await geUserDataAction(user);
+  }
 
   const { merchandise, totalPages } = (await getMerchandise(
     searchedParams,
