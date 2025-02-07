@@ -10,9 +10,10 @@ import {
 import { Locale } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import EditProductModal from "@/app/components/EditProductModal";
-import { getUserAction } from "@/app/actions/supabase";
+import { getUserAction, geUserDataAction } from "@/app/actions/supabase";
 import DeleteProductModal from "@/app/components/DeleteProductConfirm";
 import { Link } from "@/i18n/routing";
+import { User } from "@supabase/supabase-js";
 
 const MerchandiseDisplay = async ({
   params,
@@ -24,7 +25,8 @@ const MerchandiseDisplay = async ({
   const { locale } = await params;
   const searchedParams = await searchParams;
   const t = await getTranslations("Merchandise");
-  const user = await getUserAction();
+  const user = (await getUserAction()) as User;
+  const userData = await geUserDataAction(user);
 
   const { merchandise, totalPages } = (await getMerchandise(
     searchedParams,
@@ -38,7 +40,9 @@ const MerchandiseDisplay = async ({
         <div className="flex flex-col md:flex-row min-h-[40rem]">
           <aside className="md:w-1/4 mb-4 md:mb-0 md:mr-4">
             <div className="flex flex-col gap-3 items-center">
-              <AddProductModal locale={locale} />
+              {userData?.is_subscribed && !userData?.end_date && (
+                <AddProductModal locale={locale} />
+              )}
               <SidebarFilter locale={locale} />
             </div>
           </aside>
@@ -87,16 +91,21 @@ const MerchandiseDisplay = async ({
                   </Link>
                   <div className="mt-4">
                     <div className="flex justify-center gap-4">
-                      {user?.id === product.user_id && (
-                        <>
-                          <EditProductModal product={product} locale={locale} />
+                      {userData?.is_subscribed &&
+                        !userData?.end_date &&
+                        user?.id === product.user_id && (
+                          <>
+                            <EditProductModal
+                              product={product}
+                              locale={locale}
+                            />
 
-                          <DeleteProductModal
-                            product={product}
-                            locale={locale}
-                          />
-                        </>
-                      )}
+                            <DeleteProductModal
+                              product={product}
+                              locale={locale}
+                            />
+                          </>
+                        )}
                     </div>
                   </div>
                 </div>

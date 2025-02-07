@@ -124,9 +124,11 @@ export default function HomePage() {
       <section className="py-12 bg-red-600 dark:bg-red-700 text-white text-center">
         <h2 className="text-3xl font-bold">{t("premium")}</h2>
         <p className="mt-4 text-lg">{t("package")}</p>
-        <button className="mt-6 px-8 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-200 transition duration-300">
-          {t("subscribe")}
-        </button>
+        <Link href="/pricing">
+          <button className="mt-6 px-8 py-3 bg-white text-red-600 font-semibold rounded-full hover:bg-gray-200 transition duration-300">
+            {t("subscribe")}
+          </button>
+        </Link>
       </section>
 
       <section className="py-12 px-4 md:px-8">
