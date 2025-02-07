@@ -1,9 +1,9 @@
 "use client";
 
-import { editProduct } from "@/app/actions/edit_product";
+import { editProduct } from "@/app/actions/editProduct";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SubmitButton } from "./auth/SubmitButton";
 import { Label } from "@radix-ui/react-label";
 import { BsCurrencyDollar } from "react-icons/bs";
@@ -16,6 +16,7 @@ import { Locale } from "@/i18n/routing";
 import { getTypes, Type } from "@/hooks/getTypes";
 import { IoClose } from "react-icons/io5";
 import { Product, ProductFormErrors } from "@/types/api";
+import { useRouter } from "next/navigation";
 
 interface EditProductFormProps {
   product: Product;
@@ -29,17 +30,17 @@ const EditProductForm = ({
   onClose,
 }: EditProductFormProps) => {
   const t = useTranslations("ProductForm");
+  const router = useRouter();
+
   const [teamOptions, setTeamOptions] = useState<Team[]>([]);
   const [colorOptions, setColorOptions] = useState<Color[]>([]);
   const [sizeOptions, setSizeOptions] = useState<Sizes | null>(null);
   const [categoryOptions, setCategoryOptions] = useState<Category[]>([]);
   const [typeOptions, setTypeOptions] = useState<Type[]>([]);
 
-  // For file input: note that browsers don’t allow pre-populating file inputs.
-  // You can show previews of the current images (below) and allow users to add new ones.
   const [hasFiles, setHasFiles] = useState<boolean | null>(false);
+  const [isDirty, setIsDirty] = useState(false);
 
-  // Initialize state using the passed in product values.
   const [selectedCategory, setSelectedCategory] = useState<string>(
     product.category
   );
@@ -53,20 +54,23 @@ const EditProductForm = ({
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Close the modal if clicking outside the form
+  const handleClose = useCallback(() => {
+    onClose();
+    router.refresh();
+  }, [onClose, router]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        onClose();
+        handleClose();
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [onClose]);
+  }, [handleClose]);
 
-  // Fetch options data
   useEffect(() => {
     const fetchData = async () => {
       const teams = (await getTeams()) as Team[];
@@ -84,7 +88,6 @@ const EditProductForm = ({
     fetchData();
   }, []);
 
-  // If the category is changed, update sizes and type accordingly.
   useEffect(() => {
     if (selectedCategory === "accessories") {
       setSelectedSizes(["One size only"]);
@@ -151,12 +154,13 @@ const EditProductForm = ({
     if (globalMsg.error || globalMsg.success) {
       const timer = setTimeout(() => {
         setGlobalMsg({ error: null, success: null });
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [globalMsg]);
 
   const toggleSize = (size: string) => {
+    setIsDirty(true); // mark dirty on change
     if (selectedCategory === "accessories") return;
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
@@ -165,6 +169,7 @@ const EditProductForm = ({
   };
 
   const toggleColor = (color: string) => {
+    setIsDirty(true);
     setSelectedColors((prev) =>
       prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
     );
@@ -176,7 +181,7 @@ const EditProductForm = ({
     const formElem = evt.currentTarget;
     const rawData = new FormData(formElem);
     const payload = {
-      id: product.id, // include the product id for updating
+      id: product.id,
       productName: rawData.get("productName") as string,
       productPrice: parseFloat(rawData.get("productPrice") as string),
       productDescription: rawData.get("productDescription") as string,
@@ -219,8 +224,9 @@ const EditProductForm = ({
       console.log(formData.get("productImages"));
       await editProduct(formData);
       setGlobalMsg({ error: null, success: t("success_message") });
-      // Optionally, close the form after a successful update:
-      onClose();
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
     } catch (err) {
       if (err instanceof z.ZodError) {
         setGlobalMsg({
@@ -235,7 +241,6 @@ const EditProductForm = ({
     }
   };
 
-  // Determine the correct size options based on the selected category.
   const currentSizeOptions =
     selectedCategory === "shoes"
       ? sizeOptions?.shoes
@@ -254,7 +259,7 @@ const EditProductForm = ({
       >
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose} // ensure page refresh on manual close
           className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
           aria-label="Close"
         >
@@ -262,10 +267,9 @@ const EditProductForm = ({
         </button>
 
         <h1 className="text-xl font-semibold text-f1red mx-auto">
-          {t("title")} {/* For instance: "Edit Product" */}
+          {t("title")}
         </h1>
 
-        {/* Preview current images */}
         {product.images && product.images.length > 0 && (
           <div className="flex gap-2 justify-center">
             {product.images.map((imgUrl, index) => (
@@ -293,12 +297,13 @@ const EditProductForm = ({
                 name="productName"
                 defaultValue={product[`name_${locale}`]}
                 placeholder={t("name_placeholder")}
-                onChange={() =>
+                onChange={() => {
+                  setIsDirty(true); // mark dirty on change
                   setFieldErrors((prev) => ({
                     ...prev,
                     productName: undefined,
-                  }))
-                }
+                  }));
+                }}
                 className="p-3 pl-5 rounded-md border border-gray-300 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
               />
               {fieldErrors.productName && (
@@ -325,12 +330,13 @@ const EditProductForm = ({
                   placeholder="0.00"
                   min="0.01"
                   step="0.01"
-                  onChange={() =>
+                  onChange={() => {
+                    setIsDirty(true); // mark dirty on change
                     setFieldErrors((prev) => ({
                       ...prev,
                       productPrice: undefined,
-                    }))
-                  }
+                    }));
+                  }}
                   className="w-full p-3 pl-7 rounded-md border border-gray-300 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                 />
               </div>
@@ -354,12 +360,13 @@ const EditProductForm = ({
                 defaultValue={product[`description_${locale}`]}
                 rows={2}
                 placeholder={t("description_placeholder")}
-                onChange={() =>
+                onChange={() => {
+                  setIsDirty(true); // mark dirty on change
                   setFieldErrors((prev) => ({
                     ...prev,
                     productDescription: undefined,
-                  }))
-                }
+                  }));
+                }}
                 className="p-3 pl-5 rounded-md border border-gray-300 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
               ></textarea>
               {fieldErrors.productDescription && (
@@ -380,6 +387,7 @@ const EditProductForm = ({
                 accept="image/*"
                 multiple
                 onChange={(e) => {
+                  setIsDirty(true); // mark dirty on change
                   setHasFiles(e.target.files && e.target.files.length > 0);
                 }}
                 className={`block w-full text-sm text-gray-500 border rounded-lg cursor-pointer bg-gray-50 focus:outline-none
@@ -427,6 +435,7 @@ const EditProductForm = ({
                     key={team.code}
                     type="button"
                     onClick={() => {
+                      setIsDirty(true); // mark dirty on change
                       setSelectedTeam(team.code);
                       setFieldErrors((prev) => ({
                         ...prev,
@@ -466,6 +475,7 @@ const EditProductForm = ({
                 name="productCategory"
                 value={selectedCategory}
                 onChange={(e) => {
+                  setIsDirty(true); // mark dirty on change
                   setSelectedCategory(e.target.value);
                   setFieldErrors((prev) => ({
                     ...prev,
@@ -543,6 +553,7 @@ const EditProductForm = ({
                       key={name}
                       type="button"
                       onClick={() => {
+                        setIsDirty(true); // mark dirty on change
                         setSelectedType(name);
                         setFieldErrors((prev) => ({
                           ...prev,
@@ -581,6 +592,7 @@ const EditProductForm = ({
                 min="1"
                 step="1"
                 onChange={(e) => {
+                  setIsDirty(true); // mark dirty on change
                   setStock(e.target.value);
                   setFieldErrors((prev) => ({
                     ...prev,
@@ -615,7 +627,7 @@ const EditProductForm = ({
         )}
         <SubmitButton
           type="submit"
-          disabled={isSubmitting}
+          disabled={!isDirty || isSubmitting} // disable if no changes or while submitting
           className="h-12 text-lg font-semibold w-56 mx-auto"
           pendingText={t("updating")}
         >

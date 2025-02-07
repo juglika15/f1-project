@@ -7,15 +7,12 @@ export async function editProduct(formData: FormData) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
   const supabase = await createClient();
 
-  //   let updatedStripeProduct = null;
   let newStripePrice = null;
   const uploadedImageUrls: string[] = [];
 
-  // Get the product ID from formData (assumed to be your Supabase record ID)
   const productId = formData.get("productId") as string;
   if (!productId) throw new Error("Product ID is required.");
 
-  // Fetch the existing product from Supabase to retrieve Stripe IDs and current images
   const { data: existingProduct, error: fetchError } = await supabase
     .from("merchandise")
     .select("*")
@@ -23,7 +20,6 @@ export async function editProduct(formData: FormData) {
     .single();
   if (fetchError || !existingProduct) throw new Error("Product not found.");
 
-  // Extract updated fields from formData
   const productName = formData.get("productName") as string;
   const productPrice = Number(formData.get("productPrice")) * 100;
   const productDescription = formData.get("productDescription") as string;
@@ -35,7 +31,6 @@ export async function editProduct(formData: FormData) {
   const productColors = formData.getAll("productColors") as string[];
   const productStock = Number(formData.get("productStock"));
 
-  // Validate inputs similar to your addNewProduct function
   if (!productName) throw new Error("Product name is required.");
   if (!productPrice || isNaN(productPrice) || productPrice <= 0)
     throw new Error("A valid price is required.");
@@ -49,7 +44,6 @@ export async function editProduct(formData: FormData) {
   if (productStock % 1 !== 0) throw new Error("A valid stock is required.");
   if (!productType) throw new Error("Product type is required.");
 
-  // Upload images if new ones are provided; otherwise, use existing image URLs
   try {
     if (productImages && productImages.length > 0) {
       for (const imageFile of productImages) {
@@ -69,22 +63,18 @@ export async function editProduct(formData: FormData) {
         uploadedImageUrls.push(publicUrlData.publicUrl);
       }
     } else {
-      // If no new images provided, fall back to the existing images
       if (existingProduct.images && existingProduct.images.length > 0) {
       } else {
         throw new Error("At least one product image is required.");
       }
     }
 
-    // Update the Stripe product with new details
     await stripe.products.update(existingProduct.stripe_product_id, {
       name: productName,
       description: productDescription,
-      // Update image if you have any; using the first image as an example.
       images: uploadedImageUrls.length > 0 ? [uploadedImageUrls[0]] : undefined,
     });
 
-    // If the price has changed, create a new Stripe price
     if (existingProduct.price !== productPrice) {
       newStripePrice = await stripe.prices.create({
         product: existingProduct.stripe_product_id,
@@ -97,7 +87,6 @@ export async function editProduct(formData: FormData) {
     throw error;
   }
 
-  // A helper to determine language consistency for name and description
   const determineLanguage = (text: string) => {
     const georgianScriptPattern = /[\u10A0-\u10FF]/;
     return georgianScriptPattern.test(text) ? "ka" : "en";
@@ -109,12 +98,10 @@ export async function editProduct(formData: FormData) {
     throw new Error("Name and description must be in the same language.");
 
   try {
-    // Ensure the user is authenticated
     const { data: userData } = await supabase.auth.getUser();
     const userId = userData.user?.id;
     if (!userId) throw new Error("User not authenticated.");
 
-    // Build the update payload. If a new price was created, update the stripe_price_id.
     const updatePayload = {
       [`name_${languageCode}`]: productName,
       price: productPrice,
@@ -135,7 +122,6 @@ export async function editProduct(formData: FormData) {
       updatePayload.images = uploadedImageUrls;
     }
 
-    // Update the Supabase record for the product
     const { data, error } = await supabase
       .from("merchandise")
       .update(updatePayload)

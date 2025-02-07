@@ -23,7 +23,7 @@ const EditProductModal = ({
     <>
       <button
         onClick={openModal}
-        className="p-4 w-32 text-lg py-2 bg-yellow-500 text-white rounded hover:bg-yellow-700 transition"
+        className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white font-semibold rounded-lg shadow-lg hover:from-yellow-600 hover:to-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
       >
         {t("edit_product")}
       </button>

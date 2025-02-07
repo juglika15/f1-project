@@ -11,6 +11,7 @@ import { Locale } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import EditProductModal from "@/app/components/EditProductModal";
 import { getUserAction } from "@/app/actions/supabase";
+import DeleteProductModal from "@/app/components/DeleteProductConfirm";
 
 const MerchandiseDisplay = async ({
   params,
@@ -31,16 +32,16 @@ const MerchandiseDisplay = async ({
 
   return (
     <main className="bg-white dark:bg-gray-900 py-8 flex-grow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
-        <h2 className=" font-extrabold text-gray-900 dark:text-gray-100 mb-4 "></h2>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="font-extrabold text-gray-900 dark:text-gray-100 mb-4"></h2>
         <div className="flex flex-col md:flex-row min-h-[40rem]">
-          <aside className="md:w-1/4 mb-4 md:mb-0 md:mr-4 ">
-            <div className="flex flex-col gap-3  items-center">
+          <aside className="md:w-1/4 mb-4 md:mb-0 md:mr-4">
+            <div className="flex flex-col gap-3 items-center">
               <AddProductModal locale={locale} />
               <SidebarFilter locale={locale} />
             </div>
           </aside>
-          <section className="text-center  md:w-3/4">
+          <section className="text-center md:w-3/4">
             <span className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
               {t("title")}
             </span>
@@ -49,27 +50,35 @@ const MerchandiseDisplay = async ({
               {merchandise.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-gray-100 dark:bg-gray-800 p-4 rounded shadow hover:shadow-lg transition"
+                  className="bg-white dark:bg-gray-800 border-t-4 border-red-600 p-4 rounded-lg shadow-md hover:shadow-xl transition transform hover:-translate-y-1 duration-300 min-h-[350px] flex flex-col justify-between"
                 >
-                  <Image
-                    src={product.images[0]}
-                    alt={product[`name_${locale}`]}
-                    width={200}
-                    height={200}
-                    priority
-                    className="w-full h-auto object-cover rounded"
-                  />
-                  <div className="mt-2 font-semibold text-gray-800 dark:text-gray-200">
-                    <p className="hover:text-blue-500 cursor-pointer transition duration-300 active:text-blue-700">
-                      {product[`name_${locale}`]}
-                    </p>
+                  <div>
+                    <Image
+                      src={product.images[0]}
+                      alt={product[`name_${locale}`]}
+                      width={200}
+                      height={200}
+                      priority
+                      className="w-full h-auto object-cover rounded"
+                    />
+                    <div className="mt-3">
+                      <p className="text-xl font-bold text-gray-800 dark:text-gray-100 hover:text-red-600 transition-colors duration-300 cursor-pointer">
+                        {product[`name_${locale}`]}
+                      </p>
+                    </div>
+                    <div className="mt-1 text-lg text-gray-600 dark:text-gray-400">
+                      Price: ${product.price / 100}
+                    </div>
                   </div>
-                  <div className="mt-1 text-gray-600 dark:text-gray-400">
-                    Price: ${product.price / 100}
+
+                  <div className="mt-4">
+                    <div className="flex justify-center gap-4">
+                      {user?.id === product.user_id && (
+                        <EditProductModal product={product} locale={locale} />
+                      )}
+                      <DeleteProductModal product={product} locale={locale} />
+                    </div>
                   </div>
-                  {user?.id === product.user_id && (
-                    <EditProductModal product={product} locale={locale} />
-                  )}
                 </div>
               ))}
             </div>

@@ -1,3 +1,4 @@
+import AustralianGP from "@/app/components/circuits/AustralianGP";
 import { getRaces, Race } from "@/hooks/getRaces";
 import { Locale } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
@@ -22,6 +23,16 @@ export default async function RaceDetails({
       <p>{race?.country[locale]}</p>
       <p>{race?.city[locale]}</p>
       <p>{race?.circuit}</p>
+      <div className="flex justify-center items-center w-full">
+        {race?.id === 1 && (
+          <ul>
+            {race?.hospitality?.map((hospitality) => (
+              <li key={hospitality}>{hospitality}</li>
+            ))}
+          </ul>
+        )}
+        {race?.id === 1 && <AustralianGP selected="rame" />}
+      </div>
     </div>
   );
 }

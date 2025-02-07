@@ -1,9 +1,9 @@
 "use client";
 
-import { addNewProduct } from "@/app/actions/add_product";
+import { addNewProduct } from "@/app/actions/addProduct";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SubmitButton } from "./auth/SubmitButton";
 import { Label } from "@radix-ui/react-label";
 import { BsCurrencyDollar } from "react-icons/bs";
@@ -16,6 +16,7 @@ import { Locale } from "@/i18n/routing";
 import { getTypes, Type } from "@/hooks/getTypes";
 import { IoClose } from "react-icons/io5";
 import { ProductFormErrors } from "@/types/api";
+import { useRouter } from "next/navigation";
 
 interface AddProductFormProps {
   locale: Locale;
@@ -24,6 +25,7 @@ interface AddProductFormProps {
 
 const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
   const t = useTranslations("ProductForm");
+  const router = useRouter();
   const [teamOptions, setTeamOptions] = useState<Team[]>([]);
   const [colorOptions, setColorOptions] = useState<Color[]>([]);
   const [sizeOptions, setSizeOptions] = useState<Sizes | null>(null);
@@ -40,17 +42,20 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  const handleClose = useCallback(() => {
+    onClose();
+    router.refresh();
+  }, [onClose, router]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        onClose();
+        handleClose();
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [handleClose]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -205,6 +210,9 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       console.log(formData.getAll("productImages"));
       await addNewProduct(formData);
       setGlobalMsg({ error: null, success: t("success_message") });
+      setTimeout(() => {
+        handleClose();
+      }, 1000);
       formElem.reset();
       setSelectedSizes([]);
       setSelectedColors([]);
@@ -244,7 +252,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       >
         <button
           type="button"
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
           aria-label="Close"
         >
