@@ -9,6 +9,8 @@ import {
 } from "@/hooks/getMerchandise";
 import { Locale } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
+import EditProductModal from "@/app/components/EditProductModal";
+import { getUserAction } from "@/app/actions/supabase";
 
 const MerchandiseDisplay = async ({
   params,
@@ -20,6 +22,7 @@ const MerchandiseDisplay = async ({
   const { locale } = await params;
   const searchedParams = await searchParams;
   const t = await getTranslations("Merchandise");
+  const user = await getUserAction();
 
   const { merchandise, totalPages } = (await getMerchandise(
     searchedParams,
@@ -64,6 +67,9 @@ const MerchandiseDisplay = async ({
                   <div className="mt-1 text-gray-600 dark:text-gray-400">
                     Price: ${product.price / 100}
                   </div>
+                  {user?.id === product.user_id && (
+                    <EditProductModal product={product} locale={locale} />
+                  )}
                 </div>
               ))}
             </div>

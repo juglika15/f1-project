@@ -13,7 +13,7 @@
     "sprint": "სპრინტის კვირა"
   },
 
-  "AddProductForm": {
+  "ProductForm": {
     "title": "დაამატე პროდუქტი",
     "name": "პროდუქტის სახელი",
     "name_placeholder": "პროდუქტის სახელი",
@@ -43,30 +43,11 @@
     "colors_required": "აირჩიეთ პროდუქტის ფერი/ფერები",
     "stock_invalid": "შეუსაბამო მარაგის ოდენობა",
     "type_required": "აირჩიეთ ტიპი",
-    "shirts": "მაისურები",
-    "hoodies": "ჰუდიები",
-    "jackets": "კურტკები",
-    "headwear": "ქუდები",
-    "shoes": "ფეხსაცმელები",
-    "accessories": "აქსესუარები",
-    "mens": "კაცის",
-    "womens": "ქალის",
-    "unisex": "უნისექსი",
     "selected_colors": "ფერები",
-    "red": "წითელი",
-    "blue": "ლურჯი",
-    "green": "მწვანე",
-    "yellow": "ყვითელი",
-    "orange": "ნარინჯისფერი",
-    "black": "შავი",
-    "white": "თეთრი",
-    "silver": "ვერცხლისფერი",
-    "purple": "იასამნისფერი",
-    "pink": "ვარისფერი",
-    "teal": "ცისფერი",
-    "dark-green": "მუქი მწვანე",
     "select_category": "აირჩიეთ კატეგორია",
-    "stock_placeholder": "შეიყვანეთ მარაგის ოდენობა"
+    "stock_placeholder": "შეიყვანეთ მარაგის ოდენობა",
+    "updating": "ნახლდება პროდუქტი",
+    "update": "განახლე პროდუქტი"
   },
   "Pricing": {},
   "Profile": {},
@@ -93,7 +74,8 @@
     "in_stock": "მარაგშია",
     "out_of_stock": "არ არის მარაგში",
     "all": "ყველა",
-    "add_product": "დაამატე პროდუქტი"
+    "add_product": "დაამატე პროდუქტი",
+    "edit_product": "რედაქტირება"
   },
   "Blog": {},
   "Cart": {}

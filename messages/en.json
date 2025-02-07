@@ -12,7 +12,7 @@
   "Tickets": {
     "sprint": "Sprint Weekend"
   },
-  "AddProductForm": {
+  "ProductForm": {
     "title": "Add Product",
     "name": "Product Name",
     "name_placeholder": "enter product name",
@@ -42,30 +42,11 @@
     "team_required": "Please select a team",
     "stock_invalid": "Invalid stock count",
     "type_required": "Please select a Product type option",
-    "shirts": "Shirts",
-    "hoodies": "Hoodies",
-    "jackets": "Jackets",
-    "headwear": "Headwear",
-    "shoes": "Shoes",
-    "accessories": "Accessories",
-    "mens": "Mens",
-    "womens": "Womens",
-    "unisex": "Unisex",
     "selected_colors": "Colors",
-    "red": "Red",
-    "blue": "Blue",
-    "green": "Green",
-    "yellow": "Yellow",
-    "orange": "Orange",
-    "black": "Black",
-    "white": "White",
-    "silver": "Silver",
-    "purple": "Purple",
-    "pink": "Pink",
-    "teal": "Teal",
-    "dark-green": "Dark Green",
     "select_category": "Select a category",
-    "stock_placeholder": "enter stock count"
+    "stock_placeholder": "enter stock count",
+    "updating": "Updating Product",
+    "update": "Update Product"
   },
   "Merchandise": {
     "title": "Merchandise",
@@ -88,6 +69,7 @@
     "in_stock": "In Stock",
     "out_of_stock": "Out of Stock",
     "all": "All",
-    "add_product": "Add Product"
+    "add_product": "Add Product",
+    "edit_product": "edit product"
   }
 }
