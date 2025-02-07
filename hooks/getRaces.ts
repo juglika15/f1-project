@@ -10,6 +10,7 @@ export interface Race {
   country: LangTypes;
   circuit: string;
   is_sprint: boolean;
+  hospitality: string[];
 }
 
 export const getRaces = async () => {

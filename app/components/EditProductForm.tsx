@@ -1,6 +1,6 @@
 "use client";
 
-import { addNewProduct } from "@/app/actions/addProduct";
+import { editProduct } from "@/app/actions/editProduct";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -15,17 +15,23 @@ import { Category, getCategories } from "@/hooks/gatCategories";
 import { Locale } from "@/i18n/routing";
 import { getTypes, Type } from "@/hooks/getTypes";
 import { IoClose } from "react-icons/io5";
-import { ProductFormErrors } from "@/types/api";
+import { Product, ProductFormErrors } from "@/types/api";
 import { useRouter } from "next/navigation";
 
-interface AddProductFormProps {
+interface EditProductFormProps {
+  product: Product;
   locale: Locale;
   onClose: () => void;
 }
 
-const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
+const EditProductForm = ({
+  product,
+  locale,
+  onClose,
+}: EditProductFormProps) => {
   const t = useTranslations("ProductForm");
   const router = useRouter();
+
   const [teamOptions, setTeamOptions] = useState<Team[]>([]);
   const [colorOptions, setColorOptions] = useState<Color[]>([]);
   const [sizeOptions, setSizeOptions] = useState<Sizes | null>(null);
@@ -33,12 +39,18 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
   const [typeOptions, setTypeOptions] = useState<Type[]>([]);
 
   const [hasFiles, setHasFiles] = useState<boolean | null>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [selectedTeam, setSelectedTeam] = useState<string>("");
-  const [selectedType, setSelectedType] = useState<string>("");
-  const [stock, setStock] = useState<string>("");
+  const [isDirty, setIsDirty] = useState(false);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    product.category
+  );
+  const [selectedSizes, setSelectedSizes] = useState<string[]>(product.sizes);
+  const [selectedColors, setSelectedColors] = useState<string[]>(
+    product.colors
+  );
+  const [selectedTeam, setSelectedTeam] = useState<string>(product.team);
+  const [selectedType, setSelectedType] = useState<string>(product.type);
+  const [stock, setStock] = useState<string>(product.stock.toString());
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -54,7 +66,9 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [handleClose]);
 
   useEffect(() => {
@@ -79,14 +93,14 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       setSelectedSizes(["One size only"]);
       setSelectedType("none");
     } else {
-      setSelectedSizes([]);
-      setSelectedType("");
+      setSelectedSizes((prev) =>
+        selectedCategory === product.category ? prev : []
+      );
+      setSelectedType((prev) =>
+        selectedCategory === product.category ? prev : ""
+      );
     }
-    setFieldErrors((prev) => ({
-      ...prev,
-      productCategory: undefined,
-    }));
-  }, [selectedCategory]);
+  }, [selectedCategory, product.category]);
 
   const getLanguage = (input: string) => {
     const geoRegex = /[\u10A0-\u10FF]/;
@@ -103,15 +117,6 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       productDescription: z
         .string()
         .min(10, { message: t("description_required") }),
-      productImages: z.preprocess((val) => {
-        if (val instanceof FileList) {
-          return Array.from(val).filter((file) => file && file.name);
-        }
-        if (Array.isArray(val)) {
-          return val.filter((file) => file && file.name);
-        }
-        return [];
-      }, z.array(z.custom<File>((file) => file && typeof file.name === "string", { message: t("images_required") })).min(1, { message: t("images_required") })),
       productSizes: z
         .array(z.string())
         .min(1, { message: t("sizes_required") }),
@@ -149,12 +154,13 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
     if (globalMsg.error || globalMsg.success) {
       const timer = setTimeout(() => {
         setGlobalMsg({ error: null, success: null });
-      }, 5000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [globalMsg]);
 
   const toggleSize = (size: string) => {
+    setIsDirty(true); // mark dirty on change
     if (selectedCategory === "accessories") return;
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
@@ -163,6 +169,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
   };
 
   const toggleColor = (color: string) => {
+    setIsDirty(true);
     setSelectedColors((prev) =>
       prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
     );
@@ -174,6 +181,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
     const formElem = evt.currentTarget;
     const rawData = new FormData(formElem);
     const payload = {
+      id: product.id,
       productName: rawData.get("productName") as string,
       productPrice: parseFloat(rawData.get("productPrice") as string),
       productDescription: rawData.get("productDescription") as string,
@@ -199,6 +207,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
 
     try {
       const formData = new FormData(formElem);
+      formData.append("productId", `${product.id}`);
       formData.append("productTeam", selectedTeam);
       formData.append("productCategory", selectedCategory);
       formData.append("productType", selectedType);
@@ -207,19 +216,17 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       selectedColors.forEach((color) =>
         formData.append("productColors", color)
       );
-      console.log(formData.getAll("productImages"));
-      await addNewProduct(formData);
+
+      if (!hasFiles) {
+        formData.delete("productImages");
+      }
+
+      console.log(formData.get("productImages"));
+      await editProduct(formData);
       setGlobalMsg({ error: null, success: t("success_message") });
       setTimeout(() => {
         handleClose();
       }, 1000);
-      formElem.reset();
-      setSelectedSizes([]);
-      setSelectedColors([]);
-      setSelectedTeam("");
-      setSelectedType("");
-      setSelectedCategory("");
-      setStock("");
     } catch (err) {
       if (err instanceof z.ZodError) {
         setGlobalMsg({
@@ -252,7 +259,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       >
         <button
           type="button"
-          onClick={handleClose}
+          onClick={handleClose} // ensure page refresh on manual close
           className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
           aria-label="Close"
         >
@@ -262,6 +269,22 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
         <h1 className="text-xl font-semibold text-f1red mx-auto">
           {t("title")}
         </h1>
+
+        {product.images && product.images.length > 0 && (
+          <div className="flex gap-2 justify-center">
+            {product.images.map((imgUrl, index) => (
+              <Image
+                key={index}
+                src={imgUrl}
+                alt={`Product image ${index + 1}`}
+                width={80}
+                height={80}
+                className="object-contain rounded-md"
+              />
+            ))}
+          </div>
+        )}
+
         <div className="flex flex-col md:flex-row gap-8">
           <div className="flex flex-col gap-4 w-full md:w-[27rem]">
             <div className="flex flex-col gap-1">
@@ -272,13 +295,15 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                 type="text"
                 id="productName"
                 name="productName"
+                defaultValue={product[`name_${locale}`]}
                 placeholder={t("name_placeholder")}
-                onChange={() =>
+                onChange={() => {
+                  setIsDirty(true); // mark dirty on change
                   setFieldErrors((prev) => ({
                     ...prev,
                     productName: undefined,
-                  }))
-                }
+                  }));
+                }}
                 className="p-3 pl-5 rounded-md border border-gray-300 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
               />
               {fieldErrors.productName && (
@@ -301,15 +326,17 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                   type="number"
                   id="productPrice"
                   name="productPrice"
+                  defaultValue={product.price / 100}
                   placeholder="0.00"
                   min="0.01"
                   step="0.01"
-                  onChange={() =>
+                  onChange={() => {
+                    setIsDirty(true); // mark dirty on change
                     setFieldErrors((prev) => ({
                       ...prev,
                       productPrice: undefined,
-                    }))
-                  }
+                    }));
+                  }}
                   className="w-full p-3 pl-7 rounded-md border border-gray-300 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                 />
               </div>
@@ -330,14 +357,16 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
               <textarea
                 id="productDescription"
                 name="productDescription"
+                defaultValue={product[`description_${locale}`]}
                 rows={2}
                 placeholder={t("description_placeholder")}
-                onChange={() =>
+                onChange={() => {
+                  setIsDirty(true); // mark dirty on change
                   setFieldErrors((prev) => ({
                     ...prev,
                     productDescription: undefined,
-                  }))
-                }
+                  }));
+                }}
                 className="p-3 pl-5 rounded-md border border-gray-300 bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
               ></textarea>
               {fieldErrors.productDescription && (
@@ -358,27 +387,17 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                 accept="image/*"
                 multiple
                 onChange={(e) => {
+                  setIsDirty(true); // mark dirty on change
                   setHasFiles(e.target.files && e.target.files.length > 0);
-                  setFieldErrors((prev) => ({
-                    ...prev,
-                    productImages: undefined,
-                  }));
                 }}
                 className={`block w-full text-sm text-gray-500 border rounded-lg cursor-pointer bg-gray-50 focus:outline-none
                   file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold transition-colors duration-500 file:bg-gray-200
                   ${
-                    fieldErrors.productImages
-                      ? "border-red-500 bg-gradient-to-br from-gray-200 to-red-300 file:text-dark"
-                      : hasFiles
+                    hasFiles
                       ? "file:text-green-600 bg-gradient-to-br from-gray-200 to-green-400 border-green-500"
                       : "file:text-blue-700"
                   } hover:file:bg-blue-100`}
               />
-              {fieldErrors.productImages && (
-                <span className="text-sm text-red-500">
-                  {fieldErrors.productImages}
-                </span>
-              )}
             </div>
 
             <div className="flex flex-col gap-2">
@@ -416,6 +435,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                     key={team.code}
                     type="button"
                     onClick={() => {
+                      setIsDirty(true); // mark dirty on change
                       setSelectedTeam(team.code);
                       setFieldErrors((prev) => ({
                         ...prev,
@@ -455,6 +475,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                 name="productCategory"
                 value={selectedCategory}
                 onChange={(e) => {
+                  setIsDirty(true); // mark dirty on change
                   setSelectedCategory(e.target.value);
                   setFieldErrors((prev) => ({
                     ...prev,
@@ -505,7 +526,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                             ? "w-[4.8rem]"
                             : "w-[2.9rem]"
                         } ${
-                          selectedSizes.includes(size)
+                          selectedSizes?.includes(size)
                             ? "bg-blue-600 text-white border-blue-500"
                             : "bg-white text-gray-800 border-gray-300"
                         }`}
@@ -532,6 +553,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                       key={name}
                       type="button"
                       onClick={() => {
+                        setIsDirty(true); // mark dirty on change
                         setSelectedType(name);
                         setFieldErrors((prev) => ({
                           ...prev,
@@ -565,11 +587,12 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                 type="number"
                 id="productStock"
                 name="productStock"
+                defaultValue={stock}
                 placeholder={t("stock_placeholder")}
                 min="1"
                 step="1"
-                value={stock}
                 onChange={(e) => {
+                  setIsDirty(true); // mark dirty on change
                   setStock(e.target.value);
                   setFieldErrors((prev) => ({
                     ...prev,
@@ -589,7 +612,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
 
         {isSubmitting && (
           <div className="flex items-center justify-center gap-4">
-            <span>{t("adding")}</span>
+            <span>{t("updating")}</span>
           </div>
         )}
         {globalMsg.error && (
@@ -604,15 +627,15 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
         )}
         <SubmitButton
           type="submit"
-          disabled={isSubmitting}
+          disabled={!isDirty || isSubmitting} // disable if no changes or while submitting
           className="h-12 text-lg font-semibold w-56 mx-auto"
-          pendingText={t("adding")}
+          pendingText={t("updating")}
         >
-          {t("add")}
+          {t("update")}
         </SubmitButton>
       </form>
     </div>
   );
 };
 
-export default AddProductForm;
+export default EditProductForm;

@@ -1,29 +1,10 @@
 import { Locale } from "@/i18n/routing";
+import { Product } from "@/types/api";
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestResponse } from "@supabase/supabase-js";
 
-export interface Merchandise {
-  id: number;
-  name_en: string;
-  name_ka: string;
-  price: number;
-  description_en: string;
-  description_ka: string;
-  images: string[];
-  category: string;
-  stock: number;
-  sizes: string[];
-  colors: string[];
-  user_id: string;
-  stripe_product_id: string;
-  stripe_price_id: string;
-  team: string;
-  type: string;
-  thumbnails: string[];
-}
-
 export interface MerchandiseResponse {
-  merchandise: Merchandise[];
+  merchandise: Product[];
   totalPages: number;
 }
 
@@ -47,7 +28,7 @@ export async function getMerchandise(
   const supabase = await createClient();
 
   const page = parseInt(query.page, 10) || 1;
-  const limit = parseInt(query.limit, 10) || 15;
+  const limit = parseInt(query.limit, 10) || 12;
   const search = query.search?.trim() || "";
 
   // Parse sortBy parameter; only allow sorting by the current locale’s name or by price
@@ -114,8 +95,7 @@ export async function getMerchandise(
 
   merchQuery = merchQuery.order(sortField, { ascending });
 
-  const { data, error, count }: PostgrestResponse<Merchandise> =
-    await merchQuery;
+  const { data, error, count }: PostgrestResponse<Product> = await merchQuery;
 
   const totalPages = count ? Math.ceil(count / limit) : 1;
 

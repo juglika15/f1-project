@@ -42,6 +42,7 @@ describe("auth", () => {
 
     // delete created account
     cy.get('[data-cy="profile"]').click();
+    cy.url().should("include", "/profile");
     cy.get('[data-cy="delete-account-button"]').click();
     cy.get('[data-cy="delete-confirm-button"]').click();
   });
