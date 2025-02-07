@@ -11,7 +11,7 @@ const PaginationControls = ({ totalPages }: { totalPages: number }) => {
   const currentPage = Number(
     useMemo(() => searchParams?.get("page") ?? "1", [searchParams])
   );
-  const limit = searchParams?.get("limit") ?? "15";
+  const limit = searchParams?.get("limit") ?? "12";
 
   const newSearchParams = useMemo(
     () => new URLSearchParams(searchParams!),

@@ -12,6 +12,7 @@ import { getTranslations } from "next-intl/server";
 import EditProductModal from "@/app/components/EditProductModal";
 import { getUserAction } from "@/app/actions/supabase";
 import DeleteProductModal from "@/app/components/DeleteProductConfirm";
+import { Link } from "@/i18n/routing";
 
 const MerchandiseDisplay = async ({
   params,
@@ -52,31 +53,50 @@ const MerchandiseDisplay = async ({
                   key={product.id}
                   className="bg-white dark:bg-gray-800 border-t-4 border-red-600 p-4 rounded-lg shadow-md hover:shadow-xl transition transform hover:-translate-y-1 duration-300 min-h-[350px] flex flex-col justify-between"
                 >
-                  <div>
-                    <Image
-                      src={product.images[0]}
-                      alt={product[`name_${locale}`]}
-                      width={200}
-                      height={200}
-                      priority
-                      className="w-full h-auto object-cover rounded"
-                    />
-                    <div className="mt-3">
-                      <p className="text-xl font-bold text-gray-800 dark:text-gray-100 hover:text-red-600 transition-colors duration-300 cursor-pointer">
-                        {product[`name_${locale}`]}
-                      </p>
+                  <Link
+                    href={{
+                      pathname: "/merchandise/[id]",
+                      params: { id: product.id },
+                    }}
+                  >
+                    <div className="cursor-pointer">
+                      <Image
+                        src={product.images[0]}
+                        alt={product[`name_${locale}`]}
+                        width={200}
+                        height={200}
+                        priority
+                        className="w-full h-auto object-cover rounded"
+                      />
+                      <div className="mt-3">
+                        <p className="text-xl font-bold text-gray-800 dark:text-gray-100 hover:text-red-600 transition-colors duration-300">
+                          {product[`name_${locale}`]}
+                        </p>
+                      </div>
+                      <div className="mt-1 text-lg text-gray-600 dark:text-gray-400">
+                        Price: ${product.price / 100}
+                      </div>
+                      <div
+                        className={`text-sm ${
+                          product.stock > 0 ? "text-green-600" : "text-red-600"
+                        }`}
+                      >
+                        {product.stock > 0 ? t("in_stock") : t("out_of_stock")}
+                      </div>
                     </div>
-                    <div className="mt-1 text-lg text-gray-600 dark:text-gray-400">
-                      Price: ${product.price / 100}
-                    </div>
-                  </div>
-
+                  </Link>
                   <div className="mt-4">
                     <div className="flex justify-center gap-4">
                       {user?.id === product.user_id && (
-                        <EditProductModal product={product} locale={locale} />
+                        <>
+                          <EditProductModal product={product} locale={locale} />
+
+                          <DeleteProductModal
+                            product={product}
+                            locale={locale}
+                          />
+                        </>
                       )}
-                      <DeleteProductModal product={product} locale={locale} />
                     </div>
                   </div>
                 </div>

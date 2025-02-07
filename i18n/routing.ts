@@ -14,6 +14,7 @@ export const routing = defineRouting({
     "/forgot-password": { en: "/forgot-password", ka: "/პაროლის-აღდგება" },
     "/tickets/[raceId]": { en: "/tickets/[raceId]", ka: "/ბილეთები/[raceId]" },
     "/merchandise": { en: "/merchandise", ka: "/კოლექცია" },
+    "/merchandise/[id]": { en: "/merchandise/[id]", ka: "/კოლექცია/[id]" },
     "/help": { en: "/help", ka: "/დახმარება" },
     "/contact": { en: "/contact", ka: "/დაგვიკავშირდი" },
     "/about": { en: "/about", ka: "/ჩვენს-შესახებ" },

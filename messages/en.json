@@ -12,6 +12,19 @@
   "Tickets": {
     "sprint": "Sprint Weekend"
   },
+  "HomePage": {
+    "welcome": "მოგესალმებით F1 Store-ში",
+    "experience": "Experience the speed, the passion, the legacy",
+    "newest": "Newest F1 Products",
+    "shop": "shop now",
+    "buy": "Buy Now",
+    "premium": "Become a Premium Member",
+    "package": "Unlock exclusive discounts, early access, and premium content",
+    "subscribe": "Subscribe now",
+    "about": "About F1",
+    "about_text": "Formula 1 is the pinnacle of motorsport, combining cutting-edge technology with unparalleled skill. Explore our collection of F1 memorabilia, merchandise, and premium memberships, and feel the adrenaline of the track every day."
+  },
+
   "ProductForm": {
     "title": "Add Product",
     "name": "Product Name",
