@@ -57,6 +57,7 @@ export default function HomePage() {
               alt={`F1 image ${index + 1}`}
               fill
               className="w-full h-full object-cover"
+              priority
             />
           </div>
         ))}

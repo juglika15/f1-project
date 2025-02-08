@@ -1,3 +1,5 @@
+"use server";
+
 interface ValidationResponse {
   message: string;
 }
@@ -17,10 +19,8 @@ const validateImageURL = async (imageUrl: string): Promise<boolean> => {
     if (response.ok) {
       console.log("Image is valid:", data.message);
       return true;
-      // Proceed with using the image URL
     } else {
       console.log("Validation failed:", data.message);
-      // Handle the error, e.g., show a message to the user
       return false;
     }
   } catch (error) {

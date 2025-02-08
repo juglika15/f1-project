@@ -89,5 +89,8 @@
     "all": "All",
     "add_product": "Add Product",
     "edit_product": "edit product"
+  },
+  "LoadingPage": {
+    "loading": "Loading F1 Data..."
   }
 }

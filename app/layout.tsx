@@ -2,8 +2,6 @@ import "./globals.css";
 import { Metadata } from "next";
 import { Providers } from "./components/Providers";
 import { Roboto_Condensed } from "next/font/google";
-import LoadingPage from "./components/LoadingPage";
-import { Suspense } from "react";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -32,9 +30,7 @@ export default function RootLayout({
       <body
         className={`${robotoCondensed.variable} flex flex-col min-h-screen`}
       >
-        <Suspense fallback={<LoadingPage />}>
-          <Providers>{children}</Providers>
-        </Suspense>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

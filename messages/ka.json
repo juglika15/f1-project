@@ -94,5 +94,8 @@
     "edit_product": "რედაქტირება"
   },
   "Blog": {},
-  "Cart": {}
+  "Cart": {},
+  "LoadingPage": {
+    "loading": "იტვირთება F1 ინფორმაცია..."
+  }
 }

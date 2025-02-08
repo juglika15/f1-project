@@ -36,6 +36,7 @@ const Profile = () => {
         const { data } = await supabase.auth.getUser();
         setAvatar(data.user?.user_metadata?.avatar_url);
         setAvatarUrl(data.user?.user_metadata?.avatar_url);
+        console.log(data.user?.user_metadata?.avatar_url);
         setName(data.user?.user_metadata?.name);
         setEmail(data.user?.email as string);
         setLoading(false);
@@ -95,7 +96,7 @@ const Profile = () => {
     <main className="flex flex-grow flex-col justify-center items-center dark:bg-dark bg-gray-100 py-10">
       <form
         action={updateUserMetadata}
-        className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-md"
+        className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-8 w-full max-w-md flex-grow"
       >
         <div className="flex justify-end">
           <button
