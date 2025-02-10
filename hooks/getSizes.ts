@@ -1,13 +1,6 @@
+import { Sizes } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
-export interface Sizes {
-  id: number;
-  clothes: string[];
-  shoes: string[];
-  headwear: string[];
-  accessories: string[];
-}
 
 export const getSizes = async () => {
   const supabase = createClient();

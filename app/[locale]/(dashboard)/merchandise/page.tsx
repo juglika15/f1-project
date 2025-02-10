@@ -2,17 +2,16 @@ import Image from "next/image";
 import SidebarFilter from "@/app/components/SidebarFilter";
 import PaginationControls from "@/app/components/PaginationControls";
 import AddProductModal from "@/app/components/AddProductModal";
-import {
-  getMerchandise,
-  MerchandiseResponse,
-  Query,
-} from "@/hooks/getMerchandise";
+import { getMerchandise } from "@/hooks/getMerchandise";
 import { Locale } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
 import EditProductModal from "@/app/components/EditProductModal";
 import { getUserAction, geUserDataAction } from "@/app/actions/supabase";
 import DeleteProductModal from "@/app/components/DeleteProductConfirm";
 import { Link } from "@/i18n/routing";
+import AddToCartButton from "@/app/components/AddToCart";
+import BuyNowButton from "@/app/components/BuyNow";
+import { MerchandiseResponse, Query } from "@/types/api";
 
 const MerchandiseDisplay = async ({
   params,
@@ -50,15 +49,15 @@ const MerchandiseDisplay = async ({
             </div>
           </aside>
           <section className="text-center md:w-3/4">
-            <span className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
+            <span className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-gray-100">
               {t("title")}
             </span>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
               {merchandise.map((product) => (
                 <div
                   key={product.id}
-                  className="bg-white dark:bg-gray-800 border-t-4 border-red-600 p-4 rounded-lg shadow-md hover:shadow-xl transition transform hover:-translate-y-1 duration-300 min-h-[350px] flex flex-col justify-between"
+                  className="bg-gradient-to-b from-white to-gray-200 dark:from-gray-700 dark:to-gray-800 border-t-4 border-red-600 p-4 rounded-lg shadow-md hover:shadow-xl transition transform hover:-translate-y-1 duration-300 flex flex-col justify-between"
+                  style={{ height: "450px", minWidth: "100%" }}
                 >
                   <Link
                     href={{
@@ -66,49 +65,55 @@ const MerchandiseDisplay = async ({
                       params: { id: product.id },
                     }}
                   >
-                    <div className="cursor-pointer">
+                    <div className="cursor-pointer flex flex-col items-center">
                       <Image
                         src={product.images[0]}
                         alt={product[`name_${locale}`]}
-                        width={200}
-                        height={200}
+                        width={180}
+                        height={180}
                         priority
-                        className="w-full h-auto object-cover rounded"
+                        className="w-[180px] h-[180px] object-cover rounded-lg border-2 border-gray-300 dark:border-gray-600 shadow-md hover:shadow-xl transition-transform duration-300 hover:scale-105"
                       />
-                      <div className="mt-3">
-                        <p className="text-xl font-bold text-gray-800 dark:text-gray-100 hover:text-red-600 transition-colors duration-300">
+                      <div className="mt-3 flex-grow text-center">
+                        <p className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 hover:text-red-600 transition-colors duration-300">
                           {product[`name_${locale}`]}
                         </p>
-                      </div>
-                      <div className="mt-1 text-lg text-gray-600 dark:text-gray-400">
-                        Price: ${product.price / 100}
-                      </div>
-                      <div
-                        className={`text-sm ${
-                          product.stock > 0 ? "text-green-600" : "text-red-600"
-                        }`}
-                      >
-                        {product.stock > 0 ? t("in_stock") : t("out_of_stock")}
+                        <div className="mt-1 text-base sm:text-lg text-gray-600 dark:text-gray-400">
+                          Price: ${product.price / 100}
+                        </div>
+                        <div
+                          className={`text-sm ${
+                            product.stock > 0
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {product.stock > 0
+                            ? t("in_stock")
+                            : t("out_of_stock")}
+                        </div>
                       </div>
                     </div>
                   </Link>
-                  <div className="mt-4">
-                    <div className="flex justify-center gap-4">
-                      {userData?.is_subscribed &&
-                        !userData?.end_date &&
-                        user?.id === product.user_id && (
-                          <>
-                            <EditProductModal
-                              product={product}
-                              locale={locale}
-                            />
 
-                            <DeleteProductModal
-                              product={product}
-                              locale={locale}
-                            />
-                          </>
-                        )}
+                  <div
+                    className="mt-auto
+                   flex flex-col items-center gap-3"
+                  >
+                    {userData?.is_subscribed &&
+                      !userData?.end_date &&
+                      user?.id === product.user_id && (
+                        <div className="flex justify-center gap-4">
+                          <EditProductModal product={product} locale={locale} />
+                          <DeleteProductModal
+                            product={product}
+                            locale={locale}
+                          />
+                        </div>
+                      )}
+                    <div className="flex justify-center gap-4">
+                      <AddToCartButton />
+                      <BuyNowButton />
                     </div>
                   </div>
                 </div>

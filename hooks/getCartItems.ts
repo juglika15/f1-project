@@ -1,23 +1,26 @@
-import { Type } from "@/types/api";
+import { CartItem } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
-export const getTypes = async () => {
+export const getCartItems = async (id: string) => {
   const supabase = createClient();
   const {
-    data: types,
+    data: cartItems,
     error,
     status,
-  }: PostgrestSingleResponse<Type[]> = await supabase
-    .from("types")
+  }: PostgrestSingleResponse<CartItem[]> = await supabase
+    .from("cart")
     .select("*")
-    .order("id", {
+    .eq("user_id", id)
+    .order("created_at", {
       ascending: true,
     });
+
+  console.log(cartItems);
 
   if (error && status !== 406) {
     throw error;
   }
 
-  return types;
+  return cartItems;
 };

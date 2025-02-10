@@ -7,6 +7,7 @@ import { Locale } from "@/i18n/routing";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { Trash2 } from "lucide-react";
 
 interface DeleteProductModalProps {
   product: Product;
@@ -66,15 +67,15 @@ export default function DeleteProductModal({
 
   return (
     <>
-      {/* Pop Up Button */}
       <button
         onClick={() => {
           setIsOpen(true);
           setSuccess(false);
           setError(null);
         }}
-        className="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-300"
+        className="flex items-center justify-center w-32 px-4 py-2 bg-gradient-to-r from-gray-300 to-gray-400 border-2  border-red-500 text-sm  font-semibold rounded-lg shadow-lg hover:from-red-500 text-black dark:text-white hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-200"
       >
+        <Trash2 size={18} className="mr-2" />
         {t("delete")}
       </button>
 

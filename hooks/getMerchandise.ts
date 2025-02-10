@@ -1,25 +1,7 @@
 import { Locale } from "@/i18n/routing";
-import { Product } from "@/types/api";
+import { MerchandiseResponse, Product, Query } from "@/types/api";
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestResponse } from "@supabase/supabase-js";
-
-export interface MerchandiseResponse {
-  merchandise: Product[];
-  totalPages: number;
-}
-
-export interface Query {
-  page: string;
-  limit: string;
-  search: string;
-  sortBy: string;
-  team?: string;
-  category?: string;
-  size?: string;
-  color?: string;
-  type?: string;
-  stock?: string;
-}
 
 export async function getMerchandise(
   query: Query,
@@ -31,7 +13,6 @@ export async function getMerchandise(
   const limit = parseInt(query.limit, 10) || 12;
   const search = query.search?.trim() || "";
 
-  // Parse sortBy parameter; only allow sorting by the current locale’s name or by price
   const [rawSortField, rawSortOrder = "desc"] = query.sortBy
     ? query.sortBy.split("-")
     : ["id", "desc"];
@@ -49,42 +30,35 @@ export async function getMerchandise(
     .select("*", { count: "exact" })
     .range(from, to);
 
-  // Apply search filter
   if (search) {
     merchQuery = merchQuery.ilike(`name_${locale}`, `%${search}%`);
   }
 
-  // Apply team filter
   if (query.team) {
     const teams = query.team.split(",");
     merchQuery = merchQuery.in("team", teams);
   }
 
-  // Apply category filter
   if (query.category) {
     const categories = query.category.split(",");
     merchQuery = merchQuery.in("category", categories);
   }
 
-  // Apply size filter (using the "contains" operator on array columns)
   if (query.size) {
     const sizes = query.size.split(",");
     merchQuery = merchQuery.overlaps("sizes", sizes);
   }
 
-  // Apply color filter (using the "contains" operator on array columns)
   if (query.color) {
     const colors = query.color.split(",");
     merchQuery = merchQuery.overlaps("colors", colors);
   }
 
-  // Apply type filter
   if (query.type) {
     const types = query.type.split(",");
     merchQuery = merchQuery.in("type", types);
   }
 
-  // Apply stock filter
   if (query.stock && query.stock !== "all") {
     if (query.stock === "in") {
       merchQuery = merchQuery.gt("stock", 0);

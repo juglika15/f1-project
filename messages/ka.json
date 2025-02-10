@@ -91,10 +91,14 @@
     "out_of_stock": "არ არის მარაგში",
     "all": "ყველა",
     "add_product": "დაამატე პროდუქტი",
-    "edit_product": "რედაქტირება"
+    "edit_product": "რედაქტირება",
+    "buy_now": "ყიდვა",
+    "add_to_cart": "კალათაში დამატება"
   },
   "Blog": {},
-  "Cart": {},
+  "Cart": {
+    "remove": "წაშლა"
+  },
   "LoadingPage": {
     "loading": "იტვირთება F1 ინფორმაცია..."
   }

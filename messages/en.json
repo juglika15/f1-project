@@ -88,9 +88,14 @@
     "out_of_stock": "Out of Stock",
     "all": "All",
     "add_product": "Add Product",
-    "edit_product": "edit product"
+    "edit_product": "Edit",
+    "buy_now": "Buy Now",
+    "add_to_cart": "Add to Cart"
   },
   "LoadingPage": {
     "loading": "Loading F1 Data..."
+  },
+  "Cart": {
+    "remove": "Remove"
   }
 }

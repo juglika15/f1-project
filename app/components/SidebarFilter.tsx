@@ -3,14 +3,15 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { getTeams, Team } from "@/hooks/getTeams";
-import { Category, getCategories } from "@/hooks/gatCategories";
-import { getSizes, Sizes } from "@/hooks/getSizes";
-import { getTypes, Type } from "@/hooks/getTypes";
-import { Color, getColors } from "@/hooks/getColors";
+import { getTeams } from "@/hooks/getTeams";
+import { getCategories } from "@/hooks/gatCategories";
+import { getSizes } from "@/hooks/getSizes";
+import { getTypes } from "@/hooks/getTypes";
+import { getColors } from "@/hooks/getColors";
 import { Locale } from "@/i18n/routing";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Category, Color, Sizes, Team, Type } from "@/types/api";
 
 const SidebarFilter = ({ locale }: { locale: Locale }) => {
   const searchParams = useSearchParams();
@@ -19,7 +20,6 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
   const sortType = searchParams?.get("sortBy") ?? "";
   const t = useTranslations("Merchandise");
 
-  // New state for search term
   const [searchTerm, setSearchTerm] = useState("");
 
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
@@ -61,7 +61,6 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
     fetchData();
   }, []);
 
-  // New effect: On mount (or when searchParams changes) read URL params and set initial filter values
   useEffect(() => {
     if (searchParams) {
       const teamQuery = searchParams.get("team");
@@ -187,7 +186,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
   };
 
   return (
-    <div className="w-64 p-4 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
+    <div className="w-64 p-4 bg-gradient-to-b from-gray-100 to-gray-200 dark:bg-gray-800 border-r border-gray-200 rounded dark:from-gray-700 dark:to-gray-800">
       <div className="mb-4">
         <input
           id="sidebar-search"

@@ -34,3 +34,79 @@ export interface ProductFormErrors {
   productStock?: string | string[];
   productType?: string | string[];
 }
+
+export interface Query {
+  page: string;
+  limit: string;
+  search: string;
+  sortBy: string;
+  team?: string;
+  category?: string;
+  size?: string;
+  color?: string;
+  type?: string;
+  stock?: string;
+}
+
+export interface MerchandiseResponse {
+  merchandise: Product[];
+  totalPages: number;
+}
+
+export interface Race {
+  id: number;
+  name: LangTypes;
+  date: string;
+  city: LangTypes;
+  country: LangTypes;
+  circuit: string;
+  is_sprint: boolean;
+  hospitality: string[];
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  value: LangTypes;
+}
+
+export interface CartItem {
+  id: number;
+  user_id: number;
+  name_en: string;
+  name_ka: string;
+  price: number;
+  image: string;
+  size: string;
+  team: string;
+  product_id: number;
+  count: number;
+}
+
+export interface Color {
+  id: number;
+  name: LangTypes;
+  value: string;
+  code: string;
+}
+
+export interface Sizes {
+  id: number;
+  clothes: string[];
+  shoes: string[];
+  headwear: string[];
+  accessories: string[];
+}
+
+export interface Team {
+  id: number;
+  name: string;
+  logo: string;
+  code: string;
+}
+
+export interface Type {
+  id: number;
+  name: string;
+  value: LangTypes;
+}

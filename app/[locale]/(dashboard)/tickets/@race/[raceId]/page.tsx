@@ -1,6 +1,7 @@
 import AustralianGP from "@/app/components/circuits/AustralianGP";
-import { getRaces, Race } from "@/hooks/getRaces";
+import { getRaces } from "@/hooks/getRaces";
 import { Locale } from "@/i18n/routing";
+import { Race } from "@/types/api";
 import { getTranslations } from "next-intl/server";
 
 export default async function RaceDetails({

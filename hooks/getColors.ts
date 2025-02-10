@@ -1,13 +1,6 @@
-import { LangTypes } from "@/types/api";
+import { Color, LangTypes } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
-export interface Color {
-  id: number;
-  name: LangTypes;
-  value: string;
-  code: string;
-}
 
 export const getColors = async () => {
   const supabase = createClient();

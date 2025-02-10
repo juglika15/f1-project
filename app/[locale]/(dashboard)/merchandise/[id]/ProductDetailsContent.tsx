@@ -4,6 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { Locale } from "@/i18n/routing";
 import { Product } from "@/types/api";
+import AddToCartButton from "@/app/components/AddToCart";
+import BuyNowButton from "@/app/components/BuyNow";
 
 interface ProductDetailsContentProps {
   product: Product;
@@ -86,12 +88,8 @@ export default function ProductDetailsContent({
             </div>
           </div>
           <div className="mt-8 flex gap-4">
-            <button className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow transition duration-300">
-              Buy Now
-            </button>
-            <button className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition duration-300">
-              Add to Cart
-            </button>
+            <AddToCartButton className="w-full from-green-500 to-green-600" />
+            <BuyNowButton className="w-full from-cyan-500 to-cyan-600" />
           </div>
         </div>
       </div>

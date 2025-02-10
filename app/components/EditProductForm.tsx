@@ -8,14 +8,14 @@ import { SubmitButton } from "./auth/SubmitButton";
 import { Label } from "@radix-ui/react-label";
 import { BsCurrencyDollar } from "react-icons/bs";
 import Image from "next/image";
-import { getTeams, Team } from "@/hooks/getTeams";
-import { Color, getColors } from "@/hooks/getColors";
-import { Sizes, getSizes } from "@/hooks/getSizes";
-import { Category, getCategories } from "@/hooks/gatCategories";
+import { getTeams } from "@/hooks/getTeams";
+import { getColors } from "@/hooks/getColors";
+import { getSizes } from "@/hooks/getSizes";
+import { getCategories } from "@/hooks/gatCategories";
 import { Locale } from "@/i18n/routing";
-import { getTypes, Type } from "@/hooks/getTypes";
+import { getTypes } from "@/hooks/getTypes";
 import { IoClose } from "react-icons/io5";
-import { Product, ProductFormErrors } from "@/types/api";
+import { Category, Color, Product, ProductFormErrors, Sizes, Team, Type } from "@/types/api";
 import { useRouter } from "next/navigation";
 
 interface EditProductFormProps {

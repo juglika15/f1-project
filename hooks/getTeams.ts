@@ -1,12 +1,6 @@
+import { Team } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
-export interface Team {
-  id: number;
-  name: string;
-  logo: string;
-  code: string;
-}
 
 export const getTeams = async () => {
   const supabase = createClient();

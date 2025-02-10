@@ -1,5 +1,6 @@
-import { getRaces, Race } from "@/hooks/getRaces";
+import { getRaces } from "@/hooks/getRaces";
 import { Link, Locale } from "@/i18n/routing";
+import { Race } from "@/types/api";
 
 export default async function RacesList({
   params,

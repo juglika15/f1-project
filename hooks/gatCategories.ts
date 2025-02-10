@@ -1,12 +1,6 @@
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-import { LangTypes } from "@/types/api";
-
-export interface Category {
-  id: number;
-  name: string;
-  value: LangTypes;
-}
+import { Category, LangTypes } from "@/types/api";
 
 export const getCategories = async () => {
   const supabase = createClient();
