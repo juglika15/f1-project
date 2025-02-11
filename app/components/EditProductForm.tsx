@@ -30,14 +30,12 @@ interface EditProductFormProps {
   product: Product;
   locale: Locale;
   onClose: () => void;
-  isOpen: boolean;
 }
 
 const EditProductForm = ({
   product,
   locale,
   onClose,
-  isOpen,
 }: EditProductFormProps) => {
   const t = useTranslations("ProductForm");
   const router = useRouter();
@@ -261,13 +259,12 @@ const EditProductForm = ({
       : sizeOptions?.clothes;
 
   return (
-    <div
-      className={`fixed  inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 `}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
       <form
         ref={formRef}
-        className="relative bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 p-8 rounded-xl shadow-lg max-w-4xl w-full mx-4"
+        onSubmit={onSubmitHandler}
+        className="relative bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 p-4 sm:p-8 rounded-xl shadow-lg max-w-4xl w-full mx-4 max-h-screen overflow-y-auto"
       >
         <button
           type="button"
@@ -640,7 +637,7 @@ const EditProductForm = ({
         <SubmitButton
           type="submit"
           disabled={!isDirty || isSubmitting}
-          className="h-12 text-lg font-semibold w-56 mx-auto"
+          className=" mt-4 w-96 sm:w-auto h-12 text-lg font-semibold mx-auto"
           pendingText={t("updating")}
         >
           {t("update")}

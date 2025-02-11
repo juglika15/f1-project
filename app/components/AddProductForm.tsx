@@ -251,16 +251,17 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
       : sizeOptions?.clothes;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
       <form
         ref={formRef}
         onSubmit={onSubmitHandler}
-        className="relative flex flex-col gap-6 p-8 rounded-xl shadow-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 max-w-4xl w-full mx-4"
+        className=" relative bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 p-4 sm:p-8 rounded-xl shadow-lg max-w-4xl w-full mx-4 max-h-screen overflow-y-auto "
       >
         <button
           type="button"
           onClick={handleClose}
-          className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+          className="absolute top-2 right-2 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
           aria-label="Close"
         >
           <IoClose className="w-5 h-5 text-gray-700 dark:text-gray-200" />
@@ -612,7 +613,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
         <SubmitButton
           type="submit"
           disabled={isSubmitting}
-          className="h-12 text-lg font-semibold w-56 mx-auto"
+          className=" mt-4 w-96 sm:w-auto h-12 text-lg font-semibold mx-auto"
           pendingText={t("adding")}
         >
           {t("add")}

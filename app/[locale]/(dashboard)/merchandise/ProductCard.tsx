@@ -6,12 +6,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link, Locale } from "@/i18n/routing";
 import AddToCartButton from "@/app/components/AddToCart";
 import BuyNowButton from "@/app/components/BuyNow";
-import EditProductModal from "@/app/components/EditProductModal";
 import DeleteProductModal from "@/app/components/DeleteProductConfirm";
 import { Product, UserData } from "@/types/api";
 import { User } from "@supabase/supabase-js";
 import { useTranslations } from "next-intl";
-import EditProductForm from "@/app/components/EditProductForm";
+import EditProductModal from "@/app/components/EditProductModal";
 
 const ProductCard = ({
   product,
@@ -27,9 +26,6 @@ const ProductCard = ({
   const t = useTranslations("Merchandise");
   const [currentImage, setCurrentImage] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
 
   const nextImage = () => {
     if (currentImage < product.images.length - 1) {
@@ -88,7 +84,7 @@ const ProductCard = ({
 
   return (
     <div
-      className="relative flex flex-col justify-between bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 border-t-4 border-red-600 p-4 rounded-lg shadow-md hover:shadow-xl transition transform duration-300 z-40"
+      className="relative flex flex-col bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 border-t-4 border-red-600 p-4 rounded-lg shadow-md hover:shadow-xl transition duration-300"
       style={{ minHeight: "500px", display: "flex", flexDirection: "column" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -97,13 +93,7 @@ const ProductCard = ({
         !userData?.end_date &&
         user?.id === product.user_id && (
           <div className="flex flex-row justify-between mb-2">
-            <EditProductModal
-              product={product}
-              locale={locale}
-              openModal={openModal}
-              closeModal={closeModal}
-              isOpen={isOpen}
-            />
+            <EditProductModal product={product} locale={locale} />
             <DeleteProductModal product={product} locale={locale} />
           </div>
         )}
