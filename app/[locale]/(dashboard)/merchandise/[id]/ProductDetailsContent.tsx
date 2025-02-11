@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Locale } from "@/i18n/routing";
-import { Product } from "@/types/api";
+import { Product, Sizes } from "@/types/api";
 import AddToCartButton from "@/app/components/AddToCart";
 import BuyNowButton from "@/app/components/BuyNow";
+import { getSizes } from "@/hooks/getSizes";
+import { useTranslations } from "next-intl";
 
 interface ProductDetailsContentProps {
   product: Product;
@@ -18,7 +20,26 @@ export default function ProductDetailsContent({
   logo,
   locale,
 }: ProductDetailsContentProps) {
+  const t = useTranslations("Merchandise");
   const [currentImage, setCurrentImage] = useState(product.images[0]);
+  const [sizeOptions, setSizeOptions] = useState<Sizes | undefined>();
+
+  useEffect(() => {
+    const setSizes = async () => {
+      const sizes = await getSizes();
+      setSizeOptions(sizes);
+    };
+    setSizes();
+  }, []);
+
+  const currentSizeOptions =
+    product.category === "shoes"
+      ? sizeOptions?.shoes
+      : product.category === "headwear"
+      ? sizeOptions?.headwear
+      : product.category === "accessories"
+      ? sizeOptions?.accessories
+      : sizeOptions?.clothes;
 
   return (
     <main className="flex flex-col bg-gray-100 dark:bg-gray-900 py-8 flex-grow">
@@ -72,6 +93,7 @@ export default function ProductDetailsContent({
                 ${product.price / 100}
               </span>
             </div>
+
             <div className="mt-4 flex items-center bg-white  border border-gray-200 dark:border-gray-700   rounded-lg p-4">
               {logo && (
                 <Image
@@ -85,6 +107,42 @@ export default function ProductDetailsContent({
               <span className="text-xl font-medium text-gray-800 ">
                 {product.team}
               </span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="font-semibold text-sm">{t("sizes")}</span>
+              <div className="flex flex-wrap gap-1">
+                {product.category === "accessories" ? (
+                  <div className="pl-5 w-32 py-1 border rounded-md bg-blue-600 text-white border-blue-500">
+                    {sizeOptions?.accessories[0]}
+                  </div>
+                ) : (
+                  currentSizeOptions?.map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      //   onClick={() => toggleSize(size)}
+                      className={`py-1 border-2 rounded-md transition-colors duration-200 hover:bg-blue-600 hover:text-white hover:border-blue-500  ${
+                        product.category === "headwear"
+                          ? "w-[8.15rem]"
+                          : product.category === "shoes"
+                          ? "w-[4.8rem]"
+                          : "w-[2.9rem]"
+                      } ${
+                        false
+                          ? "bg-blue-600 text-white border-blue-500"
+                          : "bg-white text-gray-800 border-gray-300"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))
+                )}
+              </div>
+              {/* {fieldErrors.productSizes && (
+                <span className="text-sm text-red-500">
+                  {fieldErrors.productSizes}
+                </span>
+              )} */}
             </div>
           </div>
           <div className="mt-8 flex gap-4">

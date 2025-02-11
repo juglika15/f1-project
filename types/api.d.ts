@@ -110,3 +110,10 @@ export interface Type {
   name: string;
   value: LangTypes;
 }
+
+export interface UserData {
+  is_subscribed: boolean;
+  stripe_subscription_id: string;
+  start_date: string;
+  end_date: string;
+}

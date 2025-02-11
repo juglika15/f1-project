@@ -15,19 +15,29 @@ import { getCategories } from "@/hooks/gatCategories";
 import { Locale } from "@/i18n/routing";
 import { getTypes } from "@/hooks/getTypes";
 import { IoClose } from "react-icons/io5";
-import { Category, Color, Product, ProductFormErrors, Sizes, Team, Type } from "@/types/api";
+import {
+  Category,
+  Color,
+  Product,
+  ProductFormErrors,
+  Sizes,
+  Team,
+  Type,
+} from "@/types/api";
 import { useRouter } from "next/navigation";
 
 interface EditProductFormProps {
   product: Product;
   locale: Locale;
   onClose: () => void;
+  isOpen: boolean;
 }
 
 const EditProductForm = ({
   product,
   locale,
   onClose,
+  isOpen,
 }: EditProductFormProps) => {
   const t = useTranslations("ProductForm");
   const router = useRouter();
@@ -160,7 +170,7 @@ const EditProductForm = ({
   }, [globalMsg]);
 
   const toggleSize = (size: string) => {
-    setIsDirty(true); // mark dirty on change
+    setIsDirty(true);
     if (selectedCategory === "accessories") return;
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
@@ -251,15 +261,17 @@ const EditProductForm = ({
       : sizeOptions?.clothes;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      className={`fixed  inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 `}
+    >
+      <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
       <form
         ref={formRef}
-        onSubmit={onSubmitHandler}
-        className="relative flex flex-col gap-6 p-8 rounded-xl shadow-lg bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 max-w-4xl w-full mx-4"
+        className="relative bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 p-8 rounded-xl shadow-lg max-w-4xl w-full mx-4"
       >
         <button
           type="button"
-          onClick={handleClose} // ensure page refresh on manual close
+          onClick={handleClose}
           className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
           aria-label="Close"
         >
@@ -298,7 +310,7 @@ const EditProductForm = ({
                 defaultValue={product[`name_${locale}`]}
                 placeholder={t("name_placeholder")}
                 onChange={() => {
-                  setIsDirty(true); // mark dirty on change
+                  setIsDirty(true);
                   setFieldErrors((prev) => ({
                     ...prev,
                     productName: undefined,
@@ -331,7 +343,7 @@ const EditProductForm = ({
                   min="0.01"
                   step="0.01"
                   onChange={() => {
-                    setIsDirty(true); // mark dirty on change
+                    setIsDirty(true);
                     setFieldErrors((prev) => ({
                       ...prev,
                       productPrice: undefined,
@@ -361,7 +373,7 @@ const EditProductForm = ({
                 rows={2}
                 placeholder={t("description_placeholder")}
                 onChange={() => {
-                  setIsDirty(true); // mark dirty on change
+                  setIsDirty(true);
                   setFieldErrors((prev) => ({
                     ...prev,
                     productDescription: undefined,
@@ -387,7 +399,7 @@ const EditProductForm = ({
                 accept="image/*"
                 multiple
                 onChange={(e) => {
-                  setIsDirty(true); // mark dirty on change
+                  setIsDirty(true);
                   setHasFiles(e.target.files && e.target.files.length > 0);
                 }}
                 className={`block w-full text-sm text-gray-500 border rounded-lg cursor-pointer bg-gray-50 focus:outline-none
@@ -435,7 +447,7 @@ const EditProductForm = ({
                     key={team.code}
                     type="button"
                     onClick={() => {
-                      setIsDirty(true); // mark dirty on change
+                      setIsDirty(true);
                       setSelectedTeam(team.code);
                       setFieldErrors((prev) => ({
                         ...prev,
@@ -475,7 +487,7 @@ const EditProductForm = ({
                 name="productCategory"
                 value={selectedCategory}
                 onChange={(e) => {
-                  setIsDirty(true); // mark dirty on change
+                  setIsDirty(true);
                   setSelectedCategory(e.target.value);
                   setFieldErrors((prev) => ({
                     ...prev,
@@ -553,7 +565,7 @@ const EditProductForm = ({
                       key={name}
                       type="button"
                       onClick={() => {
-                        setIsDirty(true); // mark dirty on change
+                        setIsDirty(true);
                         setSelectedType(name);
                         setFieldErrors((prev) => ({
                           ...prev,
@@ -592,7 +604,7 @@ const EditProductForm = ({
                 min="1"
                 step="1"
                 onChange={(e) => {
-                  setIsDirty(true); // mark dirty on change
+                  setIsDirty(true);
                   setStock(e.target.value);
                   setFieldErrors((prev) => ({
                     ...prev,
@@ -627,7 +639,7 @@ const EditProductForm = ({
         )}
         <SubmitButton
           type="submit"
-          disabled={!isDirty || isSubmitting} // disable if no changes or while submitting
+          disabled={!isDirty || isSubmitting}
           className="h-12 text-lg font-semibold w-56 mx-auto"
           pendingText={t("updating")}
         >

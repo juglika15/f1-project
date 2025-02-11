@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { getLocale } from "next-intl/server";
+import { UserData } from "@/types/api";
 
 export const signUpAction = async (formData: FormData) => {
   const name = formData.get("name")?.toString();
@@ -205,7 +206,9 @@ export const updateUserMetadata = async (formData: FormData) => {
   redirect(`/${locale}/profile`);
 };
 
-export const geUserDataAction = async (user: User) => {
+export const geUserDataAction = async (
+  user: User
+): Promise<UserData | null> => {
   const supabase = await createClient();
 
   const { data: userData } = await supabase

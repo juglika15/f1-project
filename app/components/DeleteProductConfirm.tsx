@@ -73,10 +73,13 @@ export default function DeleteProductModal({
           setSuccess(false);
           setError(null);
         }}
-        className="flex items-center justify-center w-32 px-4 py-2 bg-gradient-to-r from-gray-300 to-gray-400 border-2  border-red-500 text-sm  font-semibold rounded-lg shadow-lg hover:from-red-500 text-black dark:text-white hover:to-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all duration-200"
+        className="flex items-center text-red-600 
+        transition-all duration-300 ease-out
+        hover:scale-110  hover:text-white
+        active:scale-95 active:shadow-inner hover:bg-gradient-to-t hover:from-red-500 hover:to-red-600 px-3 py-1 rounded-lg"
       >
         <Trash2 size={18} className="mr-2" />
-        {t("delete")}
+        <span>{t("delete")}</span>
       </button>
 
       {isOpen && (

@@ -90,7 +90,8 @@
     "add_product": "Add Product",
     "edit_product": "Edit",
     "buy_now": "Buy Now",
-    "add_to_cart": "Add to Cart"
+    "add_to_cart": "Add to Cart",
+    "sizes": "Product size options"
   },
   "LoadingPage": {
     "loading": "Loading F1 Data..."

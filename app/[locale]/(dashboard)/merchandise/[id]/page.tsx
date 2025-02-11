@@ -10,6 +10,7 @@ const ProductDetails = async ({
   const { id } = await params;
   const { locale } = await params;
   const { product, logo } = await getProduct(id);
+
   if (!product || !logo) {
     return <div>Product not found</div>;
   }
