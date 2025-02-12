@@ -92,7 +92,8 @@
     "buy_now": "Buy Now",
     "add_to_cart": "Add to Cart",
     "sizes": "Product size options",
-    "quantity": "Quantity"
+    "quantity": "Quantity",
+    "sizes_required": "Select Product size"
   },
   "LoadingPage": {
     "loading": "Loading F1 Data..."

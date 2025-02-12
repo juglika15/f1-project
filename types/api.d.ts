@@ -77,6 +77,8 @@ export interface CartItem {
   name_ka: string;
   price: number;
   image: string;
+  stripe_product_id: string;
+  stripe_price_id: string;
   size: string;
   team: string;
   product_id: number;

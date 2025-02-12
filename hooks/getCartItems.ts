@@ -16,8 +16,6 @@ export const getCartItems = async (id: string) => {
       ascending: true,
     });
 
-  console.log(cartItems);
-
   if (error && status !== 406) {
     throw error;
   }
