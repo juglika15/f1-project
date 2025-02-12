@@ -4,8 +4,6 @@ import { redirect } from "next/navigation";
 import { Locale, routing } from "@/i18n/routing";
 import Header from "../../components/header/Header";
 import Footer from "../../components/footer/Footer";
-import LoadingPage from "@/app/components/LoadingPage";
-import { Suspense } from "react";
 
 export default async function LocaleLayout({
   children,
@@ -28,7 +26,7 @@ export default async function LocaleLayout({
     <NextIntlClientProvider messages={messages}>
       <div className="flex flex-col min-h-screen">
         <Header />
-        <Suspense fallback={<LoadingPage />}>{children}</Suspense>
+        {children}
         <Footer />
       </div>
     </NextIntlClientProvider>

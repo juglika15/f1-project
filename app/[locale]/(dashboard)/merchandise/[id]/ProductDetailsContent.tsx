@@ -21,15 +21,18 @@ export default function ProductDetailsContent({
   locale,
 }: ProductDetailsContentProps) {
   const t = useTranslations("Merchandise");
+
   const [currentImage, setCurrentImage] = useState(product.images[0]);
   const [sizeOptions, setSizeOptions] = useState<Sizes | undefined>();
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    const setSizes = async () => {
+    const fetchSizes = async () => {
       const sizes = await getSizes();
       setSizeOptions(sizes);
     };
-    setSizes();
+    fetchSizes();
   }, []);
 
   const currentSizeOptions =
@@ -42,27 +45,28 @@ export default function ProductDetailsContent({
       : sizeOptions?.clothes;
 
   return (
-    <main className="flex flex-col bg-gray-100 dark:bg-gray-900 py-8 flex-grow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8">
+    <main className="flex flex-col bg-gray-100 dark:bg-dark py-8 flex-grow">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8">
         <div className="md:w-1/2 flex flex-col items-center">
-          <div className="w-full relative">
+          <div className="relative w-full max-w-md">
             <Image
               src={currentImage}
               alt={product[`name_${locale}`]}
               width={600}
               height={400}
-              className="w-full h-auto object-cover rounded-lg shadow-lg"
+              className="w-full h-auto object-cover rounded-xl shadow-lg"
               priority
             />
           </div>
+
           {product.images.length > 1 && (
             <div className="mt-4 flex gap-2 justify-center">
               {product.images.map((img, index) => (
                 <div
                   key={index}
-                  className={`cursor-pointer border-2 rounded ${
+                  className={`cursor-pointer border-2 rounded-lg overflow-hidden transition-all ${
                     currentImage === img
-                      ? "border-red-600"
+                      ? "border-red-600 scale-105 shadow-lg"
                       : "border-transparent"
                   }`}
                   onClick={() => setCurrentImage(img)}
@@ -70,9 +74,9 @@ export default function ProductDetailsContent({
                   <Image
                     src={img}
                     alt={`Thumbnail ${index + 1}`}
-                    width={100}
-                    height={70}
-                    className="object-cover rounded"
+                    width={80}
+                    height={60}
+                    className="object-cover rounded-md"
                   />
                 </div>
               ))}
@@ -80,74 +84,80 @@ export default function ProductDetailsContent({
           )}
         </div>
 
-        <div className="md:w-1/2 flex flex-col justify-between">
-          <div>
+        <div className="md:w-1/2 flex flex-col justify-between gap-6">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
             <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">
               {product[`name_${locale}`]}
             </h1>
-            <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">
-              {product[`description_${locale}`]}
-            </p>
-            <div className="mt-4">
-              <span className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+
+            <div className="mt-2">
+              <span className="text-2xl font-bold text-f1red">
                 ${product.price / 100}
               </span>
             </div>
 
-            <div className="mt-4 flex items-center bg-white  border border-gray-200 dark:border-gray-700   rounded-lg p-4">
+            <div className="mt-4 flex items-center bg-white border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-md">
               {logo && (
                 <Image
                   src={logo}
                   alt="Team Logo"
                   width={50}
                   height={50}
-                  className="object-contain mr-2"
+                  className="object-contain mr-3"
                 />
               )}
-              <span className="text-xl font-medium text-gray-800 ">
+              <span className="text-xl font-medium text-gray-900 ">
                 {product.team}
               </span>
             </div>
-            <div className="flex flex-col gap-1">
-              <span className="font-semibold text-sm">{t("sizes")}</span>
-              <div className="flex flex-wrap gap-1">
-                {product.category === "accessories" ? (
-                  <div className="pl-5 w-32 py-1 border rounded-md bg-blue-600 text-white border-blue-500">
-                    {sizeOptions?.accessories[0]}
-                  </div>
-                ) : (
-                  currentSizeOptions?.map((size) => (
-                    <button
-                      key={size}
-                      type="button"
-                      //   onClick={() => toggleSize(size)}
-                      className={`py-1 border-2 rounded-md transition-colors duration-200 hover:bg-blue-600 hover:text-white hover:border-blue-500  ${
-                        product.category === "headwear"
-                          ? "w-[8.15rem]"
-                          : product.category === "shoes"
-                          ? "w-[4.8rem]"
-                          : "w-[2.9rem]"
-                      } ${
-                        false
-                          ? "bg-blue-600 text-white border-blue-500"
-                          : "bg-white text-gray-800 border-gray-300"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))
-                )}
+
+            <p className="mt-4 text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              {product[`description_${locale}`]}
+            </p>
+
+            <div className="mt-4">
+              <span className="font-semibold text-lg">{t("sizes")}</span>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {currentSizeOptions?.map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => setSelectedSize(size)}
+                    disabled={!product.sizes.includes(size)}
+                    className={`py-2 px-4 border-2 rounded-md transition-all duration-200 text-sm font-medium 
+                   ${
+                     selectedSize === size
+                       ? "bg-blue-600 text-white border-blue-500 shadow-lg scale-105"
+                       : product.sizes.includes(size)
+                       ? "bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-100 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700"
+                       : "bg-gray-300 text-gray-500 dark:bg-gray-700 dark:text-gray-500 border-gray-400 dark:border-gray-600 cursor-not-allowed opacity-50"
+                   }`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
-              {/* {fieldErrors.productSizes && (
-                <span className="text-sm text-red-500">
-                  {fieldErrors.productSizes}
-                </span>
-              )} */}
             </div>
-          </div>
-          <div className="mt-8 flex gap-4">
-            <AddToCartButton className="w-full from-green-500 to-green-600" />
-            <BuyNowButton className="w-full from-cyan-500 to-cyan-600" />
+
+            <div className="mt-4 flex items-center gap-2">
+              <span className="font-semibold text-lg">{t("quantity")}</span>
+              <select
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                className="p-2 border rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-600"
+              >
+                {[...Array(10).keys()].map((num) => (
+                  <option key={num + 1} value={num + 1}>
+                    {num + 1}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mt-6 flex gap-4">
+              <AddToCartButton className="w-full text-lg font-semibold py-3 rounded-lg  text-white hover:scale-105 transition-transform" />
+              <BuyNowButton className="w-full text-lg font-semibold py-3 rounded-lg text-white hover:scale-105 transition-transform" />
+            </div>
           </div>
         </div>
       </div>

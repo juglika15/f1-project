@@ -508,7 +508,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                         onClick={() => toggleSize(size)}
                         className={`py-1 border-2 rounded-md transition-colors duration-200 hover:bg-blue-600 hover:text-white hover:border-blue-500  ${
                           selectedCategory === "headwear"
-                            ? "w-[8.15rem]"
+                            ? "w-[6rem]"
                             : selectedCategory === "shoes"
                             ? "w-[4.8rem]"
                             : "w-[2.9rem]"

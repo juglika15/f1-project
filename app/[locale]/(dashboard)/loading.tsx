@@ -1,9 +1,6 @@
-"use client";
-
 import { useTranslations } from "next-intl";
-import React from "react";
 
-const LoadingPage = () => {
+const Loading = () => {
   const t = useTranslations("LoadingPage");
 
   return (
@@ -24,4 +21,4 @@ const LoadingPage = () => {
   );
 };
 
-export default LoadingPage;
+export default Loading;

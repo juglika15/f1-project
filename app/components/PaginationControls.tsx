@@ -3,7 +3,11 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
-const PaginationControls = ({ totalPages }: { totalPages: number }) => {
+interface PaginationControlsProps {
+  totalPages: number;
+}
+
+const PaginationControls = ({ totalPages }: PaginationControlsProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -21,7 +25,6 @@ const PaginationControls = ({ totalPages }: { totalPages: number }) => {
   const navigateToPage = (page: number) => {
     newSearchParams.set("page", page.toString());
     newSearchParams.set("limit", limit);
-
     router.push(`${pathname}?${newSearchParams.toString()}`);
   };
 
@@ -37,7 +40,51 @@ const PaginationControls = ({ totalPages }: { totalPages: number }) => {
     }
   };
 
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  const getPaginationRange = (): (number | string)[] => {
+    const range: (number | string)[] = [];
+
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) {
+        range.push(i);
+      }
+    } else {
+      range.push(1);
+
+      let left = Math.max(currentPage - 1, 2);
+      let right = Math.min(currentPage + 1, totalPages - 1);
+
+      if (currentPage === 1) {
+        right = 3;
+      }
+      if (currentPage === 2) {
+        right = 4;
+      }
+      if (currentPage === totalPages) {
+        left = totalPages - 2;
+      }
+      if (currentPage === totalPages - 1) {
+        left = totalPages - 3;
+      }
+
+      if (left > 2) {
+        range.push("...");
+      }
+
+      for (let i = left; i <= right; i++) {
+        range.push(i);
+      }
+
+      if (right < totalPages - 1) {
+        range.push("...");
+      }
+
+      range.push(totalPages);
+    }
+
+    return range;
+  };
+
+  const pages = getPaginationRange();
 
   return (
     <div className="flex flex-col items-center mt-8">
@@ -63,20 +110,34 @@ const PaginationControls = ({ totalPages }: { totalPages: number }) => {
             />
           </svg>
         </button>
-        {pages.map((page) => (
-          <button
-            key={page}
-            onClick={() => navigateToPage(page)}
-            className={`w-10 h-10 flex items-center justify-center rounded-full border transition 
-              ${
-                page === currentPage
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-          >
-            {page}
-          </button>
-        ))}
+
+        {pages.map((page, index) => {
+          if (typeof page === "number") {
+            return (
+              <button
+                key={index}
+                onClick={() => navigateToPage(page)}
+                className={`w-10 h-10 flex items-center justify-center rounded-full border transition ${
+                  page === currentPage
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                {page}
+              </button>
+            );
+          } else {
+            return (
+              <span
+                key={index}
+                className="w-10 h-10 flex items-center justify-center text-gray-500"
+              >
+                {page}
+              </span>
+            );
+          }
+        })}
+
         <button
           onClick={handleNextPage}
           disabled={currentPage >= totalPages}

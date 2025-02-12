@@ -13,7 +13,7 @@
     "sprint": "Sprint Weekend"
   },
   "HomePage": {
-    "welcome": "მოგესალმებით F1 Store-ში",
+    "welcome": "Welcome to F1 Store",
     "experience": "Experience the speed, the passion, the legacy",
     "newest": "Newest F1 Products",
     "shop": "shop now",
@@ -91,7 +91,8 @@
     "edit_product": "Edit",
     "buy_now": "Buy Now",
     "add_to_cart": "Add to Cart",
-    "sizes": "Product size options"
+    "sizes": "Product size options",
+    "quantity": "Quantity"
   },
   "LoadingPage": {
     "loading": "Loading F1 Data..."
