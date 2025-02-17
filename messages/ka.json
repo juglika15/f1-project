@@ -62,7 +62,7 @@
     "delete": "წაშლა",
     "deleting": "იშლება",
     "cancel": "გაუქმება",
-    "deleteConfirmation": "დარწმუნებული ხარ, რომ გინდა წაშალო ეს პროდუქტი",
+    "deleteConfirmation": "დარწმუნებული ხართ, რომ ამ პროდუქტის წაშლა გინდათ?",
     "deleted": "პროდუქტი წარმატებით წაიშალა"
   },
   "Pricing": {},
@@ -71,7 +71,7 @@
   "Help": {},
   "About": {},
   "Merchandise": {
-    "title": "კოლექცია",
+    "title": "F1 მაღაზია",
     "search_placeholder": "მოძებნე სახელით",
     "sort_by": "სორტირება",
     "team": "გუნდი",

@@ -4,9 +4,10 @@ import AddProductModal from "@/app/components/AddProductModal";
 import { getMerchandise } from "@/hooks/getMerchandise";
 import { Locale } from "@/i18n/routing";
 import { getTranslations } from "next-intl/server";
-import { getUserAction, geUserDataAction } from "@/app/actions/supabase";
+import { getUserAction } from "@/app/actions/supabase";
 import { MerchandiseResponse, Query } from "@/types/api";
 import ProductCard from "./ProductCard";
+import { User } from "@supabase/supabase-js";
 
 const MerchandiseDisplay = async ({
   params,
@@ -18,12 +19,12 @@ const MerchandiseDisplay = async ({
   const { locale } = await params;
   const searchedParams = await searchParams;
   const t = await getTranslations("Merchandise");
-  const user = await getUserAction();
-  let userData = null;
+  const user: User | null = await getUserAction();
+  // let userData = null;
 
-  if (user) {
-    userData = await geUserDataAction(user);
-  }
+  // if (user) {
+  //   userData = await geUserDataAction(user);
+  // }
 
   const { merchandise, totalPages } = (await getMerchandise(
     searchedParams,
@@ -39,26 +40,20 @@ const MerchandiseDisplay = async ({
         <div className="flex flex-col md:flex-row min-h-[40rem]">
           <aside className="w-full md:w-1/5 mb-6 md:mb-0 md:mr-8">
             <div className="flex flex-col gap-4 items-center md:items-start">
-              {userData?.is_subscribed && !userData?.end_date && (
-                <AddProductModal locale={locale} />
-              )}
+              {user?.id && <AddProductModal locale={locale} />}
               <SidebarFilter locale={locale} />
             </div>
           </aside>
           <section className="w-full md:flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {merchandise.map((product) => (
-                <div
+                <ProductCard
                   key={product.id}
-                  className="transition-transform transform hover:scale-[1.03] duration-300"
-                >
-                  <ProductCard
-                    product={product}
-                    locale={locale}
-                    userData={userData}
-                    user={user}
-                  />
-                </div>
+                  product={product}
+                  locale={locale}
+                  // userData={userData}
+                  user={user}
+                />
               ))}
             </div>
           </section>

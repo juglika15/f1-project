@@ -33,9 +33,9 @@ const ProductDetails = async ({
           </p>
           <Link
             href="/merchandise"
-            className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-colors duration-300"
+            className="inline-block px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-full transition-colors duration-300"
           >
-            Back to Merchandise
+            {}
           </Link>
         </div>
       </main>

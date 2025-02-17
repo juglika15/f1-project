@@ -463,7 +463,8 @@ const EditProductForm = ({
                       alt={team.name}
                       width={32}
                       height={32}
-                      className="w-10 h-10 object-contain"
+                      className="h-10 object-contain"
+                      style={{ width: "auto" }}
                     />
                   </button>
                 ))}
