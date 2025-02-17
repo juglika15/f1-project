@@ -31,31 +31,34 @@ const MerchandiseDisplay = async ({
   )) as MerchandiseResponse;
 
   return (
-    <main className="bg-white dark:bg-gray-900 py-8 flex-grow">
+    <main className="bg-white dark:bg-gray-900 py-8 flex-grow min-h-screen transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="font-extrabold text-gray-900 dark:text-gray-100 mb-4"></h2>
+        <h2 className="font-extrabold text-gray-900 dark:text-gray-100 mb-6 text-center text-3xl">
+          {t("title")}
+        </h2>
         <div className="flex flex-col md:flex-row min-h-[40rem]">
-          <aside className="md:w-1/4 mb-4 md:mb-0 md:mr-4">
-            <div className="flex flex-col gap-3 items-center">
+          <aside className="w-full md:w-1/5 mb-6 md:mb-0 md:mr-8">
+            <div className="flex flex-col gap-4 items-center md:items-start">
               {userData?.is_subscribed && !userData?.end_date && (
                 <AddProductModal locale={locale} />
               )}
               <SidebarFilter locale={locale} />
             </div>
           </aside>
-          <section className="text-center md:w-3/4">
-            <span className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-              {t("title")}
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+          <section className="w-full md:flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {merchandise.map((product) => (
-                <ProductCard
+                <div
                   key={product.id}
-                  product={product}
-                  locale={locale}
-                  userData={userData}
-                  user={user}
-                />
+                  className="transition-transform transform hover:scale-[1.03] duration-300"
+                >
+                  <ProductCard
+                    product={product}
+                    locale={locale}
+                    userData={userData}
+                    user={user}
+                  />
+                </div>
               ))}
             </div>
           </section>

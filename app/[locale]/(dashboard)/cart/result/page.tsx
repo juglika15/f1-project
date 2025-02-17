@@ -64,7 +64,6 @@ export default async function ResultPage(props: {
         <p className="text-2xl text-gray-800 dark:text-gray-200 mb-6">
           Your order has been successfully placed.
         </p>
-
         <Link
           href="/orders"
           className="inline-block bg-gradient-to-r from-red-500 to-black dark:from-red-600 dark:to-gray-800 text-white font-semibold py-4 px-8 rounded-full transition-all hover:opacity-90"

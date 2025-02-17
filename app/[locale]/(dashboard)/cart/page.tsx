@@ -80,11 +80,7 @@ const Cart = () => {
           </div>
         )}
         <div className="mt-6 flex justify-end">
-          <CheckoutFormCart
-            uiMode={"hosted"}
-            locale={locale}
-            products={cartItems!}
-          />
+          <CheckoutFormCart locale={locale} products={cartItems!} />
         </div>
       </div>
     </main>

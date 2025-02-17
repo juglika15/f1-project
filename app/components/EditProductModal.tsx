@@ -27,9 +27,9 @@ const EditProductModal = ({
         className="flex items-center text-emerald-600 
         transition-all duration-300 ease-out
         hover:scale-110  hover:text-white
-        active:scale-95 active:shadow-inner hover:bg-gradient-to-t hover:from-emerald-500 hover:to-emerald-600 px-3 py-1 rounded-lg"
+        active:scale-95 active:shadow-inner hover:bg-gradient-to-t hover:from-emerald-500 hover:to-emerald-600 px-3 py-1 rounded-lg ml-2"
       >
-        <Pencil size={16} className="mr-2" />
+        <Pencil size={15} className="mr-1" />
         <span>{t("edit_product")}</span>
       </button>
 

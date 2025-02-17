@@ -247,6 +247,7 @@ const SidebarFilter = ({ locale }: { locale: Locale }) => {
                       alt={team.name}
                       width={36}
                       height={36}
+                      quality={100}
                       className="h-[2.25rem] w-[2.25rem] mr-2 object-contain rounded-full bg-white p-1"
                     />
                   )}

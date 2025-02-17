@@ -5,13 +5,11 @@ import { createCheckoutSession } from "../actions/stripe";
 import { CartItem } from "@/types/api";
 
 interface CheckoutFormProps {
-  uiMode: "hosted";
   locale: string;
   products: CartItem[];
 }
 
 export default function CheckoutFormCart({
-  uiMode,
   locale,
   products,
 }: CheckoutFormProps) {
@@ -22,7 +20,7 @@ export default function CheckoutFormCart({
 
     try {
       const formData = new FormData();
-      formData.append("uiMode", uiMode);
+      formData.append("uiMode", "hosted");
       formData.append("locale", locale);
       formData.append("purchaseType", "cart");
       formData.append(

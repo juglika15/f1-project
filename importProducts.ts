@@ -64,7 +64,7 @@
 //         sizes: JSON.parse(product.sizes),
 //         colors: JSON.parse(product.colors),
 //         category: product.category,
-//         link: product.link,
+//         page: product.page,
 //       },
 //     ]);
 
@@ -75,4 +75,4 @@
 //   }
 // }
 
-// processCSV("/Users/lashajugeli/Downloads/111.csv.csv");
+// processCSV("/Users/lashajugeli/Downloads/1234.csv");
