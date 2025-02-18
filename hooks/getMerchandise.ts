@@ -19,7 +19,7 @@ export async function getMerchandise(
   const sortField =
     rawSortField === `name_${locale}` || rawSortField === "price"
       ? rawSortField
-      : "id";
+      : "created_at";
   const ascending = rawSortOrder.toLowerCase() === "asc";
 
   const from = (page - 1) * limit;

@@ -10,7 +10,7 @@ import DeleteProductModal from "@/app/components/DeleteProductConfirm";
 import { Product } from "@/types/api";
 import { User } from "@supabase/supabase-js";
 import { useTranslations } from "next-intl";
-import EditProductModal from "@/app/components/EditProductModal";
+import UpdateProductModal from "@/app/components/UpdateProductModal";
 
 const ProductCard = ({
   product,
@@ -42,7 +42,7 @@ const ProductCard = ({
     <div className="relative flex flex-col bg-gradient-to-b from-white to-gray-50 dark:from-gray-700 dark:to-gray-800 border-t-4 border-red-600 py-2 rounded-lg shadow-md hover:shadow-xl transition duration-300 min-h-[400px] sm:min-h-[500px]">
       {user?.id === product.user_id && (
         <div className="flex flex-row justify-between mb-2">
-          <EditProductModal product={product} locale={locale} />
+          <UpdateProductModal product={product} locale={locale} />
           <DeleteProductModal product={product} locale={locale} />
         </div>
       )}

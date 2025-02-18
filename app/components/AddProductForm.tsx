@@ -507,11 +507,11 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                         type="button"
                         onClick={() => toggleSize(size)}
                         className={`py-1 border-2 rounded-md transition-colors duration-200 hover:bg-blue-600 hover:text-white hover:border-blue-500  ${
-                          selectedCategory === "headwear"
-                            ? "w-[6rem]"
-                            : selectedCategory === "shoes"
-                            ? "w-[4.8rem]"
-                            : "w-[2.9rem]"
+                          selectedCategory === "shoes"
+                            ? "w-[4.7rem]"
+                            : selectedCategory === "headwear"
+                            ? "w-[5.9rem]"
+                            : "w-[2.8rem]"
                         } ${
                           selectedSizes.includes(size)
                             ? "bg-blue-600 text-white border-blue-500"
@@ -546,7 +546,7 @@ const AddProductForm = ({ locale, onClose }: AddProductFormProps) => {
                           productType: undefined,
                         }));
                       }}
-                      className={`p-2 w-32 border-2 rounded-md transition-all duration-200 hover:scale-110 hover:bg-blue-600 hover:text-white  ${
+                      className={`p-2 w-[7.9rem] border-2 rounded-md transition-all duration-200 hover:scale-110 hover:bg-blue-600 hover:text-white  ${
                         selectedType === name
                           ? "bg-blue-600 text-white"
                           : "bg-white text-dark border-gray-300"

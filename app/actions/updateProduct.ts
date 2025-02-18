@@ -3,7 +3,7 @@
 import Stripe from "stripe";
 import { createClient } from "@/utils/supabase/server";
 
-export async function editProduct(formData: FormData) {
+export async function updateProduct(formData: FormData) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
   const supabase = await createClient();
 

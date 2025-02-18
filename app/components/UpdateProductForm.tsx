@@ -1,6 +1,6 @@
 "use client";
 
-import { editProduct } from "@/app/actions/editProduct";
+import { updateProduct } from "@/app/actions/updateProduct";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -26,17 +26,17 @@ import {
 } from "@/types/api";
 import { useRouter } from "next/navigation";
 
-interface EditProductFormProps {
+interface UpdateProductFormProps {
   product: Product;
   locale: Locale;
   onClose: () => void;
 }
 
-const EditProductForm = ({
+const UpdateProductForm = ({
   product,
   locale,
   onClose,
-}: EditProductFormProps) => {
+}: UpdateProductFormProps) => {
   const t = useTranslations("ProductForm");
   const router = useRouter();
 
@@ -230,7 +230,7 @@ const EditProductForm = ({
       }
 
       console.log(formData.get("productImages"));
-      await editProduct(formData);
+      await updateProduct(formData);
       setGlobalMsg({ error: null, success: t("success_message") });
       setTimeout(() => {
         handleClose();
@@ -259,7 +259,7 @@ const EditProductForm = ({
       : sizeOptions?.clothes;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 w-full">
       <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
       <form
         ref={formRef}
@@ -276,7 +276,7 @@ const EditProductForm = ({
         </button>
 
         <h1 className="text-xl font-semibold text-f1red mx-auto">
-          {t("title")}
+          {t("update")}
         </h1>
 
         {product.images && product.images.length > 0 && (
@@ -531,7 +531,7 @@ const EditProductForm = ({
                         onClick={() => toggleSize(size)}
                         className={`py-1 border-2 rounded-md transition-colors duration-200 hover:bg-blue-600 hover:text-white hover:border-blue-500  ${
                           selectedCategory === "headwear"
-                            ? "w-[6rem]"
+                            ? "w-[5.9rem]"
                             : selectedCategory === "shoes"
                             ? "w-[4.8rem]"
                             : "w-[2.9rem]"
@@ -570,7 +570,7 @@ const EditProductForm = ({
                           productType: undefined,
                         }));
                       }}
-                      className={`p-2 w-32 border-2 rounded-md transition-all duration-200 hover:scale-110 hover:bg-blue-600 hover:text-white  ${
+                      className={`p-2 w-[7.8rem] border-2 rounded-md transition-all duration-200 hover:scale-110 hover:bg-blue-600 hover:text-white  ${
                         selectedType === name
                           ? "bg-blue-600 text-white"
                           : "bg-white text-dark border-gray-300"
@@ -648,4 +648,4 @@ const EditProductForm = ({
   );
 };
 
-export default EditProductForm;
+export default UpdateProductForm;

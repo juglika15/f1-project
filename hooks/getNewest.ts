@@ -12,8 +12,8 @@ const getNewest = async () => {
   }: PostgrestSingleResponse<Product[]> = await supabase
     .from("merchandise")
     .select("*")
-    .order("id", { ascending: false })
-    .limit(3);
+    .order("created_at", { ascending: false })
+    .limit(4);
 
   if (error && status !== 406) {
     throw error;

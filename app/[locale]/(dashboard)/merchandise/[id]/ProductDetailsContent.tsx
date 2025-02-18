@@ -28,7 +28,6 @@ export default function ProductDetailsContent({
 }: ProductDetailsContentProps) {
   const t = useTranslations("Merchandise");
 
-  const [currentImage, setCurrentImage] = useState(product.images[0]);
   const [sizeOptions, setSizeOptions] = useState<Sizes | undefined>();
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -41,7 +40,7 @@ export default function ProductDetailsContent({
   });
   const [isSticky, setIsSticky] = useState(false);
   const [teamProducts, setTeamProducts] = useState<Product[] | null>([]);
-
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const stickyTriggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,11 +69,9 @@ export default function ProductDetailsContent({
     }
   }, [globalMsg]);
 
-  // Set up Intersection Observer to detect when the trigger element leaves the viewport.
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // When the trigger is no longer fully visible, mark details as sticky.
         setIsSticky(!entry.isIntersecting);
       },
       { threshold: 1.0 }
@@ -128,7 +125,6 @@ export default function ProductDetailsContent({
     }
   };
 
-  // Determine available sizes for the product category
   const currentSizeOptions =
     product.category === "shoes"
       ? sizeOptions?.shoes
@@ -143,37 +139,61 @@ export default function ProductDetailsContent({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8">
         {/* LEFT SIDE: Image slider */}
         <div className="md:w-1/2">
-          {/* Invisible trigger element for Intersection Observer */}
           <div ref={stickyTriggerRef} className="h-1 w-full"></div>
           <div className="flex flex-col items-center">
-            <div className="relative w-full h-auto max-w-md">
-              <Image
-                src={currentImage}
-                alt={product[`name_${locale}`]}
-                width={600}
-                height={400}
-                className="w-full h-auto object-cover rounded-xl shadow-lg"
-                priority
-              />
+            {/* Carousel Container */}
+            <div className="relative w-full h-auto max-w-md overflow-hidden rounded-xl shadow-lg">
+              <div
+                className="flex transition-transform duration-700 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentImageIndex * 100}%)`,
+                }}
+              >
+                {product.images.map((img, index) => (
+                  <div
+                    key={index}
+                    className="relative min-w-full h-64 sm:h-72 md:h-96 lg:h-[40rem]"
+                  >
+                    <Link
+                      href={{
+                        pathname: "/merchandise/[id]",
+                        params: { id: product.id },
+                      }}
+                      className="relative block w-full h-full cursor-pointer"
+                    >
+                      <Image
+                        src={img}
+                        alt={product[`name_${locale}`]}
+                        fill
+                        quality={100}
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
+            {/* Thumbnails */}
             {product.images.length > 1 && (
               <div className="mt-4 flex gap-2 justify-center">
                 {product.images.map((img, index) => (
                   <div
                     key={index}
-                    className={`cursor-pointer border-2 w-20 rounded-lg overflow-hidden transition-all ${
-                      currentImage === img
+                    className={`cursor-pointer border-2 w-20 rounded-lg overflow-hidden transition-all duration-300 ${
+                      currentImageIndex === index
                         ? "border-red-600 scale-105 shadow-lg"
-                        : "border-transparent"
+                        : "border-transparent hover:scale-105"
                     }`}
-                    onClick={() => setCurrentImage(img)}
+                    onClick={() => setCurrentImageIndex(index)}
                   >
                     <Image
                       src={img}
                       alt={`Thumbnail ${index + 1}`}
                       width={80}
                       height={60}
-                      className="w-full h-auto object-cover rounded-md"
+                      className="object-cover rounded-md"
                     />
                   </div>
                 ))}
@@ -285,20 +305,20 @@ export default function ProductDetailsContent({
         </div>
       </div>
       {/* BOTTOM: "You May Also Like" section */}
-      <div className="mt-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mt-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 ">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
           You May Also Like
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 ">
           {teamProducts?.map((teamProduct) => (
-            <div key={teamProduct.id} className="">
-              <div className="overflow-hidden relative">
+            <div key={teamProduct.id} className="relative group">
+              <div className="overflow-hidden ">
                 <div className="flex transition-transform duration-500 ease-in-out">
                   <div className="relative min-w-full h-64 sm:h-72 md:h-80 lg:h-96">
                     <Link
                       href={{
                         pathname: "/merchandise/[id]",
-                        params: { id: product.id },
+                        params: { id: teamProduct.id },
                       }}
                       className="relative block w-full h-full cursor-pointer"
                     >
@@ -309,7 +329,16 @@ export default function ProductDetailsContent({
                         quality={100}
                         priority
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover shadow-md"
+                        className="object-cover shadow-md transition-opacity duration-500 group-hover:opacity-0"
+                      />
+                      <Image
+                        src={teamProduct.images[1]}
+                        alt={teamProduct[`name_${locale}`]}
+                        fill
+                        quality={100}
+                        priority
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover shadow-md absolute top-0 left-0 transition-opacity duration-500 opacity-0 group-hover:opacity-100"
                       />
                     </Link>
                   </div>

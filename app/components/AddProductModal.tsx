@@ -16,7 +16,7 @@ const AddProductModal = ({ locale }: { locale: Locale }) => {
     <>
       <button
         onClick={openModal}
-        className="p-4 w-56 text-lg py-2 bg-f1red text-white rounded hover:bg-red-700 transition"
+        className="p-4 w-64 text-lg py-2 bg-f1red text-white rounded hover:bg-red-700 transition"
       >
         {t("add_product")}
       </button>

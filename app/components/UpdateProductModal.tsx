@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import { Product } from "@/types/api";
 import { Pencil } from "lucide-react";
 import { useState } from "react";
-import EditProductForm from "./EditProductForm";
+import UpdateProductForm from "./UpdateProductForm";
 
-const EditProductModal = ({
+const UpdateProductModal = ({
   locale,
   product,
 }: {
@@ -30,11 +30,11 @@ const EditProductModal = ({
         active:scale-95 active:shadow-inner hover:bg-gradient-to-t hover:from-emerald-500 hover:to-emerald-600 px-3 py-1 rounded-lg ml-2"
       >
         <Pencil size={15} className="mr-1" />
-        <span>{t("edit_product")}</span>
+        <span>{t("update_product")}</span>
       </button>
 
       {isOpen && (
-        <EditProductForm
+        <UpdateProductForm
           locale={locale}
           product={product}
           onClose={closeModal}
@@ -44,4 +44,4 @@ const EditProductModal = ({
   );
 };
 
-export default EditProductModal;
+export default UpdateProductModal;
