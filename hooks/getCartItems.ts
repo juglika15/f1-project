@@ -1,7 +1,6 @@
 import { CartItem } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
 export const getCartItems = async (id: string) => {
   const supabase = createClient();
   const {

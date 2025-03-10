@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Race } from "@/types/api";
-
 export const getRaces = async () => {
   const supabase = await createClient();
   const {

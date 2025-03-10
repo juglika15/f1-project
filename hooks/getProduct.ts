@@ -1,7 +1,6 @@
 import { Product } from "@/types/api";
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
 const getProduct = async (id: string) => {
   const supabase = await createClient();
 

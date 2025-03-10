@@ -1,7 +1,6 @@
 import { Color } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
 export const getColors = async () => {
   const supabase = createClient();
   const {

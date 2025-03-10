@@ -2,7 +2,6 @@ import { Locale } from "@/i18n/routing";
 import { MerchandiseResponse, Product, Query } from "@/types/api";
 import { createClient } from "@/utils/supabase/server";
 import { PostgrestResponse } from "@supabase/supabase-js";
-
 export async function getMerchandise(
   query: Query,
   locale: Locale

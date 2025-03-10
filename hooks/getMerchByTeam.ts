@@ -1,7 +1,6 @@
 import { Product } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
-
 const getMerchByTeam = async (team: string, id: number) => {
   const supabase = createClient();
 
