@@ -1,4 +1,4 @@
-import { Color, LangTypes } from "@/types/api";
+import { Color } from "@/types/api";
 import { createClient } from "@/utils/supabase/client";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 
